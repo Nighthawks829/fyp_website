@@ -1,0 +1,45 @@
+.stroke-custom {
+  stroke-width: 2rem;
+}
+
+.sidebar h5 {
+  color: #222222;
+}
+
+.link-button {
+  transition: all 0.3s ease;
+}
+
+.link-button:hover {
+  background-color: #e9ecef80;
+  border-radius: 8px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.link-button.active {
+  border-radius: 8px;
+  background-color: #e9ecefb3;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+}
+
+.arrow-icon {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.link-button:hover .arrow-icon {
+  opacity: 1;
+}
+
+.link-button.active .arrow-icon {
+  opacity: 1;
+}
+
+.button-name {
+  transition: text-decoration 0.3s ease;
+}
+
+.link-button:hover .button-name,
+.link-button.active .button-name {
+  text-decoration: underline;
+}

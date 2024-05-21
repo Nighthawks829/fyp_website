@@ -1,0 +1,41 @@
+img {
+    width: 50px;
+    height: 50px;
+}
+
+.sidebar {
+    min-width: 250px;
+    background-color: #62BFED;
+}
+
+.border-nav {
+    border-bottom: 1px solid #F1E3F3;
+}
+
+
+.user-profile {
+    object-fit: contain;
+}
+
+/* .dropdown-menu{
+
+} */
+
+.dropdown-item{
+    font-weight: 600;
+}
+
+.dropdown li:hover,
+.dropdown-item:hover {
+    background-color: #CED4DA;
+}
+
+.dropdown li:active,
+.dropdown-item:active {
+    /* background-color: #6C757D; */
+    background-color: #ADB5BD;
+}
+
+.user-name {
+    font-weight: 600;
+}
