@@ -5,6 +5,8 @@ import "./sidebar.css";
 import NavigationButton from "../navigation-button/navigation-button";
 import userProfile from "../../assets/profile.jpg";
 import { IoIosArrowDown } from "react-icons/io";
+import { Routes, Route } from "react-router";
+import Dashboard from "../../pages/dashboard/Dashboard";
 
 export default function SideBar() {
   const navigationButton = [
@@ -61,19 +63,27 @@ export default function SideBar() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               />
-              <ul class="dropdown-menu mt-3 py-3">
+              <ul className="dropdown-menu mt-3 py-3">
                 <li className="ps-1 pe-2 mb-2">
                   <a className="dropdown-item text-dark py-2 m-0" href="/">
                     User Profile
                   </a>
                 </li>
                 <li className="ps-1 pe-2">
-                  <a className="dropdown-item text-danger py-2 m-0 mb-1" href="/">
+                  <a
+                    className="dropdown-item text-danger py-2 m-0 mb-1"
+                    href="/"
+                  >
                     Logout
                   </a>
                 </li>
               </ul>
             </div>
+          </div>
+          <div>
+            <Routes>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
           </div>
         </div>
       </div>
