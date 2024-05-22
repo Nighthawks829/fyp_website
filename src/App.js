@@ -7,8 +7,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "./components/sidebar/sidebar";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Dashboard from "./pages/dashboard/Dashboard";
-import { useState } from "react";
 import NotFound from "./pages/notFound/NotFound";
+import { useState } from "react";
 
 function App() {
   // eslint-disable-next-line
@@ -19,10 +19,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
-          path="/"
+          path="/*"
           element={loggedIn ? <SideBar /> : <Navigate to="/login" />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/not-found" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

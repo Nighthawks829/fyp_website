@@ -5,8 +5,9 @@ import "./sidebar.css";
 import NavigationButton from "../navigation-button/navigation-button";
 import userProfile from "../../assets/profile.jpg";
 import { IoIosArrowDown } from "react-icons/io";
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
+import BoardPage from "../../pages/board/BoardPage";
 
 export default function SideBar() {
   const navigationButton = [
@@ -82,7 +83,10 @@ export default function SideBar() {
           </div>
           <div>
             <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/board" element={<BoardPage />} />
+              <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>
         </div>
