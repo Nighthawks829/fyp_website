@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import loginProfile from "../../assets/login-profile.jpeg";
 // import { IoMenu } from "react-icons/io5";
 import "./sidebar.css";
