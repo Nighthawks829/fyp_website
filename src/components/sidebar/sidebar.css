@@ -4,8 +4,17 @@ img {
 }
 
 .sidebar {
+    width: 100%;
     min-width: 250px;
     background-color: #62BFED;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+.sidebar-container {
+    width: 16.66%;
+    min-width: 250px;
 }
 
 .border-nav {

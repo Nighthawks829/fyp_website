@@ -20,50 +20,33 @@ export default function SideBar() {
   ];
 
   const [activeButton, setActiveButton] = useState(null);
-  const [sidebarHeight, setSidebarHeight] = useState(
-    document.body.scrollHeight
-  );
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setSidebarHeight(document.body.scrollHeight);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Initial call to set the height correctly on component mount
-    handleScroll();
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <>
       <div className="row g-0 m-0">
-        <div className="d-flex flex-column col-2 sidebar">
-          <div className="header d-flex box align-items-center pt-4 pb-4 px-4 border-nav">
-            <img
-              src={loginProfile}
-              alt=""
-              className="border border-1 border-dark rounded-circle"
-            />
-            <h5 className="text-uppercase fw-bold my-0 ms-lg-4 ms-3">
-              NIGHTHAWKS
-            </h5>
-          </div>
-          <div className="sidebar-body pt-5">
-            {navigationButton.map((button, index) => (
-              <NavigationButton
-                key={index}
-                icon={button.icon}
-                name={button.name}
-                active={activeButton === button.name}
-                onClick={() => setActiveButton(button.name)}
+        <div className="sidebar-container">
+          <div className="d-flex flex-column col-2 sidebar vh-100">
+            <div className="header d-flex box align-items-center pt-4 pb-4 px-4 border-nav">
+              <img
+                src={loginProfile}
+                alt=""
+                className="border border-1 border-dark rounded-circle"
               />
-            ))}
+              <h5 className="text-uppercase fw-bold my-0 ms-lg-4 ms-3">
+                NIGHTHAWKS
+              </h5>
+            </div>
+            <div className="sidebar-body pt-5">
+              {navigationButton.map((button, index) => (
+                <NavigationButton
+                  key={index}
+                  icon={button.icon}
+                  name={button.name}
+                  active={activeButton === button.name}
+                  onClick={() => setActiveButton(button.name)}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <div className="col p-0">
