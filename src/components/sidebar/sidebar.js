@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import loginProfile from "../../assets/login-profile.jpeg";
 // import { IoMenu } from "react-icons/io5";
 import "./sidebar.css";
@@ -20,12 +20,31 @@ export default function SideBar() {
   ];
 
   const [activeButton, setActiveButton] = useState(null);
+  const [sidebarHeight, setSidebarHeight] = useState(
+    document.body.scrollHeight
+  );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setSidebarHeight(document.body.scrollHeight);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Initial call to set the height correctly on component mount
+    handleScroll();
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
-      <div className="row g-0">
-        <div className="d-flex flex-column col-2 vh-100 sidebar ">
-          <div className="sidebar header d-flex align-items-center pt-4 pb-4 px-4 border-nav">
+      <div className="row g-0 m-0">
+        <div className="d-flex flex-column col-2 sidebar">
+          <div className="header d-flex box align-items-center pt-4 pb-4 px-4 border-nav">
             <img
               src={loginProfile}
               alt=""
