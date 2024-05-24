@@ -13,3 +13,41 @@
 .add-btn:active {
     background-color: #639fab;
 }
+
+.modal-body {
+    background-color: #F0F0F0;
+    border-radius: 15px;
+}
+
+.modal-body h2,
+h4 {
+    font-weight: 600;
+    color: #000;
+}
+
+.modal-body input,.modal-body select{
+    color: #000;
+    font-weight: 500;
+}
+
+.modal-cancel-button {
+    width: 150px;
+    text-align: center;
+    border-radius: 15px;
+    border: 2px solid #086788;
+    font-size: 24px;
+    font-weight: 500;
+    color: #DD1C1A;
+    background-color: #fff;
+}
+
+.modal-next-button{
+    width: 150px;
+    text-align: center;
+    border-radius: 15px;
+    border: 2px solid #086788;
+    font-size: 24px;
+    font-weight: 500;
+    color: #639FAB;
+    background-color: #fff; 
+}
