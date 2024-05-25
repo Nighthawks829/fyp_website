@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import loginProfile from "../../assets/login-profile.jpeg";
 // import { IoMenu } from "react-icons/io5";
 import "./sidebar.css";
@@ -11,12 +11,16 @@ import BoardPage from "../../pages/board/BoardPage";
 
 export default function SideBar() {
   const navigationButton = [
-    { icon: "RiBarChartBoxLine", name: "Dashboard" },
-    { icon: "LuCircuitBoard", name: "Board" },
-    { icon: "GiLed", name: "Sensor" },
-    { icon: "IoIosNotifications", name: "Alert Notification" },
-    { icon: "BsGraphUp", name: "Visualization Data" },
-    { icon: "LiaUserCogSolid", name: "User Management" },
+    { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
+    { icon: "LuCircuitBoard", name: "Board", to: "/board" },
+    { icon: "GiLed", name: "Sensor", to: "/sensor" },
+    {
+      icon: "IoIosNotifications",
+      name: "Alert Notification",
+      to: "/notification",
+    },
+    { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" },
+    { icon: "LiaUserCogSolid", name: "User Management", to: "/user" },
   ];
 
   const [activeButton, setActiveButton] = useState(null);
@@ -43,6 +47,7 @@ export default function SideBar() {
                   icon={button.icon}
                   name={button.name}
                   active={activeButton === button.name}
+                  to={button.to}
                   onClick={() => setActiveButton(button.name)}
                 />
               ))}

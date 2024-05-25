@@ -7,9 +7,10 @@ import { BsGraphUp } from "react-icons/bs";
 import { LiaUserCogSolid } from "react-icons/lia";
 import { IoIosArrowForward } from "react-icons/io";
 
-import './navigation-button.css'
+import "./navigation-button.css";
+import { useNavigate } from "react-router-dom";
 
-export default function NavigationButton({ icon, name, active, onClick }) {
+export default function NavigationButton({ icon, name, active, onClick, to }) {
   const icons = {
     RiBarChartBoxLine: <RiBarChartBoxLine color="black" size={30} />,
     LuCircuitBoard: <LuCircuitBoard color="black" size={30} />,
@@ -19,12 +20,17 @@ export default function NavigationButton({ icon, name, active, onClick }) {
     LiaUserCogSolid: <LiaUserCogSolid color="black" size={30} />,
   };
 
+  const navigate = useNavigate();
+
   return (
     <div
       className={`link-button mx-3 my-4 d-flex align-items-center p-3 py-4 ${
         active ? "active" : ""
       }`}
-      onClick={onClick}
+      onClick={() => {
+        onClick();
+        navigate(to);
+      }}
     >
       {icons[icon]}
       <h5 className="my-0 ms-3 fw-bold button-name">{name}</h5>

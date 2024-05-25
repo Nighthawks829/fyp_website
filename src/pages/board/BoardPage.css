@@ -1,0 +1,38 @@
+.add-btn {
+    color: #fff;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    background-color: #639FAB;
+    border: 3px solid #1C5D99;
+}
+
+.add-btn:hover {
+    background-color: #578992;
+}
+
+.add-btn:active {
+    background-color: #639fab;
+}
+
+.action{
+    width: 100px;
+}
+
+.dropdown-item {
+    font-weight: 600;
+}
+
+.dropdown li:hover,
+.dropdown-item:hover {
+    background-color: #CED4DA;
+}
+
+.dropdown li:active,
+.dropdown-item:active {
+    /* background-color: #6C757D; */
+    background-color: #ADB5BD;
+}
+
+.user-name {
+    font-weight: 600;
+}
