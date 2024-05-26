@@ -5,8 +5,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { LoginPage } from "./pages/login/login";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "./components/sidebar/sidebar";
-import PrivateRoute from "./components/privateRoute/PrivateRoute";
-import Dashboard from "./pages/dashboard/Dashboard";
+// import PrivateRoute from "./components/privateRoute/PrivateRoute";
+// import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./pages/notFound/NotFound";
 import { useState } from "react";
 

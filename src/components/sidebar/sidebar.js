@@ -29,7 +29,7 @@ export default function SideBar() {
     <>
       <div className="row g-0 m-0">
         <div className="sidebar-container">
-          <div className="d-flex flex-column col-2 sidebar vh-100">
+          <div className="d-flex flex-column col-2 sidebar">
             <div className="header d-flex box align-items-center pt-4 pb-4 px-4 border-nav">
               <img
                 src={loginProfile}
