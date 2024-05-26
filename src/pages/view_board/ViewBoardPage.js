@@ -160,14 +160,16 @@ export default function ViewBoard() {
           </tbody>
         </table>
       </div>
-      <div className=" mt-5 col-12 text-center">
-        <button
-          className="px-3 py-1 edit-button me-lg-3 mb-lg-0 mb-2 shadow"
-          onClick={() => navigate(`/editBoard/${id}`)}
-        >
-          Edit
-        </button>
-        <button className="px-3 py-1 delete-button shadow">Delete</button>
+      <div className="mt-5 col-12 text-center ">
+        <div className="d-flex flex-wrap align-items-center justify-content-center">
+          <button
+            className="px-3 py-1 edit-button shadow m-1"
+            onClick={() => navigate(`/editBoard/${id}`)}
+          >
+            Edit
+          </button>
+          <button className="px-3 py-1 delete-button shadow m-1">Delete</button>
+        </div>
       </div>
     </div>
   );

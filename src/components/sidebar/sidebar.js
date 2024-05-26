@@ -9,6 +9,8 @@ import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import BoardPage from "../../pages/board/BoardPage";
 import ViewBoardPage from "../../pages/view_board/ViewBoardPage";
+import EditBoardPage from "../../pages/edit_board/EditBoardPage";
+
 export default function SideBar() {
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
@@ -82,7 +84,7 @@ export default function SideBar() {
                     className="dropdown-item text-danger py-2 m-0 mb-1"
                     href="/"
                   >
-                    `` Logout
+                    Logout
                   </a>
                 </li>
               </ul>
@@ -94,6 +96,7 @@ export default function SideBar() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/board" element={<BoardPage />} />
               <Route path="/viewBoard/:id" element={<ViewBoardPage />} />
+              <Route path="/editBoard/:id" element={<EditBoardPage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>
