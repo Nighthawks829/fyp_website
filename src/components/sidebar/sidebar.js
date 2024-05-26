@@ -54,7 +54,7 @@ export default function SideBar() {
             </div>
           </div>
         </div>
-        <div className="col p-0">
+        <div className="col-10 p-0">
           <div className="py-4 px-5 border-nav ms-auto d-flex align-items-center justify-content-end">
             <img
               src={userProfile}

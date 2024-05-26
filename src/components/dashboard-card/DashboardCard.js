@@ -62,7 +62,7 @@ export default function DashboardCard({
               ) : null}
             </>
           ) : (
-            <Line data={graphData} />
+            <Line data={graphData} style={{maxHeight:'90%'}}/>
           )}
         </div>
       </div>
