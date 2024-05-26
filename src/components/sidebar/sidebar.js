@@ -81,7 +81,7 @@ export default function SideBar() {
                   <a
                     className="dropdown-item text-danger py-2 m-0 mb-1"
                     href="/"
-                  >
+                  >``
                     Logout
                   </a>
                 </li>
