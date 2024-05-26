@@ -1,0 +1,51 @@
+.back-btn {
+  color: #000;
+  font-size: 1.5rem;
+  border-radius: 15px;
+  background-color: #fff;
+  border: 2px solid #1c5d99;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  /* background-color: #f8f9fa; */
+  background-color: #e9ecef;
+}
+
+.back-btn:active {
+  /* background-color: #e9ecef; */
+  background-color: #dee2e6;
+}
+
+.board-data {
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0px;
+}
+
+.delete-button {
+  width: 150px;
+  text-align: center;
+  border-radius: 15px;
+  border: 2px solid #086788;
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #dd1c1a;
+}
+
+.edit-button {
+  width: 150px;
+  text-align: center;
+  border-radius: 15px;
+  border: 2px solid #086788;
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #639fab;
+}
+
+.board-img {
+  max-height: 300px;
+  object-fit: contain;
+}

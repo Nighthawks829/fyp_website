@@ -8,7 +8,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import BoardPage from "../../pages/board/BoardPage";
-
+import ViewBoardPage from "../../pages/view_board/ViewBoardPage";
 export default function SideBar() {
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
@@ -34,7 +34,7 @@ export default function SideBar() {
               <img
                 src={loginProfile}
                 alt=""
-                className="border border-1 border-dark rounded-circle"
+                className="border border-1 border-dark rounded-circle profile-img"
               />
               <h5 className="text-uppercase fw-bold my-0 ms-lg-4 ms-3">
                 NIGHTHAWKS
@@ -59,7 +59,7 @@ export default function SideBar() {
             <img
               src={userProfile}
               alt=""
-              className="border border-1 border-dark rounded-circle user-profile"
+              className="border border-1 border-dark rounded-circle user-profile profile-img"
             />
             <h5 className="text-capitalize my-0 ms-lg-4 ms-3 me-2 user-name">
               Sunlightsam
@@ -81,8 +81,8 @@ export default function SideBar() {
                   <a
                     className="dropdown-item text-danger py-2 m-0 mb-1"
                     href="/"
-                  >``
-                    Logout
+                  >
+                    `` Logout
                   </a>
                 </li>
               </ul>
@@ -93,6 +93,7 @@ export default function SideBar() {
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/board" element={<BoardPage />} />
+              <Route path="/viewBoard/:id" element={<ViewBoardPage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>

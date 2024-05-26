@@ -3,6 +3,7 @@ import React from "react";
 import "./BoardPage.css";
 
 import { IoIosMore } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function BoardPage() {
   return (
@@ -37,7 +38,7 @@ export default function BoardPage() {
         <tbody className="table-group-divider">
           <tr className="">
             <td className="text-center py-2 text-decoration-underline text-primary">
-              Board
+              <Link to='/viewBoard/1'>Board</Link>
             </td>
             <td className="text-center py-2">ESP32</td>
             <td className="text-center py-2">Home</td>

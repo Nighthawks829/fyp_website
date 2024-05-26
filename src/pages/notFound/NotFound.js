@@ -16,7 +16,7 @@ export default function NotFound() {
           Sorry, the page you're looking for doesn't exist.
         </h6>
         <Link to="/">
-          <button className="display-6 btn btn-primary fw-bold shadow back-btn">
+          <button className="btn btn-primary fw-bold shadow return-btn">
             RETURN HOME
           </button>
         </Link>
