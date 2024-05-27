@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router";
-import "./EditBoardPage.css";
+import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 
-export default function EditBoardPage() {
-  const { id } = useParams();
+export default function AddBoardPage() {
   const navigate = useNavigate();
 
   return (
@@ -12,11 +10,11 @@ export default function EditBoardPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate(`/viewBoard/${id}`)}
+          onClick={() => navigate('/board')}
         >
           Back
         </button>
-        <h1 className="m-0">Edit Board</h1>
+        <h1 className="m-0">Add Board</h1>
         <div style={{ width: "106.2px" }}></div>
       </div>
       <div className="text-center">
@@ -85,7 +83,7 @@ export default function EditBoardPage() {
         <div className=" mt-5 col-12 text-center">
           <div className="d-flex flex-wrap align-items-center justify-content-center">
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
-              Edit
+              Add
             </button>
             <button className="px-3 py-1 delete-button shadow m-1" type="reset">
               Clear

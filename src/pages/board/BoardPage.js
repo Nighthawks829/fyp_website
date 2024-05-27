@@ -3,16 +3,17 @@ import React from "react";
 import "./BoardPage.css";
 
 import { IoIosMore } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function BoardPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="p-5 w-100">
       <div className="text-end mb-4">
         <button
           className="add-btn btn-primary fw-bold shadow px-3 py-1"
-          data-bs-toggle="modal"
-          data-bs-target="#addWidget1"
+          onClick={() => navigate("/addBoard")}
         >
           + Board
         </button>
@@ -38,7 +39,7 @@ export default function BoardPage() {
         <tbody className="table-group-divider">
           <tr className="">
             <td className="text-center py-2 text-decoration-underline text-primary">
-              <Link to='/viewBoard/1'>Board</Link>
+              <Link to="/viewBoard/1">Board</Link>
             </td>
             <td className="text-center py-2">ESP32</td>
             <td className="text-center py-2">Home</td>
