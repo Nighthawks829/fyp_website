@@ -12,7 +12,8 @@ export default function EditBoardPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate(`/viewBoard/${id}`)}
+          // onClick={() => navigate(`/viewBoard/${id}`)}
+          onClick={() => navigate(-1)}
         >
           Back
         </button>
