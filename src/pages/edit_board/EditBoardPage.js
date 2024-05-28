@@ -1,10 +1,10 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import "./EditBoardPage.css";
 import { TbUpload } from "react-icons/tb";
 
 export default function EditBoardPage() {
-  const { id } = useParams();
+  // const { id } = useParams();
   const navigate = useNavigate();
 
   return (
