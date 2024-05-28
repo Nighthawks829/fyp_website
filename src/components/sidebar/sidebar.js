@@ -15,6 +15,7 @@ import SensorPage from "../../pages/sensor/SensorPage";
 import AddSensorPage from "../../pages/addSensor/AddSensorPage";
 import ViewSensorPage from "../../pages/viewSensor/ViewSensorPage";
 import EditSensorPage from "../../pages/editSensor/EditSensorPage";
+import AlertNotificationPage from "../../pages/alertNotification/AlertNotificationPage";
 
 export default function SideBar() {
   const navigationButton = [
@@ -107,6 +108,7 @@ export default function SideBar() {
               <Route path="/addSensor" element={<AddSensorPage />} />
               <Route path="/viewSensor/:id" element={<ViewSensorPage />} />
               <Route path="/editSensor/:id" element={<EditSensorPage />} />
+              <Route path="/notification" element={<AlertNotificationPage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>
