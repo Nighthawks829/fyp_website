@@ -50,16 +50,18 @@ export default function ViewBoard() {
         <h4 className="mb-4">Associated Sensors</h4>
         <table className="table">
           <thead>
-            <th scope="col" className="text-center col-3">
-              Name
-            </th>
-            <th scope="col" className="text-center col-3">
-              Type
-            </th>
-            <th scope="col" className="text-center col-3">
-              Pin
-            </th>
-            <th scope="col" className="text-center col-3"></th>
+            <tr>
+              <th scope="col" className="text-center col-3">
+                Name
+              </th>
+              <th scope="col" className="text-center col-3">
+                Type
+              </th>
+              <th scope="col" className="text-center col-3">
+                Pin
+              </th>
+              <th scope="col" className="text-center col-3"></th>
+            </tr>
           </thead>
           <tbody className="table-group-divider">
             <tr>

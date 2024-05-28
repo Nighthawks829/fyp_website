@@ -24,12 +24,12 @@ export default function AddBoardPage() {
           className="board-img"
         />
       </div>
-      <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
-        <label for="formFile" class="form-label upload-label mb-3">
+      <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
+        <label htmlFor="formFile" className="form-label upload-label mb-3">
           Upload Image <TbUpload size={20} />
         </label>
         <input
-          class="form-control"
+          className="form-control"
           type="file"
           id="formFile"
           accept=".jpg, .jpeg, .png"

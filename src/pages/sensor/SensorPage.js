@@ -53,22 +53,24 @@ export default function SensorPage() {
         </div>
         <table className="table">
           <thead>
-            <th className="text-center" scope="col">
-              Name
-            </th>
-            <th className="text-center" scope="col">
-              Type
-            </th>
-            <th className="text-center" scope="col">
-              Pin
-            </th>
-            <th className="text-center" scope="col">
-              Board
-            </th>
-            <th className="text-center" scope="col">
-              Topc
-            </th>
-            <th className="text-center" scope="col"></th>
+            <tr>
+              <th className="text-center" scope="col">
+                Name
+              </th>
+              <th className="text-center" scope="col">
+                Type
+              </th>
+              <th className="text-center" scope="col">
+                Pin
+              </th>
+              <th className="text-center" scope="col">
+                Board
+              </th>
+              <th className="text-center" scope="col">
+                Topc
+              </th>
+              <th className="text-center" scope="col"></th>
+            </tr>
           </thead>
           <tbody className="table-group-divider">
             <tr>
@@ -98,13 +100,13 @@ export default function SensorPage() {
                       </Link>
                     </li>
                     <li className="ps-1 pe-2">
-                      <buttton
+                      <button
                         className="dropdown-item text-danger py-2 m-0 mb-1"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteSensor"
                       >
                         Delete
-                      </buttton>
+                      </button>
                     </li>
                   </ul>
                 </div>

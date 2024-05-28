@@ -59,7 +59,7 @@ export default function ViewSensorPage() {
             className="board-img"
           />
           <div className="mt-4 col-12 text-center">
-            <div className="d-flex flex-wrap align-items-center justify-content-center">
+            {/* <div className="d-flex flex-wrap align-items-center justify-content-center">
               <button className="px-3 py-1 edit-button shadow m-1">ON</button>
               <button className="px-3 py-1 delete-button shadow m-1">
                 OFF
@@ -67,7 +67,20 @@ export default function ViewSensorPage() {
             </div>
             <h3 className="mt-4">
               State: <span className="digital-value">ON</span>
+            </h3> */}
+            <h3>
+              Value: <span className="analog-value">1024</span>
             </h3>
+            <div className="col-lg-6 col-md-8 col-12 mx-auto">
+              <input
+                type="range"
+                className="mt-4"
+                min="0"
+                max="4096"
+                step="1"
+                id="customRange1"
+              />
+            </div>
           </div>
           <div className="col-lg-8 col-12 mx-auto mt-5">
             <div className="row">

@@ -15,7 +15,7 @@ export default function EditSensorPage() {
         >
           Back
         </button>
-        <h1 className="m-0">Edit Sensor</h1>
+        <h1 className="m-0">Edit Sensor {id}</h1>
         <div style={{ width: "106.2px" }}></div>
       </div>
       <div className="text-center">
@@ -25,12 +25,12 @@ export default function EditSensorPage() {
           className="board-img"
         />
       </div>
-      <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
-        <label for="formFile" class="form-label upload-label mb-3">
+      <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
+        <label htmlFor="formFile" className="form-label upload-label mb-3">
           Upload Image <TbUpload size={20} />
         </label>
         <input
-          class="form-control"
+          className="form-control"
           type="file"
           id="formFile"
           accept=".jpg, .jpeg, .png"
@@ -96,7 +96,10 @@ export default function EditSensorPage() {
             </label>
           </div>
           <div className="col">
-            <select class="form-select" aria-label=".form-select sensor-board">
+            <select
+              className="form-select"
+              aria-label=".form-select sensor-board"
+            >
               <option value="1">Board1</option>
               <option value="2">Board2</option>
               <option value="3">Board3</option>
