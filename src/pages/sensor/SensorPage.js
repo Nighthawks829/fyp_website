@@ -54,9 +54,9 @@ export default function SensorPage() {
                 />
                 <ul className="dropdown-menu py-3">
                   <li className="ps-1 pe-2 mb-2">
-                    <button className="dropdown-item text-dark py-2 m-0">
+                    <Link className="dropdown-item text-dark py-2 m-0" to='/editSensor/1'>
                       Edit
-                    </button>
+                    </Link>
                   </li>
                   <li className="ps-1 pe-2">
                     <a

@@ -73,7 +73,7 @@ export default function ViewSensorPage() {
         <div className="d-flex flex-wrap align-items-center justify-content-center">
           <button
             className="px-3 py-1 edit-button shadow m-1"
-            onClick={() => navigate(`/editBoard/`)}
+            onClick={() => navigate(`/editSensor/1`)}
           >
             Edit
           </button>
