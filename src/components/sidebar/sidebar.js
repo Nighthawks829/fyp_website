@@ -12,6 +12,7 @@ import ViewBoardPage from "../../pages/view_board/ViewBoardPage";
 import EditBoardPage from "../../pages/edit_board/EditBoardPage";
 import AddBoardPage from "../../pages/addBoard/AddBoardPage";
 import SensorPage from "../../pages/sensor/SensorPage";
+import AddSensorPage from "../../pages/addSensor/AddSensorPage";
 
 export default function SideBar() {
   const navigationButton = [
@@ -101,6 +102,7 @@ export default function SideBar() {
               <Route path="/editBoard/:id" element={<EditBoardPage />} />
               <Route path="/addBoard" element={<AddBoardPage />} />
               <Route path="/sensor" element={<SensorPage />} />
+              <Route path="/addSensor" element={<AddSensorPage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>

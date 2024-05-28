@@ -1,11 +1,16 @@
 import React from "react";
 import { IoIosMore } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 export default function SensorPage() {
+  const navigate = useNavigate();
   return (
     <div className="p-xl-5 p-3">
       <div className="text-end mb-4">
-        <button className="add-btn btn-primary fw-bold shadow px-3 py-1">
+        <button
+          className="add-btn btn-primary fw-bold shadow px-3 py-1"
+          onClick={() => navigate("/addSensor")}
+        >
           + Sensor
         </button>
       </div>
