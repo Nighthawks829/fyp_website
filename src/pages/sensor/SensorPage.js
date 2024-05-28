@@ -1,6 +1,7 @@
 import React from "react";
 import { IoIosMore } from "react-icons/io";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function SensorPage() {
   const navigate = useNavigate();
@@ -35,7 +36,9 @@ export default function SensorPage() {
         </thead>
         <tbody className="table-group-divider">
           <tr>
-            <td className="text-center">Sensor 1</td>
+            <td className="text-center">
+              <Link to='/viewSensor/1'>Sensor 1</Link>
+            </td>
             <td className="text-center">Anaglog Input</td>
             <td className="text-center">2</td>
             <td className="text-center">Board1</td>
