@@ -5,6 +5,21 @@ import { Link } from "react-router-dom";
 
 export default function SensorPage() {
   const navigate = useNavigate();
+
+//   function unsecuredCopyToClipboard(text) {
+//   const textArea = document.createElement("textarea");
+//   textArea.value = text;
+//   document.body.appendChild(textArea);
+//   textArea.focus();
+//   textArea.select();
+//   try {
+//     document.execCommand('copy');
+//   } catch (err) {
+//     console.error('Unable to copy to clipboard', err);
+//   }
+//   document.body.removeChild(textArea);
+// }
+
   return (
     <>
       {/* Modal */}
@@ -98,6 +113,17 @@ export default function SensorPage() {
                       >
                         Edit
                       </Link>
+                    </li>
+                    <li className="ps-1 pe-2 mb-2">
+                      <button
+                        className="dropdown-item text-dark py-2 m-0"
+                        onClick={() => {
+                          navigator.clipboard.writeText('copy');
+                        }}
+                        
+                      >
+                        Copy ID
+                      </button>
                     </li>
                     <li className="ps-1 pe-2">
                       <button
