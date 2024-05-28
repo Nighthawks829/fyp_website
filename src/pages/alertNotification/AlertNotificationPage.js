@@ -1,14 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
 
 export default function AlertNotification() {
+  const navigate = useNavigate();
   return (
     <div className="p-xl-5 p-3">
       <div className="text-end mb-4">
         <button
           className="add-btn btn-primary fw-bold shadow px-3 py-1"
-          // onClick={() => navigate("/addSensor")}
+          onClick={() => navigate("/addNotification")}
         >
           + Alert
         </button>
