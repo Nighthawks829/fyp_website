@@ -6,11 +6,11 @@ import { Line } from "react-chartjs-2";
 export default function VisualizationPage() {
   // eslint-disable-next-line
   const [graphData, setGraphData] = useState({
-    labels: [], // Example categorical labels
+    labels: ['1','2','3'], // Example categorical labels
     datasets: [
       {
         label: "Light Data",
-        data: [], // Example data
+        data: [10,20,30], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192, 0.2)",
@@ -69,8 +69,8 @@ export default function VisualizationPage() {
           </button>
         </div>
         <h3 className="text-center fw-bold mb-5">Visualization Data</h3>
-        <div>
-          <Line data={graphData} />
+        <div className="d-flex justify-content-center align-items-center">
+          <Line data={graphData} style={{width:'100%'}}/>
         </div>
       </div>
     </>
