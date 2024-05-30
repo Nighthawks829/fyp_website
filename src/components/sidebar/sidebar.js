@@ -45,6 +45,41 @@ export default function SideBar() {
 
   return (
     <>
+      {/* Modal */}
+      <div
+        className="modal fade"
+        id="logoutModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="logoutModalLabel1"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-5">
+                Are you sure want to logout?
+              </h2>
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  Yes
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="row g-0 m-0">
         <div className="sidebar-container">
           <div className="d-flex flex-column col-2 sidebar">
@@ -99,12 +134,19 @@ export default function SideBar() {
                   </Link>
                 </li>
                 <li className="ps-1 pe-2">
-                  <a
+                  {/* <a
                     className="dropdown-item text-danger py-2 m-0 mb-1"
                     href="/"
                   >
                     Logout
-                  </a>
+                  </a> */}
+                  <button
+                    className="dropdown-item text-danger py-2 m-0 mb-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#logoutModal"
+                  >
+                    Logout
+                  </button>
                 </li>
               </ul>
             </div>
