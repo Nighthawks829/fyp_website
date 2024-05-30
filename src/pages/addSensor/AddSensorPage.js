@@ -24,93 +24,104 @@ export default function AddSensorPage() {
           className="board-img"
         />
       </div>
-      <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
-        <label htmlFor="formFile" className="form-label upload-label mb-3">
-          Upload Image <TbUpload size={20} />
-        </label>
-        <input
-          className="form-control"
-          type="file"
-          id="formFile"
-          accept=".jpg, .jpeg, .png"
-        />
-      </div>
-      <form className="col-xxl-4 col-xl-5 col-lg-8 col-12 mx-auto mt-5">
-        <div className="row mb-4">
-          <div className="col-3">
-            <label htmlFor="" className="col-form-label">
-              Name:
-            </label>
-          </div>
-          <div className="col">
-            <input type="text" className="form-control" />
-          </div>
+      <form>
+        <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
+          <label htmlFor="formFile" className="form-label upload-label mb-3">
+            Upload Image <TbUpload size={20} />
+          </label>
+          <input
+            className="form-control"
+            type="file"
+            id="formFile"
+            accept=".jpg, .jpeg, .png"
+          />
         </div>
+        <div className="col-xxl-4 col-xl-5 col-lg-8 col-12 mx-auto mt-5">
+          <div className="row mb-4">
+            <div className="col-3">
+              <label htmlFor="" className="col-form-label">
+                Name:
+              </label>
+            </div>
+            <div className="col">
+              <input type="text" className="form-control" />
+            </div>
+          </div>
 
-        <div className="row mb-4">
-          <div className="col-3">
-            <label htmlFor="" className="col-form-label">
-              Type:
-            </label>
+          <div className="row mb-4">
+            <div className="col-3">
+              <label htmlFor="" className="col-form-label">
+                Type:
+              </label>
+            </div>
+            <div className="col">
+              <select
+                className="form-select"
+                aria-label=".form-select sensor-type"
+              >
+                <option value="digital-input">Digital Input</option>
+                <option value="digital_output">Digital Output</option>
+                <option value="analog_input">Analog Input</option>
+                <option value="analog_output">Analog Output</option>
+              </select>
+            </div>
           </div>
-          <div className="col">
-            <select
-              className="form-select"
-              aria-label=".form-select sensor-type"
-            >
-              <option value="digital-input">Digital Input</option>
-              <option value="digital_output">Digital Output</option>
-              <option value="analog_input">Analog Input</option>
-              <option value="analog_output">Analog Output</option>
-            </select>
-          </div>
-        </div>
 
-        <div className="row mb-4">
-          <div className="col-3">
-            <label htmlFor="" className="col-form-label">
-              Topic
-            </label>
+          <div className="row mb-4">
+            <div className="col-3">
+              <label htmlFor="" className="col-form-label">
+                Topic
+              </label>
+            </div>
+            <div className="col">
+              <input type="text" className="form-control" />
+            </div>
           </div>
-          <div className="col">
-            <input type="text" className="form-control" />
-          </div>
-        </div>
 
-        <div className="row mb-4">
-          <div className="col-3">
-            <label htmlFor="" className="col-form-label">
-              Pin:
-            </label>
+          <div className="row mb-4">
+            <div className="col-3">
+              <label htmlFor="" className="col-form-label">
+                Pin:
+              </label>
+            </div>
+            <div className="col">
+              <input type="text" className="form-control" />
+            </div>
           </div>
-          <div className="col">
-            <input type="text" className="form-control" />
-          </div>
-        </div>
 
-        <div className="row mb-4">
-          <div className="col-3">
-            <label htmlFor="" className="col-form-label">
-              Board:
-            </label>
+          <div className="row mb-4">
+            <div className="col-3">
+              <label htmlFor="" className="col-form-label">
+                Board:
+              </label>
+            </div>
+            <div className="col">
+              <select
+                className="form-select"
+                aria-label=".form-select sensor-board"
+              >
+                <option value="1">Board1</option>
+                <option value="2">Board2</option>
+                <option value="3">Board3</option>
+              </select>
+            </div>
           </div>
-          <div className="col">
-            <select className="form-select" aria-label=".form-select sensor-board">
-              <option value="1">Board1</option>
-              <option value="2">Board2</option>
-              <option value="3">Board3</option>
-            </select>
-          </div>
-        </div>
 
-        <div className=" mt-5 col-12 text-center">
-          <div className="d-flex flex-wrap align-items-center justify-content-center">
-            <button className="px-3 py-1 edit-button shadow m-1" type="submit">
-              Add
-            </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
-              Clear
-            </button>
+          <div className=" mt-5 col-12 text-center">
+            <div className="d-flex flex-wrap align-items-center justify-content-center">
+              <button
+                className="px-3 py-1 edit-button shadow m-1"
+                type="submit"
+              >
+                Add
+              </button>
+              <button
+                className="px-3 py-1 delete-button shadow m-1"
+                type="reset"
+              >
+                Clear
+              </button>
+            </div>
           </div>
         </div>
       </form>
