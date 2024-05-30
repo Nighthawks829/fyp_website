@@ -24,6 +24,7 @@ import ViewUserPage from "../../pages/viewUser/ViewUserPage";
 import AddUserPage from "../../pages/addUser/AddUserPage";
 import EditUserPage from "../../pages/editUser/EditUserPage";
 import UserProfilePage from "../../pages/userProfile/UserProfilePage";
+import EditUserProfilePage from "../../pages/editUserProfile/EditUserProfilePage";
 import { Link } from "react-router-dom";
 
 export default function SideBar() {
@@ -135,6 +136,10 @@ export default function SideBar() {
                 element={<AddNotificationPage />}
               />
               <Route path="/userProfile" element={<UserProfilePage />} />
+              <Route
+                path="/editUserProfile"
+                element={<EditUserProfilePage />}
+              />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>
