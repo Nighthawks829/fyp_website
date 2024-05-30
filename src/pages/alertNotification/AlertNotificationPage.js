@@ -20,7 +20,7 @@ export default function AlertNotification() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to Alert Water Level?
+                Are you sure want to delete Alert Water Level?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
