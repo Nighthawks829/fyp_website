@@ -23,6 +23,8 @@ import UserManagementPage from "../../pages/userManagement/UserManagementPage";
 import ViewUserPage from "../../pages/viewUser/ViewUserPage";
 import AddUserPage from "../../pages/addUser/AddUserPage";
 import EditUserPage from "../../pages/editUser/EditUserPage";
+import UserProfilePage from "../../pages/userProfile/UserProfilePage";
+import { Link } from "react-router-dom";
 
 export default function SideBar() {
   const navigationButton = [
@@ -88,9 +90,12 @@ export default function SideBar() {
               />
               <ul className="dropdown-menu mt-3 py-3">
                 <li className="ps-1 pe-2 mb-2">
-                  <a className="dropdown-item text-dark py-2 m-0" href="/">
+                  <Link
+                    className="dropdown-item text-dark py-2 m-0"
+                    to="/userProfile"
+                  >
                     User Profile
-                  </a>
+                  </Link>
                 </li>
                 <li className="ps-1 pe-2">
                   <a
@@ -129,6 +134,7 @@ export default function SideBar() {
                 path="/addNotification"
                 element={<AddNotificationPage />}
               />
+              <Route path="/userProfile" element={<UserProfilePage />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
             </Routes>
           </div>
