@@ -4,7 +4,7 @@ import { IoIosMore } from "react-icons/io";
 
 export default function UserManagementPage() {
   const navigate = useNavigate();
-  
+
   return (
     <div className="p-xl-5 p-3">
       <div className="text-end mb-4">
@@ -50,7 +50,7 @@ export default function UserManagementPage() {
                   <li className="ps-1 pe-2 mb-2">
                     <Link
                       className="dropdown-item text-dark py-2 m-0"
-                      to="/editNotification/1"
+                      to="/editUser/1"
                     >
                       Edit
                     </Link>
