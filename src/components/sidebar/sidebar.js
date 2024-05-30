@@ -20,6 +20,7 @@ import AddNotificationPage from "../../pages/addNotification/AddNotificationPage
 import EditNotificationPage from "../../pages/editNotification/EditNotificationPage";
 import VisualizationPage from "../../pages/visualization/VisualizationPage";
 import UserManagementPage from "../../pages/userManagement/UserManagementPage";
+import ViewUserPage from "../../pages/viewUser/ViewUserPage";
 
 export default function SideBar() {
   const navigationButton = [
@@ -115,6 +116,7 @@ export default function SideBar() {
               <Route path="/notification" element={<AlertNotificationPage />} />
               <Route path="/visualization" element={<VisualizationPage />} />
               <Route path="/user" element={<UserManagementPage />} />
+              <Route path="/viewUser/:id" element={<ViewUserPage />} />
               <Route
                 path="/editNotification/:id"
                 element={<EditNotificationPage />}
