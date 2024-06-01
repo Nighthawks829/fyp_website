@@ -5,7 +5,7 @@ import "./sidebar.css";
 import NavigationButton from "../navigation-button/navigation-button";
 import userProfile from "../../assets/profile.jpg";
 import { IoIosArrowDown } from "react-icons/io";
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route, Navigate, useNavigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import BoardPage from "../../pages/board/BoardPage";
 import ViewBoardPage from "../../pages/view_board/ViewBoardPage";
@@ -26,8 +26,11 @@ import EditUserPage from "../../pages/editUser/EditUserPage";
 import UserProfilePage from "../../pages/userProfile/UserProfilePage";
 import EditUserProfilePage from "../../pages/editUserProfile/EditUserProfilePage";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function SideBar() {
+export default function SideBar({ setLoggedIn }) {
+  const navigate = useNavigate();
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
     { icon: "LuCircuitBoard", name: "Board", to: "/board" },
@@ -42,6 +45,26 @@ export default function SideBar() {
   ];
 
   const [activeButton, setActiveButton] = useState(null);
+
+  async function logoutHandle() {
+    try {
+      await axios
+        .post(
+          "http://192.168.0.110:3001/api/v1/auth/logout",
+          {},
+          {
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          toast.success("Logout successful!");
+          setLoggedIn(false);
+          navigate("/");
+        });
+    } catch (error) {
+      toast.error("Error");
+    }
+  }
 
   return (
     <>
@@ -58,13 +81,12 @@ export default function SideBar() {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-5">
-                Are you sure want to logout?
-              </h2>
+              <h2 className="text-center mb-5">Are you sure want to logout?</h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => logoutHandle()}
                 >
                   Yes
                 </button>
