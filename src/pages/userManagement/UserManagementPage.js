@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
 
+import axios from "axios";
+import Cookies from "js-cookie";
+
 export default function UserManagementPage() {
   const navigate = useNavigate();
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    async function getUserList() {
+      const token = Cookies.get("token"); // Get the JWT token from the cookies
+
+      const response = await axios.get(
+        "http://192.168.0.110:3001/api/v1/user/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log(response);
+
+      setUserList(response.data.users); // Set the user list state with the response data
+    }
+
+    getUserList(); // Call the getUserList function
+  }, []);
 
   return (
     <>
@@ -67,7 +93,44 @@ export default function UserManagementPage() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            <tr>
+            {userList.map((user) => (
+              <tr key={user.id}>
+                <td className="text-center">
+                  <Link to={`/viewUser/${user.id}`}>{user.name}</Link>
+                </td>
+                <td className="text-center">{user.email}</td>
+                <td className="text-center">{user.role}</td>
+                <td className="text-center py-2 action">
+                  <IoIosMore
+                    size={25}
+                    className="dropdown-toggle"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  />
+                  <ul className="dropdown-menu py-3">
+                    <li className="ps-1 pe-2 mb-2">
+                      <Link
+                        className="dropdown-item text-dark py-2 m-0"
+                        to={`/editUser/${user.id}`}
+                      >
+                        Edit
+                      </Link>
+                    </li>
+                    <li className="ps-1 pe-2">
+                      <button
+                        className="dropdown-item text-danger py-2 m-0 mb-1"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteUser"
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            ))}
+            {/* <tr>
               <td className="text-center">
                 <Link to="/viewUser/1">Nighthawks</Link>
               </td>
@@ -103,7 +166,7 @@ export default function UserManagementPage() {
                   </ul>
                 </div>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
