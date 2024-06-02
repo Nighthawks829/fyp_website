@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 // import { FaRegCircleUser } from "react-icons/fa6";
 import "./ViewUserPage.css";
+
+import axios from "axios";
+import Cookies from "js-cookie";
+
 export default function ViewUserPage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    async function getUser() {
+      const token = Cookies.get("token"); // Get the JWT token from the cookies
+
+      const response = await axios.get(
+        `http://192.168.0.110:3001/api/v1/user/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setName(response.data.user.name);
+        setEmail(response.data.user.email);
+        setImage(response.data.user.image);
+        setRole(response.data.user.role);
+        console.log(response);
+      }
+    }
+
+    getUser();
+  }, [id]);
 
   return (
     <>
@@ -52,22 +86,24 @@ export default function ViewUserPage() {
           </button>
         </div>
         <div className="text-center ">
-          {/* <FaRegCircleUser size={250} className="mt-3" /> */}
           <img
-            src={require("../../assets/profile.jpg")}
+            src={
+              image === ""
+                ? require("../../assets/profile.jpg")
+                : require(`../../assets/${image}`)
+            }
             alt=""
             className="user-img"
           />
           <div className="mt-5">
             <h5 className="mb-3 fw-bold">
-              Name: <span className="board-data">Nighthawks</span>
+              Name: <span className="board-data">{name}</span>
             </h5>
             <h5 className="mb-3 fw-bold">
-              Role: <span className="board-data">Admin</span>
+              Role: <span className="board-data">{role}</span>
             </h5>
             <h5 className="mb-3 fw-bold">
-              Email:{" "}
-              <span className="board-data">nighthawks0230@gmail.com</span>
+              Email: <span className="board-data">{email}</span>
             </h5>
           </div>
         </div>
@@ -75,7 +111,7 @@ export default function ViewUserPage() {
           <div className="d-flex flex-wrap align-items-center justify-content-center">
             <button
               className="px-3 py-1 edit-button shadow m-1"
-              onClick={() => navigate("/editUser/1")}
+              onClick={() => navigate(`/editUser/${id}`)}
             >
               Edit
             </button>
