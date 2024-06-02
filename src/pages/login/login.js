@@ -1,9 +1,10 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./login.css";
 import loginProfile from "../../assets/login-profile.jpeg";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 export const LoginPage = ({ setLoggedIn }) => {
   const navigate = useNavigate();
@@ -12,35 +13,33 @@ export const LoginPage = ({ setLoggedIn }) => {
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
 
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
 
+    if (userCookie) {
+      const user = JSON.parse(userCookie);
+
+      if (user && user.name && user.email) {
+        setLoggedIn(true);
+        navigate("/");
+      }
+    }
+  }, [navigate, setLoggedIn]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios
-        .post(
-          "http://192.168.0.110:3001/api/v1/auth/login",
-          {
-            email: email,
-            password: password,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            // const userData = response.data.user;
-            // const token = response.data.token;
+      const response = await axios.post(
+        "http://192.168.0.110:3001/api/v1/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
-            // Store user data and token in session storage
-            // sessionStorage.setItem("user", JSON.stringify(userData));
-            // sessionStorage.setItem("token", token);
-            setLoggedIn(true);
-            toast.success("Login successful!");
-            navigate("/");
-          }
-        });
+      if (response.status === 200) {
+        setLoggedIn(true);
+        toast.success("Login successful!");
+        navigate("/");
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.msg || "An error occurred";
       toast.error(errorMessage);
@@ -73,9 +72,7 @@ export const LoginPage = ({ setLoggedIn }) => {
               placeholder="Email"
               required
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              onChange={(e) => setEmail(e.target.value)}
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
             />
@@ -92,9 +89,7 @@ export const LoginPage = ({ setLoggedIn }) => {
               required
               value={password}
               placeholder="Password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setPasswordFocus(true)}
               onBlur={() => setPasswordFocus(false)}
             />
