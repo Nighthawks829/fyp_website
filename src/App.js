@@ -13,7 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   // eslint-disable-next-line
   const [loggedIn, setLoggedIn] = useState(false);
-  
+  const [currentTab, setCurrentTab] = useState("Dashboard");
+
   return (
     <BrowserRouter>
       <Routes>
@@ -25,7 +26,11 @@ function App() {
           path="/*"
           element={
             loggedIn ? (
-              <SideBar setLoggedIn={setLoggedIn} />
+              <SideBar
+                setLoggedIn={setLoggedIn}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+              />
             ) : (
               <Navigate to="/login" />
             )

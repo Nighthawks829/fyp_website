@@ -10,7 +10,13 @@ import { IoIosArrowForward } from "react-icons/io";
 import "./navigation-button.css";
 import { useNavigate } from "react-router-dom";
 
-export default function NavigationButton({ icon, name, active, onClick, to }) {
+export default function NavigationButton({
+  icon,
+  name,
+  to,
+  currentTab,
+  setCurrentTab,
+}) {
   const icons = {
     RiBarChartBoxLine: <RiBarChartBoxLine color="black" size={30} />,
     LuCircuitBoard: <LuCircuitBoard color="black" size={30} />,
@@ -25,10 +31,10 @@ export default function NavigationButton({ icon, name, active, onClick, to }) {
   return (
     <div
       className={`link-button mx-3 my-4 d-flex align-items-center p-3 py-4 ${
-        active ? "active" : ""
+        currentTab === name ? "active" : ""
       }`}
       onClick={() => {
-        onClick();
+        setCurrentTab(name);
         navigate(to);
       }}
     >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import loginProfile from "../../assets/login-profile.jpeg";
 // import { IoMenu } from "react-icons/io5";
 import "./sidebar.css";
@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function SideBar({ setLoggedIn }) {
+export default function SideBar({ setLoggedIn, currentTab, setCurrentTab }) {
   const navigate = useNavigate();
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
@@ -43,8 +43,6 @@ export default function SideBar({ setLoggedIn }) {
     { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" },
     { icon: "LiaUserCogSolid", name: "User Management", to: "/user" },
   ];
-
-  const [activeButton, setActiveButton] = useState(null);
 
   async function logoutHandle() {
     try {
@@ -121,9 +119,9 @@ export default function SideBar({ setLoggedIn }) {
                   key={index}
                   icon={button.icon}
                   name={button.name}
-                  active={activeButton === button.name}
                   to={button.to}
-                  onClick={() => setActiveButton(button.name)}
+                  setCurrentTab={setCurrentTab}
+                  currentTab={currentTab}
                 />
               ))}
             </div>
