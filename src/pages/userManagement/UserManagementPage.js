@@ -4,6 +4,7 @@ import { IoIosMore } from "react-icons/io";
 
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default function UserManagementPage() {
   const navigate = useNavigate();
@@ -11,19 +12,24 @@ export default function UserManagementPage() {
 
   useEffect(() => {
     async function getUserList() {
-      const token = Cookies.get("token"); // Get the JWT token from the cookies
+      try {
+        const token = Cookies.get("token"); // Get the JWT token from the cookies
 
-      const response = await axios.get(
-        "http://192.168.0.110:3001/api/v1/user/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-          },
-          withCredentials: true,
-        }
-      );
+        const response = await axios.get(
+          "http://192.168.0.110:3001/api/v1/user/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+            },
+            withCredentials: true,
+          }
+        );
 
-      setUserList(response.data.users); // Set the user list state with the response data
+        setUserList(response.data.users); // Set the user list state with the response data
+      } catch (error) {
+        const errorMessage = error.response?.data?.msg || "An error occurred";
+        toast.error(errorMessage);
+      }
     }
 
     getUserList(); // Call the getUserList function
