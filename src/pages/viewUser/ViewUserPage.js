@@ -33,7 +33,6 @@ export default function ViewUserPage() {
         setEmail(response.data.user.email);
         setImage(response.data.user.image);
         setRole(response.data.user.role);
-        console.log(response);
       }
     }
 

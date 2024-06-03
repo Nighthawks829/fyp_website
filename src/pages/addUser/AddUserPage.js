@@ -62,7 +62,7 @@ export default function AddUserPage() {
       );
 
       if (response.status === 201) {
-        console.log('Add User Success');
+        console.log("Add User Success");
         toast.success("Add user successful!");
         navigate(-1);
       }
@@ -131,6 +131,7 @@ export default function AddUserPage() {
                 name="userName"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -149,6 +150,7 @@ export default function AddUserPage() {
                 onChange={(e) => setRole(e.target.value)}
                 id="userRole"
                 name="userRole"
+                required
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -170,13 +172,14 @@ export default function AddUserPage() {
                 name="userEmail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
           </div>
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="password" className="col-form-label">
+              <label htmlFor="userPassword" className="col-form-label">
                 Password
               </label>
             </div>
@@ -184,17 +187,18 @@ export default function AddUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="password"
-                name="password"
+                id="userPassword"
+                name="userPassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
           </div>
 
           <div className="row mb-4 align-items-center">
             <div className="col-3">
-              <label htmlFor="confirmPassword" className="col-form-label">
+              <label htmlFor="userConfirmPassword" className="col-form-label">
                 Confirm Password
               </label>
             </div>
@@ -202,10 +206,11 @@ export default function AddUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="confirmPassword"
-                name="confirmPassword"
+                id="userConfirmPassword"
+                name="userConfirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
             </div>
           </div>
