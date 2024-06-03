@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import { getUserFromCookies } from "../../utils/cookies";
-import { loginUserThunk } from "./userThunk";
+import { loginUserThunk, logoutUserThunk } from "./userThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -15,6 +14,13 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
     return loginUserThunk("/auth/login", user, thunkAPI);
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (_, thunkAPI) => {
+    return logoutUserThunk("auth/logout", thunkAPI);
   }
 );
 
@@ -44,9 +50,22 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.loggedIn = false;
+        state.user = null;
+        toast.success("Logout successful!");
+      })
+      .addCase(logoutUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
       });
   },
 });
 
-export const { switchSidebar ,loggedInUser} = userSlice.actions;
+export const { switchSidebar, loggedInUser } = userSlice.actions;
 export default userSlice.reducer;

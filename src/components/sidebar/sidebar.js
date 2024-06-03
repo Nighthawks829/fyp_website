@@ -26,11 +26,11 @@ import EditUserPage from "../../pages/editUser/EditUserPage";
 import UserProfilePage from "../../pages/userProfile/UserProfilePage";
 import EditUserProfilePage from "../../pages/editUserProfile/EditUserProfilePage";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../stores/user/userSlice";
 
-export default function SideBar({ setLoggedIn, currentTab, setCurrentTab }) {
-  const navigate = useNavigate();
+export default function SideBar({ currentTab, setCurrentTab }) {
+  const dispatch = useDispatch();
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
     { icon: "LuCircuitBoard", name: "Board", to: "/board" },
@@ -45,23 +45,24 @@ export default function SideBar({ setLoggedIn, currentTab, setCurrentTab }) {
   ];
 
   async function logoutHandle() {
-    try {
-      await axios
-        .post(
-          "http://192.168.0.110:3001/api/v1/auth/logout",
-          {},
-          {
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          toast.success("Logout successful!");
-          setLoggedIn(false);
-          navigate("/");
-        });
-    } catch (error) {
-      toast.error("Error");
-    }
+    dispatch(logoutUser());
+    // try {
+    //   await axios
+    //     .post(
+    //       "http://192.168.0.110:3001/api/v1/auth/logout",
+    //       {},
+    //       {
+    //         withCredentials: true,
+    //       }
+    //     )
+    //     .then((response) => {
+    //       toast.success("Logout successful!");
+    //       setLoggedIn(false);
+    //       navigate("/");
+    //     });
+    // } catch (error) {
+    //   toast.error("Error");
+    // }
   }
 
   return (

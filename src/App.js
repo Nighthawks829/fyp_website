@@ -13,7 +13,6 @@ import { useSelector } from "react-redux";
 
 function App() {
   // eslint-disable-next-line
-  const [userloggedIn, setLoggedIn] = useState(false);
   const [currentTab, setCurrentTab] = useState("Dashboard");
   const { loggedIn } = useSelector((store) => store.user);
 
@@ -26,7 +25,6 @@ function App() {
           element={
             loggedIn ? (
               <SideBar
-                setLoggedIn={setLoggedIn}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />

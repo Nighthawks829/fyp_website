@@ -4,12 +4,12 @@ import loginProfile from "../../assets/login-profile.jpeg";
 // import axios from "axios";
 // import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, loginUser } from "../../stores/user/userSlice";
 
 export const LoginPage = () => {
-  const { user, isLoading } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ export const LoginPage = () => {
       dispatch(loggedInUser({ loggedIn: true }));
       navigate("/");
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -36,24 +37,6 @@ export const LoginPage = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     dispatch(loginUser({ email: email, password: password }));
-    //   try {
-    //     const response = await axios.post(
-    //       "http://192.168.0.110:3001/api/v1/auth/login",
-    //       { email, password },
-    //       { withCredentials: true }
-    //     );
-
-    //     if (response.status === 200) {
-    //       setLoggedIn(true);
-    //       toast.success("Login successful!");
-    //       navigate("/");
-    //     }
-    //   } catch (error) {
-    //     const errorMessage = error.response?.data?.msg || "An error occurred";
-    //     toast.error(errorMessage);
-    //     setEmail("");
-    //     setPassword("");
-    //   }
   }
 
   return (
