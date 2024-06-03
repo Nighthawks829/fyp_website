@@ -48,5 +48,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { switchSidebar } = userSlice.actions;
+export const { switchSidebar ,loggedInUser} = userSlice.actions;
 export default userSlice.reducer;

@@ -6,7 +6,7 @@ import loginProfile from "../../assets/login-profile.jpeg";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../stores/user/userSlice";
+import { loggedInUser, loginUser } from "../../stores/user/userSlice";
 
 export const LoginPage = () => {
   const { user, isLoading } = useSelector((store) => store.user);
@@ -18,18 +18,12 @@ export const LoginPage = () => {
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
 
-  // useEffect(() => {
-  //   const userCookie = Cookies.get("user");
-
-  //   if (userCookie) {
-  //     const user = JSON.parse(userCookie);
-
-  //     if (user && user.name && user.email) {
-  //       setLoggedIn(true);
-  //       navigate("/");
-  //     }
-  //   }
-  // }, [navigate, setLoggedIn]);
+  useEffect(() => {
+    if (user) {
+      dispatch(loggedInUser({ loggedIn: true }));
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
