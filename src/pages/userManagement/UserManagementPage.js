@@ -9,29 +9,54 @@ import { toast } from "react-toastify";
 export default function UserManagementPage() {
   const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
+  const [deleteUserId, setDeleteUserId] = useState("");
+
+  async function getUserList() {
+    try {
+      const token = Cookies.get("token"); // Get the JWT token from the cookies
+
+      const response = await axios.get(
+        "http://192.168.0.110:3001/api/v1/user/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+          },
+          withCredentials: true,
+        }
+      );
+
+      setUserList(response.data.users); // Set the user list state with the response data
+    } catch (error) {
+      const errorMessage = error.response?.data?.msg || "An error occurred";
+      toast.error(errorMessage);
+    }
+  }
+
+  async function handleDeleteUser() {
+    const token = Cookies.get("token");
+
+    try {
+      const response = await axios.delete(
+        `http://192.168.0.110:3001/api/v1/user/${deleteUserId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("User deleted successfully");
+        getUserList();
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete user");
+    }
+  }
 
   useEffect(() => {
-    async function getUserList() {
-      try {
-        const token = Cookies.get("token"); // Get the JWT token from the cookies
-
-        const response = await axios.get(
-          "http://192.168.0.110:3001/api/v1/user/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-            },
-            withCredentials: true,
-          }
-        );
-
-        setUserList(response.data.users); // Set the user list state with the response data
-      } catch (error) {
-        const errorMessage = error.response?.data?.msg || "An error occurred";
-        toast.error(errorMessage);
-      }
-    }
-
     getUserList(); // Call the getUserList function
   }, []);
 
@@ -57,6 +82,7 @@ export default function UserManagementPage() {
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteUser()}
                 >
                   Yes
                 </button>
@@ -126,6 +152,7 @@ export default function UserManagementPage() {
                         className="dropdown-item text-danger py-2 m-0 mb-1"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteUser"
+                        onClick={() => setDeleteUserId(user.id)}
                       >
                         Delete
                       </button>

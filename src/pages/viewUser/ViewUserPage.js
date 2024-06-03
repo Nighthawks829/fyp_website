@@ -5,6 +5,7 @@ import "./ViewUserPage.css";
 
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default function ViewUserPage() {
   const navigate = useNavigate();
@@ -13,6 +14,30 @@ export default function ViewUserPage() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [image, setImage] = useState("");
+
+  async function handleDeleteUser() {
+    const token = Cookies.get("token");
+
+    try {
+      const response = await axios.delete(
+        `http://192.168.0.110:3001/api/v1/user/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("User deleted successfully");
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete user");
+    }
+  }
 
   useEffect(() => {
     async function getUser() {
@@ -61,6 +86,7 @@ export default function ViewUserPage() {
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteUser()}
                 >
                   Yes
                 </button>
