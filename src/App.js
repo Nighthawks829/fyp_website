@@ -9,19 +9,18 @@ import NotFound from "./pages/notFound/NotFound";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 function App() {
   // eslint-disable-next-line
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [userloggedIn, setLoggedIn] = useState(false);
   const [currentTab, setCurrentTab] = useState("Dashboard");
+  const { loggedIn } = useSelector((store) => store.user);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/login"
-          element={<LoginPage setLoggedIn={setLoggedIn} />}
-        />
+        <Route path="/login" element={<LoginPage />} />
         <Route
           path="/*"
           element={

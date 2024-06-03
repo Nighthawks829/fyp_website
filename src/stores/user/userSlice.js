@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserFromCookies, getTokenFromCookies } from "../utils/cookies";
+import { getUserFromCookies } from "../../utils/cookies";
 import { loginUserThunk } from "./userThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
   user: getUserFromCookies(),
+  loggedIn: false,
   isLoading: false,
   sidebar: "Dashboard",
 };
@@ -21,6 +22,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    loggedInUser: (state, { payload }) => {
+      state.loggedIn = payload.loggedIn;
+    },
     switchSidebar: (state, { payload }) => {
       state.sidebar = payload.sidebar;
     },
@@ -34,7 +38,8 @@ const userSlice = createSlice({
         const { user } = payload;
         state.isLoading = false;
         state.user = user;
-        toast.success(`Welcome Back ${user.name}`);
+        state.loggedIn = true;
+        toast.success(`Login successful! Welcome Back ${user.name}`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;

@@ -1,51 +1,65 @@
 import React, { useEffect, useState } from "react";
 import "./login.css";
 import loginProfile from "../../assets/login-profile.jpeg";
-import axios from "axios";
-import { toast } from "react-toastify";
+// import axios from "axios";
+// import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../stores/user/userSlice";
 
-export const LoginPage = ({ setLoggedIn }) => {
+export const LoginPage = () => {
+  const { user, isLoading } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
 
+  // useEffect(() => {
+  //   const userCookie = Cookies.get("user");
+
+  //   if (userCookie) {
+  //     const user = JSON.parse(userCookie);
+
+  //     if (user && user.name && user.email) {
+  //       setLoggedIn(true);
+  //       navigate("/");
+  //     }
+  //   }
+  // }, [navigate, setLoggedIn]);
+
   useEffect(() => {
-    const userCookie = Cookies.get("user");
-
-    if (userCookie) {
-      const user = JSON.parse(userCookie);
-
-      if (user && user.name && user.email) {
-        setLoggedIn(true);
+    if (user) {
+      setTimeout(() => {
         navigate("/");
-      }
+      }, 2000);
     }
-  }, [navigate, setLoggedIn]);
+  }, [user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://192.168.0.110:3001/api/v1/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
+    dispatch(loginUser({ email: email, password: password }));
+    //   try {
+    //     const response = await axios.post(
+    //       "http://192.168.0.110:3001/api/v1/auth/login",
+    //       { email, password },
+    //       { withCredentials: true }
+    //     );
 
-      if (response.status === 200) {
-        setLoggedIn(true);
-        toast.success("Login successful!");
-        navigate("/");
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.msg || "An error occurred";
-      toast.error(errorMessage);
-      setEmail("");
-      setPassword("");
-    }
+    //     if (response.status === 200) {
+    //       setLoggedIn(true);
+    //       toast.success("Login successful!");
+    //       navigate("/");
+    //     }
+    //   } catch (error) {
+    //     const errorMessage = error.response?.data?.msg || "An error occurred";
+    //     toast.error(errorMessage);
+    //     setEmail("");
+    //     setPassword("");
+    //   }
   }
 
   return (
