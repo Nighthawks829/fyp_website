@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 
-import axios from "axios";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addUser,
+  handleUserChange,
+  clearUserValues,
+} from "../../stores/user/userSlice";
 
 export default function AddUserPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("user");
-  const [image, setImage] = useState("");
+  const { name, email, role, password, confirmPassword, image } = useSelector(
+    (store) => store.user
+  );
+  const dispatch = useDispatch();
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleUserChange({ name, value }));
+  };
 
   const navigate = useNavigate();
 
@@ -41,40 +49,13 @@ export default function AddUserPage() {
 
     if (!validateInputs()) {
       return;
-    }
-    const token = Cookies.get("token"); // Get the JWT token from the cookies
-    try {
-      const response = await axios.post(
-        "http://192.168.0.110:3001/api/v1/user/",
-        {
-          name: name,
-          email: email,
-          password: password,
-          role: role,
-          image: image,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-          },
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 201) {
-        console.log("Add User Success");
-        toast.success("Add user successful!");
-        navigate(-1);
-      }
-    } catch (error) {
-      console.log(error);
-      const errorMessage = error.response?.data?.msg || "An error occurred";
-      toast.error(errorMessage);
-      setName("");
-      setRole("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+    } else {
+      try {
+        await dispatch(
+          addUser({ name, email, role, password, image })
+        ).unwrap();
+        navigate(-1); // Navigate back to the previous page
+      } catch (error) {}
     }
   }
 
@@ -105,13 +86,14 @@ export default function AddUserPage() {
           <input
             className="form-control"
             type="file"
-            id="userImage"
-            name="userImage"
+            id="image"
+            name="image"
             accept=".jpg, .jpeg, .png"
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
-                setImage(file.name);
+                console.log(file, name);
+                dispatch(handleUserChange({ name: "image", value: file.name }));
               }
             }}
           />
@@ -119,7 +101,7 @@ export default function AddUserPage() {
         <div className="col-xxl-9 col-xl-19 col-lg-10 col-12 mx-auto mt-5">
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userName" className="col-form-label">
+              <label htmlFor="name" className="col-form-label">
                 Name:
               </label>
             </div>
@@ -127,10 +109,10 @@ export default function AddUserPage() {
               <input
                 type="text"
                 className="form-control"
-                id="userName"
-                name="userName"
+                id="name"
+                name="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -138,7 +120,7 @@ export default function AddUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userRole" className="col-form-label">
+              <label htmlFor="role" className="col-form-label">
                 Role:
               </label>
             </div>
@@ -147,9 +129,9 @@ export default function AddUserPage() {
                 className="form-select"
                 aria-label=".form-select user-role"
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
-                id="userRole"
-                name="userRole"
+                onChange={handleUserInput}
+                id="role"
+                name="role"
                 required
               >
                 <option value="user">User</option>
@@ -160,7 +142,7 @@ export default function AddUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userEmail" className="col-form-label">
+              <label htmlFor="email" className="col-form-label">
                 Email:
               </label>
             </div>
@@ -168,10 +150,10 @@ export default function AddUserPage() {
               <input
                 type="email"
                 className="form-control"
-                id="userEmail"
-                name="userEmail"
+                id="email"
+                name="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -179,7 +161,7 @@ export default function AddUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userPassword" className="col-form-label">
+              <label htmlFor="password" className="col-form-label">
                 Password
               </label>
             </div>
@@ -187,10 +169,10 @@ export default function AddUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="userPassword"
-                name="userPassword"
+                id="password"
+                name="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -198,7 +180,7 @@ export default function AddUserPage() {
 
           <div className="row mb-4 align-items-center">
             <div className="col-3">
-              <label htmlFor="userConfirmPassword" className="col-form-label">
+              <label htmlFor="confirmPassword" className="col-form-label">
                 Confirm Password
               </label>
             </div>
@@ -206,10 +188,10 @@ export default function AddUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="userConfirmPassword"
-                name="userConfirmPassword"
+                id="confirmPassword"
+                name="confirmPassword"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -226,6 +208,7 @@ export default function AddUserPage() {
               <button
                 className="px-3 py-1 delete-button shadow m-1"
                 type="reset"
+                onClick={() => dispatch(clearUserValues())}
               >
                 Clear
               </button>
