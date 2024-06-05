@@ -15,6 +15,7 @@ export default function UserManagementPage() {
   const navigate = useNavigate();
   // const [userList, setUserList] = useState([]);
   const [deleteUserId, setDeleteUserId] = useState("");
+  const [deleteUserName, setDeleteUserName] = useState("");
 
   // async function getUserList() {
   //   try {
@@ -83,7 +84,7 @@ export default function UserManagementPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete user Nighthawks?
+                Are you sure want to delete user {deleteUserName}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
@@ -159,7 +160,10 @@ export default function UserManagementPage() {
                         className="dropdown-item text-danger py-2 m-0 mb-1"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteUser"
-                        onClick={() => setDeleteUserId(user.id)}
+                        onClick={() => {
+                          setDeleteUserId(user.id);
+                          setDeleteUserName(user.name);
+                        }}
                       >
                         Delete
                       </button>
