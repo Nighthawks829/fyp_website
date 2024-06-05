@@ -5,32 +5,37 @@ import { IoIosMore } from "react-icons/io";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../stores/allUsers/allUsersSlice";
 
 export default function UserManagementPage() {
+  const { users } = useSelector((store) => store.allUsers);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
-  const [userList, setUserList] = useState([]);
+  // const [userList, setUserList] = useState([]);
   const [deleteUserId, setDeleteUserId] = useState("");
 
-  async function getUserList() {
-    try {
-      const token = Cookies.get("token"); // Get the JWT token from the cookies
+  // async function getUserList() {
+  //   try {
+  //     const token = Cookies.get("token"); // Get the JWT token from the cookies
 
-      const response = await axios.get(
-        "http://192.168.0.110:3001/api/v1/user/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-          },
-          withCredentials: true,
-        }
-      );
+  //     const response = await axios.get(
+  //       "http://192.168.0.110:3001/api/v1/user/",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     );
 
-      setUserList(response.data.users); // Set the user list state with the response data
-    } catch (error) {
-      const errorMessage = error.response?.data?.msg || "An error occurred";
-      toast.error(errorMessage);
-    }
-  }
+  //     setUserList(response.data.users); // Set the user list state with the response data
+  //   } catch (error) {
+  //     const errorMessage = error.response?.data?.msg || "An error occurred";
+  //     toast.error(errorMessage);
+  //   }
+  // }
 
   async function handleDeleteUser() {
     const token = Cookies.get("token");
@@ -48,7 +53,8 @@ export default function UserManagementPage() {
 
       if (response.status === 200) {
         toast.success("User deleted successfully");
-        getUserList();
+        // getUserList();
+        dispatch(getAllUsers());
       }
     } catch (error) {
       console.error(error);
@@ -57,8 +63,9 @@ export default function UserManagementPage() {
   }
 
   useEffect(() => {
-    getUserList(); // Call the getUserList function
-  }, []);
+    // getUserList(); // Call the getUserList function
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   return (
     <>
@@ -123,7 +130,7 @@ export default function UserManagementPage() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {userList.map((user) => (
+            {users.map((user) => (
               <tr key={user.id}>
                 <td className="text-center">
                   <Link to={`/viewUser/${user.id}`}>{user.name}</Link>
