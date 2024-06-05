@@ -6,10 +6,10 @@ import loginProfile from "../../assets/login-profile.jpeg";
 import { useNavigate } from "react-router";
 // import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { loggedInUser, loginUser } from "../../stores/user/userSlice";
+import { loggedInUser, loginUser } from "../../stores/auth/authSlice";
 
 export const LoginPage = () => {
-  const { user } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 function App() {
   // eslint-disable-next-line
   const [currentTab, setCurrentTab] = useState("Dashboard");
-  const { loggedIn } = useSelector((store) => store.user);
+  const { loggedIn } = useSelector((store) => store.auth);
 
   return (
     <BrowserRouter>

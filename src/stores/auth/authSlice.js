@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getUserFromCookies } from "../../utils/cookies";
-import { loginUserThunk, logoutUserThunk } from "./userThunk";
+import { loginUserThunk, logoutUserThunk } from "./authThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -11,21 +11,21 @@ const initialState = {
 };
 
 export const loginUser = createAsyncThunk(
-  "user/loginUser",
+  "auth/loginUser",
   async (user, thunkAPI) => {
     return loginUserThunk("/auth/login", user, thunkAPI);
   }
 );
 
 export const logoutUser = createAsyncThunk(
-  "user/logoutUser",
+  "auth/logoutUser",
   async (_, thunkAPI) => {
     return logoutUserThunk("auth/logout", thunkAPI);
   }
 );
 
-const userSlice = createSlice({
-  name: "user",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     loggedInUser: (state, { payload }) => {
@@ -67,5 +67,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { switchSidebar, loggedInUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { switchSidebar, loggedInUser } = authSlice.actions;
+export default authSlice.reducer;

@@ -5,7 +5,7 @@ import "./sidebar.css";
 import NavigationButton from "../navigation-button/navigation-button";
 import userProfile from "../../assets/profile.jpg";
 import { IoIosArrowDown } from "react-icons/io";
-import { Routes, Route, Navigate, useNavigate } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import BoardPage from "../../pages/board/BoardPage";
 import ViewBoardPage from "../../pages/view_board/ViewBoardPage";
@@ -27,7 +27,7 @@ import UserProfilePage from "../../pages/userProfile/UserProfilePage";
 import EditUserProfilePage from "../../pages/editUserProfile/EditUserProfilePage";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "../../stores/user/userSlice";
+import { logoutUser } from "../../stores/auth/authSlice";
 
 export default function SideBar({ currentTab, setCurrentTab }) {
   const dispatch = useDispatch();
@@ -46,23 +46,6 @@ export default function SideBar({ currentTab, setCurrentTab }) {
 
   async function logoutHandle() {
     dispatch(logoutUser());
-    // try {
-    //   await axios
-    //     .post(
-    //       "http://192.168.0.110:3001/api/v1/auth/logout",
-    //       {},
-    //       {
-    //         withCredentials: true,
-    //       }
-    //     )
-    //     .then((response) => {
-    //       toast.success("Logout successful!");
-    //       setLoggedIn(false);
-    //       navigate("/");
-    //     });
-    // } catch (error) {
-    //   toast.error("Error");
-    // }
   }
 
   return (
