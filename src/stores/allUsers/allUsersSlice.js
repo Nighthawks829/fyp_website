@@ -43,5 +43,5 @@ const allUsersSlice = createSlice({
   },
 });
 
-export const { handleChange } = allUsersSlice.actions;
+export const { showLoading,hideLoading } = allUsersSlice.actions;
 export default allUsersSlice.reducer;
