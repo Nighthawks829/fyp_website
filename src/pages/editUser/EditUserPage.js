@@ -1,21 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TbUpload } from "react-icons/tb";
 import { toast } from "react-toastify";
 
-import axios from "axios";
-import Cookies from "js-cookie";
+// import axios from "axios";
+// import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  editUser,
+  getUser,
+  handleUserChange,
+} from "../../stores/user/userSlice";
 
 export default function EditUserPage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("user");
-  const [image, setImage] = useState("");
+  const { name, email, role, password, confirmPassword, image } = useSelector(
+    (store) => store.user
+  );
+  const dispatch = useDispatch();
+
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  // const [role, setRole] = useState("user");
+  // const [image, setImage] = useState("");
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleUserChange({ name, value }));
+  };
 
   function validateInputs() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,73 +59,80 @@ export default function EditUserPage() {
 
     if (!validateInputs()) {
       return;
+    } else {
+      try {
+        const userData = { name, email, role, password, image };
+        await dispatch(editUser({ userId: id, user: userData })).unwrap();
+        navigate(-1); // Navigate back to the previous page
+      } catch (error) {}
     }
-    const token = Cookies.get("token"); // Get the JWT token from the cookies
+    // const token = Cookies.get("token"); // Get the JWT token from the cookies
 
-    try {
-      const response = await axios.patch(
-        `http://192.168.0.110:3001/api/v1/user/${id}`,
-        {
-          name: name,
-          email: email,
-          password: password,
-          role: role,
-          image: image,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-          },
-          withCredentials: true,
-        }
-      );
+    // try {
+    //   const response = await axios.patch(
+    //     `http://192.168.0.110:3001/api/v1/user/${id}`,
+    //     {
+    //       name: name,
+    //       email: email,
+    //       password: password,
+    //       role: role,
+    //       image: image,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
 
-      if (response.status === 200) {
-        toast.success("Edit user successful!");
-        navigate(-1);
-      }
-    } catch (error) {
-      console.log(error);
-      const errorMessage = error.response?.data?.msg || "An error occurred";
-      toast.error(errorMessage);
-      setName("");
-      setRole("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-    }
+    //   if (response.status === 200) {
+    //     toast.success("Edit user successful!");
+    //     navigate(-1);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   const errorMessage = error.response?.data?.msg || "An error occurred";
+    //   toast.error(errorMessage);
+    //   // setName("");
+    //   // setRole("");
+    //   // setEmail("");
+    //   // setPassword("");
+    //   // setConfirmPassword("");
+    // }
   }
 
   useEffect(() => {
-    async function getUser() {
-      try {
-        const token = Cookies.get("token"); // Get the JWT token from the cookies
+    // async function getUser() {
+    //   try {
+    //     const token = Cookies.get("token"); // Get the JWT token from the cookies
 
-        const response = await axios.get(
-          `http://192.168.0.110:3001/api/v1/user/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-            },
-            withCredentials: true,
-          }
-        );
+    //     const response = await axios.get(
+    //       `http://192.168.0.110:3001/api/v1/user/${id}`,
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+    //         },
+    //         withCredentials: true,
+    //       }
+    //     );
 
-        if (response.status === 200) {
-          setName(response.data.user.name);
-          setEmail(response.data.user.email);
-          setImage(response.data.user.image);
-          setRole(response.data.user.role);
-          console.log(response);
-        }
-      } catch (error) {
-        const errorMessage = error.response?.data?.msg || "An error occurred";
-        toast.error(errorMessage);
-      }
-    }
+    //     if (response.status === 200) {
+    //       // setName(response.data.user.name);
+    //       // setEmail(response.data.user.email);
+    //       // setImage(response.data.user.image);
+    //       // setRole(response.data.user.role);
+    //       console.log(response);
+    //     }
+    //   } catch (error) {
+    //     const errorMessage = error.response?.data?.msg || "An error occurred";
+    //     toast.error(errorMessage);
+    //   }
+    // }
 
-    getUser();
-  }, [id]);
+    // getUser();
+    dispatch(getUser(id));
+  }, [id, dispatch]);
 
   return (
     <div className="p-xl-5 p-3">
@@ -141,13 +165,13 @@ export default function EditUserPage() {
           <input
             className="form-control"
             type="file"
-            id="userImage"
-            name="userImage"
+            id="image"
+            name="image"
             accept=".jpg, .jpeg, .png"
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
-                setImage(file.name);
+                dispatch(handleUserChange({ name: "image", value: file.name }));
               }
             }}
           />
@@ -155,7 +179,7 @@ export default function EditUserPage() {
         <div className="col-xxl-9 col-xl-19 col-lg-10 col-12 mx-auto mt-5">
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userName" className="col-form-label">
+              <label htmlFor="name" className="col-form-label">
                 Name:
               </label>
             </div>
@@ -163,10 +187,10 @@ export default function EditUserPage() {
               <input
                 type="text"
                 className="form-control"
-                id="userName"
-                name="userName"
+                id="name"
+                name="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -174,7 +198,7 @@ export default function EditUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userRole" className="col-form-label">
+              <label htmlFor="role" className="col-form-label">
                 Role:
               </label>
             </div>
@@ -182,10 +206,10 @@ export default function EditUserPage() {
               <select
                 className="form-select"
                 aria-label=".form-select user-role"
-                name="userRole"
-                id="userRole"
+                name="role"
+                id="role"
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={handleUserInput}
                 required
               >
                 <option value="user">User</option>
@@ -196,7 +220,7 @@ export default function EditUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userEmail" className="col-form-label">
+              <label htmlFor="email" className="col-form-label">
                 Email:
               </label>
             </div>
@@ -204,10 +228,10 @@ export default function EditUserPage() {
               <input
                 type="email"
                 className="form-control"
-                id="userEmail"
-                name="userEmail"
+                id="email"
+                name="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -215,7 +239,7 @@ export default function EditUserPage() {
 
           <div className="row mb-4">
             <div className="col-3">
-              <label htmlFor="userPassword" className="col-form-label">
+              <label htmlFor="password" className="col-form-label">
                 Password
               </label>
             </div>
@@ -223,10 +247,10 @@ export default function EditUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="userPassword"
-                name="userPassword"
+                id="password"
+                name="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>
@@ -234,7 +258,7 @@ export default function EditUserPage() {
 
           <div className="row mb-4 align-items-center">
             <div className="col-3">
-              <label htmlFor="userConfirmPassword" className="col-form-label">
+              <label htmlFor="confirmPassword" className="col-form-label">
                 Confirm Password
               </label>
             </div>
@@ -242,10 +266,10 @@ export default function EditUserPage() {
               <input
                 type="password"
                 className="form-control"
-                id="userConfirmPassword"
-                name="userConfirmPassword"
+                id="confirmPassword"
+                name="confirmPassword"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleUserInput}
                 required
               />
             </div>

@@ -19,3 +19,13 @@ export const getUserThunk = async (url, thunkAPI) => {
     return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
+
+export const editUserThunk = async (url, user, thunkAPI) => {
+  try {
+    const response = await customFetch.patch(url, user);
+    thunkAPI.dispatch(clearUserValues());
+    return response.data.user;
+  } catch (error) {
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};

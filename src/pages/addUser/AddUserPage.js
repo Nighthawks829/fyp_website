@@ -92,7 +92,6 @@ export default function AddUserPage() {
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
-                console.log(file, name);
                 dispatch(handleUserChange({ name: "image", value: file.name }));
               }
             }}
