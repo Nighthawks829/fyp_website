@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getUserFromCookies } from "../../utils/cookies";
-import { loginUserThunk, logoutUserThunk } from "./authThunk";
+import {
+  clearAuthStoreThunk,
+  loginUserThunk,
+  logoutUserThunk,
+} from "./authThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -22,6 +26,11 @@ export const logoutUser = createAsyncThunk(
   async (_, thunkAPI) => {
     return logoutUserThunk("auth/logout", thunkAPI);
   }
+);
+
+export const clearAuthStore = createAsyncThunk(
+  "auth/clearStore",
+  clearAuthStoreThunk
 );
 
 const authSlice = createSlice({
@@ -63,6 +72,9 @@ const authSlice = createSlice({
       .addCase(logoutUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(clearAuthStore.rejected, () => {
+        toast.error("There was an error");
       });
   },
 });
