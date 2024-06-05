@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 // import { FaRegCircleUser } from "react-icons/fa6";
 import "./ViewUserPage.css";
@@ -6,14 +6,19 @@ import "./ViewUserPage.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../stores/user/userSlice";
 
 export default function ViewUserPage() {
+  const { name, email, role, image } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const { id } = useParams();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [image, setImage] = useState("");
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [role, setRole] = useState("");
+  // const [image, setImage] = useState("");
 
   async function handleDeleteUser() {
     const token = Cookies.get("token");
@@ -40,29 +45,30 @@ export default function ViewUserPage() {
   }
 
   useEffect(() => {
-    async function getUser() {
-      const token = Cookies.get("token"); // Get the JWT token from the cookies
+    // async function getUser() {
+    //   const token = Cookies.get("token"); // Get the JWT token from the cookies
 
-      const response = await axios.get(
-        `http://192.168.0.110:3001/api/v1/user/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-          },
-          withCredentials: true,
-        }
-      );
+    //   const response = await axios.get(
+    //     `http://192.168.0.110:3001/api/v1/user/${id}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
 
-      if (response.status === 200) {
-        setName(response.data.user.name);
-        setEmail(response.data.user.email);
-        setImage(response.data.user.image);
-        setRole(response.data.user.role);
-      }
-    }
+    //   if (response.status === 200) {
+    //     setName(response.data.user.name);
+    //     setEmail(response.data.user.email);
+    //     setImage(response.data.user.image);
+    //     setRole(response.data.user.role);
+    //   }
+    // }
 
-    getUser();
-  }, [id]);
+    // getUser();
+    dispatch(getUser(id));
+  }, [id, dispatch]);
 
   return (
     <>

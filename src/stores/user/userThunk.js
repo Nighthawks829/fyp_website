@@ -10,3 +10,12 @@ export const addUserThunk = async (url, user, thunkAPI) => {
     return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
+
+export const getUserThunk = async (url, thunkAPI) => {
+  try {
+    const response = await customFetch.get(url);
+    return response.data.user;
+  } catch (error) {
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};

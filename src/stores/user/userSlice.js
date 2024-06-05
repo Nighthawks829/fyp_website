@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUserThunk } from "./userThunk";
+import { addUserThunk, getUserThunk } from "./userThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -16,6 +16,13 @@ export const addUser = createAsyncThunk(
   "user/addUser",
   async (user, thunkAPI) => {
     return addUserThunk("/user/", user, thunkAPI);
+  }
+);
+
+export const getUser = createAsyncThunk(
+  "user/getUser",
+  async (userId, thunkAPI) => {
+    return getUserThunk(`/user/${userId}`, thunkAPI);
   }
 );
 
@@ -41,6 +48,20 @@ const userSlice = createSlice({
         toast.success("Add user successful!");
       })
       .addCase(addUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.name = payload.name;
+        state.email = payload.email;
+        state.role = payload.role;
+        state.image = payload.image;
+      })
+      .addCase(getUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       });
