@@ -151,7 +151,7 @@ export default function EditUserPage() {
           src={
             image === ""
               ? require("../../assets/profile.jpg")
-              : require(`../../assets/${image}`)
+              : require(`../../../public/uploads/${image}`)
           }
           alt=""
           className="user-img"
