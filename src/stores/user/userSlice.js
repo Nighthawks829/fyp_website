@@ -19,8 +19,8 @@ const initialState = {
 
 export const addUser = createAsyncThunk(
   "user/addUser",
-  async (user, thunkAPI) => {
-    return addUserThunk("/user/", user, thunkAPI);
+  async (formData, thunkAPI) => {
+    return addUserThunk("/user/", formData, thunkAPI);
   }
 );
 

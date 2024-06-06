@@ -1,9 +1,14 @@
 import customFetch, { checkForUnauthorizedResponse } from "../../utils/axios";
 import { clearUserValues } from "./userSlice";
 
-export const addUserThunk = async (url, user, thunkAPI) => {
+export const addUserThunk = async (url, formData, thunkAPI) => {
   try {
-    const response = await customFetch.post(url, user);
+    // console.log(user);
+    const response = await customFetch.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     thunkAPI.dispatch(clearUserValues());
     return response.data.msg;
   } catch (error) {

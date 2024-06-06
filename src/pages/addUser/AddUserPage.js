@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
-
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,7 +13,10 @@ export default function AddUserPage() {
   const { name, email, role, password, confirmPassword, image } = useSelector(
     (store) => store.user
   );
+  const [file, setFile] = useState("");
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -22,7 +24,13 @@ export default function AddUserPage() {
     dispatch(handleUserChange({ name, value }));
   };
 
-  const navigate = useNavigate();
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFile(file);
+      dispatch(handleUserChange({ name: "image", value: file.name }));
+    }
+  };
 
   function validateInputs() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,11 +59,18 @@ export default function AddUserPage() {
       return;
     } else {
       try {
-        await dispatch(
-          addUser({ name, email, role, password, image })
-        ).unwrap();
-        navigate(-1); // Navigate back to the previous page
-      } catch (error) {}
+        const userData = { name, email, role, password, image };
+        const formData = new FormData();
+        for (const key in userData) {
+          formData.append(key, userData[key]);
+        }
+        if (file) {
+          formData.append("image", file);
+        }
+        await dispatch(addUser(formData)).unwrap();
+        navigate(-1);
+      } catch (error) {
+      }
     }
   }
 
@@ -80,7 +95,7 @@ export default function AddUserPage() {
       </div>
       <form onSubmit={handleAddUser}>
         <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-6 col-12 mb-3 text-center mx-auto mt-4 ">
-          <label htmlFor="userImage" className="form-label upload-label mb-3">
+          <label htmlFor="image" className="form-label upload-label mb-3">
             Upload Image <TbUpload size={20} />
           </label>
           <input
@@ -89,12 +104,7 @@ export default function AddUserPage() {
             id="image"
             name="image"
             accept=".jpg, .jpeg, .png"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                dispatch(handleUserChange({ name: "image", value: file.name }));
-              }
-            }}
+            onChange={handleFileChange}
           />
         </div>
         <div className="col-xxl-9 col-xl-19 col-lg-10 col-12 mx-auto mt-5">
