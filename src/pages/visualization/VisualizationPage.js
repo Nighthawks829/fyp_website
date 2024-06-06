@@ -48,7 +48,7 @@ export default function VisualizationPage() {
                 </button>
                 <button
                   className="modal-next-button shadow"
-                  data-bs-target="#addWidget2"
+                  data-bs-target="#watchData"
                   data-bs-toggle="modal"
                 >
                   Next

@@ -9,6 +9,87 @@ export default function AlertNotification() {
       {/* Modal */}
       <div
         className="modal fade"
+        id="addAlert"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="addAlertLabel1"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-2">Select Sensor</h2>
+              <h4 className="text-center mb-4">Sensor ID</h4>
+              <input
+                type="text"
+                className="form-control border border-dark text-center"
+                placeholder="Sensor ID"
+              />
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-target="#addAlert2"
+                  data-bs-toggle="modal"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal 3 */}
+      <div
+        className="modal fade"
+        id="addAlert2"
+        aria-hidden="true"
+        aria-labelledby="addAlertLabel3"
+        tabIndex="-1"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-2">Rename Alert</h2>
+              <h4 className="text-center mb-4">
+                Enter new name for this alert
+              </h4>
+              <input
+                type="text"
+                className="form-control border border-dark text-center"
+                placeholder="Component Name"
+              />
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-target="#addAlert2"
+                  data-bs-toggle="modal"
+                  onClick={()=>navigate('/addNotification')}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div
+        className="modal fade"
         id="deleteNotification"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -40,11 +121,13 @@ export default function AlertNotification() {
           </div>
         </div>
       </div>
+
       <div className="p-xl-5 p-3">
         <div className="text-end mb-4">
           <button
             className="add-btn btn-primary fw-bold shadow px-3 py-1"
-            onClick={() => navigate("/addNotification")}
+            data-bs-toggle="modal"
+            data-bs-target="#addAlert"
           >
             + Alert
           </button>
@@ -70,7 +153,7 @@ export default function AlertNotification() {
           <tbody className="table-group-divider">
             <tr>
               <td className="text-center">
-                <Link to="/viewNotification/1">Alert Water Level</Link>
+                <Link >Alert Water Level</Link>
               </td>
               <td className="text-center">Water Sensor 1</td>
               <td className="text-center">500</td>
