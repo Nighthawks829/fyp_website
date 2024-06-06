@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
 
-import axios from "axios";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+// import axios from "axios";
+// import Cookies from "js-cookie";
+// import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../../stores/allUsers/allUsersSlice";
+import { deleteUser } from "../../stores/user/userSlice";
 
 export default function UserManagementPage() {
   const { users } = useSelector((store) => store.allUsers);
@@ -39,28 +40,30 @@ export default function UserManagementPage() {
   // }
 
   async function handleDeleteUser() {
-    const token = Cookies.get("token");
+    dispatch(deleteUser(deleteUserId));
+    dispatch(getAllUsers());
+    // const token = Cookies.get("token");
 
-    try {
-      const response = await axios.delete(
-        `http://192.168.0.110:3001/api/v1/user/${deleteUserId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
+    // try {
+    //   const response = await axios.delete(
+    //     `http://192.168.0.110:3001/api/v1/user/${deleteUserId}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
 
-      if (response.status === 200) {
-        toast.success("User deleted successfully");
-        // getUserList();
-        dispatch(getAllUsers());
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete user");
-    }
+    //   if (response.status === 200) {
+    //     toast.success("User deleted successfully");
+    //     // getUserList();
+    //     dispatch(getAllUsers());
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error("Failed to delete user");
+    // }
   }
 
   useEffect(() => {

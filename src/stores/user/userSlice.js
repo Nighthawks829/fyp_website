@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUserThunk, editUserThunk, getUserThunk } from "./userThunk";
+import {
+  addUserThunk,
+  deleteUserThunk,
+  editUserThunk,
+  getUserThunk,
+} from "./userThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -30,6 +35,13 @@ export const editUser = createAsyncThunk(
   "user/editUser",
   async ({ userId, user }, thunkAPI) => {
     return editUserThunk(`/user/${userId}`, user, thunkAPI);
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (userId, thunkAPI) => {
+    return deleteUserThunk(`/user/${userId}`, thunkAPI);
   }
 );
 
@@ -80,6 +92,17 @@ const userSlice = createSlice({
         toast.success("Edit user successful!");
       })
       .addCase(editUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success("User deleted successfully");
+      })
+      .addCase(deleteUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       });

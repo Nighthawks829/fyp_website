@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router";
 // import { FaRegCircleUser } from "react-icons/fa6";
 import "./ViewUserPage.css";
 
-import axios from "axios";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+// import axios from "axios";
+// import Cookies from "js-cookie";
+// import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../stores/user/userSlice";
+import { deleteUser, getUser } from "../../stores/user/userSlice";
 
 export default function ViewUserPage() {
   const { name, email, role, image } = useSelector((store) => store.user);
@@ -21,27 +21,31 @@ export default function ViewUserPage() {
   // const [image, setImage] = useState("");
 
   async function handleDeleteUser() {
-    const token = Cookies.get("token");
-
     try {
-      const response = await axios.delete(
-        `http://192.168.0.110:3001/api/v1/user/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
+      await dispatch(deleteUser(id)).unwrap();
+      navigate(-1); // Navigate back to the previous page
+    } catch (error) {}
+    // const token = Cookies.get("token");
 
-      if (response.status === 200) {
-        toast.success("User deleted successfully");
-        navigate(-1);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete user");
-    }
+    // try {
+    //   const response = await axios.delete(
+    //     `http://192.168.0.110:3001/api/v1/user/${id}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
+
+    //   if (response.status === 200) {
+    //     toast.success("User deleted successfully");
+    //     navigate(-1);
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error("Failed to delete user");
+    // }
   }
 
   useEffect(() => {
