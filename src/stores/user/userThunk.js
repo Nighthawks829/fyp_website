@@ -25,9 +25,9 @@ export const getUserThunk = async (url, thunkAPI) => {
   }
 };
 
-export const editUserThunk = async (url, user, thunkAPI) => {
+export const editUserThunk = async (url, formData, thunkAPI) => {
   try {
-    const response = await customFetch.patch(url, user);
+    const response = await customFetch.patch(url, formData);
     thunkAPI.dispatch(clearUserValues());
     return response.data.user;
   } catch (error) {
