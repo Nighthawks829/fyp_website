@@ -24,15 +24,15 @@ export const LoginPage = () => {
       navigate("/");
     }
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
-  useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setTimeout(() => {
+  //       navigate("/");
+  //     }, 2000);
+  //   }
+  // }, [user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
