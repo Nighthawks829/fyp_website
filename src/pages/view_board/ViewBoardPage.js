@@ -5,7 +5,7 @@ import ESP32 from "../../assets/esp32.jpeg";
 
 import { IoIosMore } from "react-icons/io";
 
-export default function ViewBoard() {
+export default function ViewBoardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   return (
