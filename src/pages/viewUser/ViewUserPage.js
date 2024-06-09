@@ -42,6 +42,7 @@ export default function ViewUserPage() {
     return <img src={imgSrc} alt="" className="user-img" />;
   };
 
+
   return (
     <>
       {/* Modal */}
@@ -58,7 +59,7 @@ export default function ViewUserPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete user Nighthawks?
+                Are you sure want to delete user {name}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
