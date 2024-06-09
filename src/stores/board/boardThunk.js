@@ -14,3 +14,12 @@ export const addBoardThunk = async (url, formData, thunkAPI) => {
     return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
+
+export const getBoardThunk = async (url, thunkAPI) => {
+  try {
+    const response = await customFetch.get(url);
+    return response.data.board;
+  } catch (error) {
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};
