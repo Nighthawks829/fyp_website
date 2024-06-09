@@ -23,3 +23,13 @@ export const getBoardThunk = async (url, thunkAPI) => {
     return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
+
+export const editBoardThunk = async (url, formData, thunkAPI) => {
+  try {
+    const response = await customFetch.patch(url, formData);
+    thunkAPI.dispatch(clearBoardValues());
+    return response.data.boaord;
+  } catch (error) {
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};

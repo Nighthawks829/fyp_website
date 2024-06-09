@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addBoardThunk, getBoardThunk } from "./boardThunk";
+import { addBoardThunk, editBoardThunk, getBoardThunk } from "./boardThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
   name: "",
   type: "",
   location: "",
-  ipAddress: "",
+  ip_address: "",
   image: "",
   sensors: "",
 };
@@ -23,6 +23,13 @@ export const getBoard = createAsyncThunk(
   "board/getBoard",
   async (boardId, thunkAPI) => {
     return getBoardThunk(`/board/${boardId}`, thunkAPI);
+  }
+);
+
+export const editBoard = createAsyncThunk(
+  "board/editBoard",
+  async ({ boardId, formData }, thunkAPI) => {
+    return editBoardThunk(`/board/${boardId}`, formData, thunkAPI);
   }
 );
 
@@ -58,11 +65,22 @@ const boardSlice = createSlice({
         state.name = payload.name;
         state.type = payload.type;
         state.location = payload.location;
-        state.ipAddress = payload.ip_address;
+        state.ip_address = payload.ip_address;
         state.image = payload.image;
         state.sensors = payload.sensors;
       })
       .addCase(getBoard.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(editBoard.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editBoard.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success("Edit board dusccessful!");
+      })
+      .addCase(editBoard.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       });
