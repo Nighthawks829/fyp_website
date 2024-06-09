@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./BoardPage.css";
 
@@ -6,11 +6,20 @@ import { IoIosMore } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBoards } from "../../stores/allBoards/allBoardsSlice";
+import { deleteBoard } from "../../stores/board/boardSlice";
 
 export default function BoardPage() {
   const navigate = useNavigate();
   const { boards } = useSelector((store) => store.allBoards);
   const dispatch = useDispatch();
+
+  const [deleteBoardId, setDeleteBoardId] = useState("");
+  const [deleteBoardName, setDeleteBoardName] = useState("");
+
+  async function handleDeleteBoard() {
+    dispatch(deleteBoard(deleteBoardId));
+    dispatch(getAllBoards());
+  }
 
   useEffect(() => {
     dispatch(getAllBoards());
@@ -32,12 +41,13 @@ export default function BoardPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete sensor Board 1?
+                Are you sure want to delete {deleteBoardName}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteBoard()}
                 >
                   Yes
                 </button>
@@ -113,7 +123,10 @@ export default function BoardPage() {
                               className="dropdown-item text-danger py-2 m-0 mb-1"
                               data-bs-toggle="modal"
                               data-bs-target="#deleteBoard"
-                              // onClick={() => setBoardToDelete(board)}
+                              onClick={() => {
+                                setDeleteBoardId(board.id);
+                                setDeleteBoardName(board.name);
+                              }}
                             >
                               Delete
                             </button>

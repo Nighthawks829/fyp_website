@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addBoardThunk, editBoardThunk, getBoardThunk } from "./boardThunk";
+import {
+  addBoardThunk,
+  deleteBoardThunk,
+  editBoardThunk,
+  getBoardThunk,
+} from "./boardThunk";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -30,6 +35,13 @@ export const editBoard = createAsyncThunk(
   "board/editBoard",
   async ({ boardId, formData }, thunkAPI) => {
     return editBoardThunk(`/board/${boardId}`, formData, thunkAPI);
+  }
+);
+
+export const deleteBoard = createAsyncThunk(
+  "board/deleteBoard",
+  async (boardId, thunkAPI) => {
+    return deleteBoardThunk(`/board/${boardId}`, thunkAPI);
   }
 );
 
@@ -82,6 +94,17 @@ const boardSlice = createSlice({
       })
       .addCase(editBoard.rejected, (state, { payload }) => {
         state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(deleteBoard.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteBoard.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success("Board deleted successfully");
+      })
+      .addCase(deleteBoard.rejected, (state, { payload }) => {
+        state.isLoading = true;
         toast.error(payload);
       });
   },

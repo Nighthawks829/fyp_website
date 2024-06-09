@@ -33,3 +33,13 @@ export const editBoardThunk = async (url, formData, thunkAPI) => {
     return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
+
+export const deleteBoardThunk = async (url, thunkAPI) => {
+  try {
+    const response = await customFetch.delete(url);
+    thunkAPI.dispatch(clearBoardValues());
+    return response.data.msg;
+  } catch (error) {
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};
