@@ -1,6 +1,6 @@
 import customFetch, { checkForUnauthorizedResponse } from "../../utils/axios";
 
-export const getAllUsersThunk = async (url, thunkAPI) => {
+export const getAllBoardsThunk = async (url, thunkAPI) => {
   try {
     const response = await customFetch.get(url);
     return response.data;
