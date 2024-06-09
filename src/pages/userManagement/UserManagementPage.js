@@ -18,56 +18,12 @@ export default function UserManagementPage() {
   const [deleteUserId, setDeleteUserId] = useState("");
   const [deleteUserName, setDeleteUserName] = useState("");
 
-  // async function getUserList() {
-  //   try {
-  //     const token = Cookies.get("token"); // Get the JWT token from the cookies
-
-  //     const response = await axios.get(
-  //       "http://192.168.0.110:3001/api/v1/user/",
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-  //         },
-  //         withCredentials: true,
-  //       }
-  //     );
-
-  //     setUserList(response.data.users); // Set the user list state with the response data
-  //   } catch (error) {
-  //     const errorMessage = error.response?.data?.msg || "An error occurred";
-  //     toast.error(errorMessage);
-  //   }
-  // }
-
   async function handleDeleteUser() {
     dispatch(deleteUser(deleteUserId));
     dispatch(getAllUsers());
-    // const token = Cookies.get("token");
-
-    // try {
-    //   const response = await axios.delete(
-    //     `http://192.168.0.110:3001/api/v1/user/${deleteUserId}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //       withCredentials: true,
-    //     }
-    //   );
-
-    //   if (response.status === 200) {
-    //     toast.success("User deleted successfully");
-    //     // getUserList();
-    //     dispatch(getAllUsers());
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error("Failed to delete user");
-    // }
   }
 
   useEffect(() => {
-    // getUserList(); // Call the getUserList function
     dispatch(getAllUsers());
   }, [dispatch]);
 
@@ -134,47 +90,49 @@ export default function UserManagementPage() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="text-center">
-                  <Link to={`/viewUser/${user.id}`}>{user.name}</Link>
-                </td>
-                <td className="text-center">{user.email}</td>
-                <td className="text-center">{user.role}</td>
-                <td className="text-center py-2 action">
-                  <IoIosMore
-                    size={25}
-                    className="dropdown-toggle"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  />
-                  <ul className="dropdown-menu py-3">
-                    <li className="ps-1 pe-2 mb-2">
-                      <Link
-                        className="dropdown-item text-dark py-2 m-0"
-                        to={`/editUser/${user.id}`}
-                      >
-                        Edit
-                      </Link>
-                    </li>
-                    <li className="ps-1 pe-2">
-                      <button
-                        className="dropdown-item text-danger py-2 m-0 mb-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteUser"
-                        onClick={() => {
-                          setDeleteUserId(user.id);
-                          setDeleteUserName(user.name);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            ))}
+            {users
+              ? users.map((user) => (
+                  <tr key={user.id}>
+                    <td className="text-center">
+                      <Link to={`/viewUser/${user.id}`}>{user.name}</Link>
+                    </td>
+                    <td className="text-center">{user.email}</td>
+                    <td className="text-center">{user.role}</td>
+                    <td className="text-center py-2 action">
+                      <IoIosMore
+                        size={25}
+                        className="dropdown-toggle"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      />
+                      <ul className="dropdown-menu py-3">
+                        <li className="ps-1 pe-2 mb-2">
+                          <Link
+                            className="dropdown-item text-dark py-2 m-0"
+                            to={`/editUser/${user.id}`}
+                          >
+                            Edit
+                          </Link>
+                        </li>
+                        <li className="ps-1 pe-2">
+                          <button
+                            className="dropdown-item text-danger py-2 m-0 mb-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteUser"
+                            onClick={() => {
+                              setDeleteUserId(user.id);
+                              setDeleteUserName(user.name);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                ))
+              : null}
           </tbody>
         </table>
       </div>
