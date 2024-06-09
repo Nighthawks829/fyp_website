@@ -1,9 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { addBoard, handleBoardChange } from "../../stores/board/boardSlice";
+import { toast } from "react-toastify";
 
 export default function AddBoardPage() {
+  const { name, type, location, ip_address, image } = useSelector(
+    (store) => store.board
+  );
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [file, setFile] = useState("");
+
   const navigate = useNavigate();
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleBoardChange({ name, value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFile(file);
+      dispatch(handleBoardChange({ name: "image", value: file.name }));
+    }
+  };
+
+  async function handleAddBoard(e) {
+    e.preventDefault();
+
+    try {
+      const userId = user.userId;
+      const boardData = { userId, name, type, location, ip_address, image };
+      const formData = new FormData();
+      for (const key in boardData) {
+        formData.append(key, boardData[key]);
+      }
+      if (file) {
+        formData.append("image", file);
+      }
+      await dispatch(addBoard(formData)).unwrap();
+      navigate(-1);
+    } catch (error) {
+      toast.error(error);
+    }
+  }
 
   return (
     <div className="p-xl-5 p-3">
@@ -31,52 +75,89 @@ export default function AddBoardPage() {
         <input
           className="form-control"
           type="file"
-          id="formFile"
+          id="image"
+          name="image"
           accept=".jpg, .jpeg, .png"
+          onChange={handleFileChange}
         />
       </div>
-      <form className="col-xxl-4 col-xl-5 col-lg-8 col-12 mx-auto mt-5">
+      <form
+        className="col-xxl-4 col-xl-5 col-lg-8 col-12 mx-auto mt-5"
+        onSubmit={handleAddBoard}
+      >
         <div className="row mb-4">
           <div className="col-3">
-            <label htmlFor="" className="col-form-label">
+            <label htmlFor="name" className="col-form-label">
               Name:
             </label>
           </div>
           <div className="col">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={name}
+              required
+              onChange={handleUserInput}
+            />
           </div>
         </div>
 
         <div className="row mb-4">
           <div className="col-3">
-            <label htmlFor="" className="col-form-label">
+            <label htmlFor="type" className="col-form-label">
               Type:
             </label>
           </div>
           <div className="col">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              id="type"
+              name="type"
+              value={type}
+              required
+              onChange={handleUserInput}
+            />
           </div>
         </div>
 
         <div className="row mb-4">
           <div className="col-3">
-            <label htmlFor="" className="col-form-label">
+            <label htmlFor="location" className="col-form-label">
               Location:
             </label>
           </div>
           <div className="col">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              name="location"
+              value={location}
+              required
+              onChange={handleUserInput}
+            />
           </div>
         </div>
 
         <div className="row mb-4">
           <div className="col-3">
-            <label htmlFor="" className="col-form-label">
+            <label htmlFor="ip_address" className="col-form-label">
               IP Address:
             </label>
           </div>
           <div className="col">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control"
+              id="ip_address"
+              name="ip_address"
+              value={ip_address}
+              required
+              onChange={handleUserInput}
+            />
           </div>
         </div>
 
