@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 // import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearUserValues,
   editUser,
   getUser,
   handleUserChange,
@@ -86,7 +87,10 @@ export default function EditUserPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            dispatch(clearUserValues());
+            navigate(-1);
+          }}
         >
           Back
         </button>

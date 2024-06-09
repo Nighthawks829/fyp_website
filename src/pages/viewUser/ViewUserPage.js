@@ -3,7 +3,11 @@ import { useNavigate, useParams } from "react-router";
 import "./ViewUserPage.css";
 
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getUser } from "../../stores/user/userSlice";
+import {
+  clearUserValues,
+  deleteUser,
+  getUser,
+} from "../../stores/user/userSlice";
 import defaultImage from "../../assets/profile.jpg";
 
 export default function ViewUserPage() {
@@ -79,7 +83,10 @@ export default function ViewUserPage() {
         <div className="text-start">
           <button
             className="back-btn btn-primary fw-bold shadow px-4 py-1"
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              dispatch(clearUserValues());
+              navigate(-1);
+            }}
           >
             Back
           </button>
