@@ -104,7 +104,7 @@ export default function SensorPage() {
                     </td>
                     <td className="text-center">{sensor.type}</td>
                     <td className="text-center">{sensor.pin}</td>
-                    <td className="text-center">{sensor.board}</td>
+                    <td className="text-center">{sensor.boardName}</td>
                     <td className="text-center">{sensor.topic}</td>
                     <td className="text-center py-2 action">
                       <div className="dropdown">
