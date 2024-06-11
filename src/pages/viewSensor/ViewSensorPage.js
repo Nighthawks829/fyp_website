@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "./ViewSensorPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSensorValues, getSensor } from "../../stores/sensor/sensorSlice";
+import { clearSensorValues, deleteSensor, getSensor } from "../../stores/sensor/sensorSlice";
 
 import defaultImage from "../../assets/led.jpeg";
 
@@ -72,6 +72,13 @@ export default function ViewSensorPage() {
     }
   };
 
+  async function handleDeleteSensor() {
+    try {
+      await dispatch(deleteSensor(id)).unwrap();
+      navigate(-1);
+    } catch (error) {}
+  }
+
   return (
     <>
       {/* Modal */}
@@ -88,12 +95,13 @@ export default function ViewSensorPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete Sensor 1?
+                Are you sure want to delete {name}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={()=>handleDeleteSensor()}
                 >
                   Yes
                 </button>

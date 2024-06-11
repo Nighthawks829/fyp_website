@@ -121,7 +121,7 @@ export default function AddSensorPage() {
             <div className="col">
               <select
                 className="form-select"
-                aria-label=".form-select sensor-type"
+                aria-label="form-select sensor-type"
                 id="type"
                 name="type"
                 value={type}
@@ -189,6 +189,7 @@ export default function AddSensorPage() {
                 required
                 onChange={handleUserInput}
               >
+                <option value="">Select Sensor Type</option>
                 {boards
                   ? boards.map((board) => (
                       <option key={board.id} value={board.id}>

@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
+import { deleteSensor } from "../../stores/sensor/sensorSlice";
 
 export default function SensorPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sensors } = useSelector((store) => store.allSensors);
+
+  const [deleteSensorId, setDeleteSensorId] = useState("");
+  const [deleteSensorName, setDeleteSensorName] = useState("");
 
   useEffect(() => {
     dispatch(getAllSensors());
@@ -28,6 +32,11 @@ export default function SensorPage() {
     document.body.removeChild(textArea);
   }
 
+  async function handleDeleteSensor() {
+    dispatch(deleteSensor(deleteSensorId));
+    dispatch(getAllSensors());
+  }
+
   return (
     <>
       {/* Modal */}
@@ -44,12 +53,13 @@ export default function SensorPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete Sensor 1?
+                Are you sure want to delete {deleteSensorName}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteSensor()}
                 >
                   Yes
                 </button>
@@ -140,6 +150,10 @@ export default function SensorPage() {
                               className="dropdown-item text-danger py-2 m-0 mb-1"
                               data-bs-toggle="modal"
                               data-bs-target="#deleteSensor"
+                              onClick={() => {
+                                setDeleteSensorId(sensor.id);
+                                setDeleteSensorName(sensor.name);
+                              }}
                             >
                               Delete
                             </button>
