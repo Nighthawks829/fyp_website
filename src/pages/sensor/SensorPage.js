@@ -1,24 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoIosMore } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
 
 export default function SensorPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { sensors } = useSelector((store) => store.allSensors);
 
-//   function unsecuredCopyToClipboard(text) {
-//   const textArea = document.createElement("textarea");
-//   textArea.value = text;
-//   document.body.appendChild(textArea);
-//   textArea.focus();
-//   textArea.select();
-//   try {
-//     document.execCommand('copy');
-//   } catch (err) {
-//     console.error('Unable to copy to clipboard', err);
-//   }
-//   document.body.removeChild(textArea);
-// }
+  useEffect(() => {
+    dispatch(getAllSensors());
+  }, [dispatch]);
+
+  function unsecuredCopyToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand("copy");
+    } catch (err) {
+      console.error("Unable to copy to clipboard", err);
+    }
+    document.body.removeChild(textArea);
+  }
 
   return (
     <>
@@ -82,13 +90,67 @@ export default function SensorPage() {
                 Board
               </th>
               <th className="text-center" scope="col">
-                Topc
+                Topic
               </th>
               <th className="text-center" scope="col"></th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            <tr>
+            {sensors
+              ? sensors.map((sensor) => (
+                  <tr key={sensor.id}>
+                    <td className="text-center">
+                      <Link to={`/viewSensor/${sensor.id}`}>{sensor.name}</Link>
+                    </td>
+                    <td className="text-center">{sensor.type}</td>
+                    <td className="text-center">{sensor.pin}</td>
+                    <td className="text-center">{sensor.board}</td>
+                    <td className="text-center">{sensor.topic}</td>
+                    <td className="text-center py-2 action">
+                      <div className="dropdown">
+                        <IoIosMore
+                          size={25}
+                          className="dropdown-toggle"
+                          role="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        />
+                        <ul className="dropdown-menu py-3">
+                          <li className="ps-1 pe-2 mb-2">
+                            <Link
+                              className="dropdown-item text-dark py-2 m-0"
+                              to={`/editSensor/${sensor.id}`}
+                            >
+                              Edit
+                            </Link>
+                          </li>
+                          <li className="ps-1 pe-2 mb-2">
+                            <button
+                              className="dropdown-item text-dark py-2 m-0"
+                              onClick={() => {
+                                // navigator.clipboard.writeText(sensor.id);
+                                unsecuredCopyToClipboard(sensor.id);
+                              }}
+                            >
+                              Copy ID
+                            </button>
+                          </li>
+                          <li className="ps-1 pe-2">
+                            <button
+                              className="dropdown-item text-danger py-2 m-0 mb-1"
+                              data-bs-toggle="modal"
+                              data-bs-target="#deleteSensor"
+                            >
+                              Delete
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              : null}
+            {/* <tr>
               <td className="text-center">
                 <Link to="/viewSensor/1">Sensor 1</Link>
               </td>
@@ -118,9 +180,8 @@ export default function SensorPage() {
                       <button
                         className="dropdown-item text-dark py-2 m-0"
                         onClick={() => {
-                          navigator.clipboard.writeText('copy');
+                          navigator.clipboard.writeText("copy");
                         }}
-                        
                       >
                         Copy ID
                       </button>
@@ -137,7 +198,7 @@ export default function SensorPage() {
                   </ul>
                 </div>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
