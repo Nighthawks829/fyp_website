@@ -83,7 +83,7 @@ const sensorSlice = createSlice({
         state.type = payload.type;
         state.topic = payload.topic;
         state.image = payload.image;
-        state.value = payload.value;
+        state.value = payload.value ? payload.value : "0";
       })
       .addCase(getSensor.rejected, (state, { payload }) => {
         state.isLoading = false;
