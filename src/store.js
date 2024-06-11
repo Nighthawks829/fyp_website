@@ -5,6 +5,7 @@ import userSlice from "./stores/user/userSlice";
 import allBoardsSlice from "./stores/allBoards/allBoardsSlice";
 import boardSlice from "./stores/board/boardSlice";
 import allSensorsSlice from "./stores/allSensors/allSensorsSlice";
+import sensorSlice from "./stores/sensor/sensorSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     allBoards: allBoardsSlice,
     board: boardSlice,
     allSensors: allSensorsSlice,
+    sensor: sensorSlice,
   },
 });
