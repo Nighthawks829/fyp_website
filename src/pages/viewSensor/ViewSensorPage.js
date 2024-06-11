@@ -1,10 +1,38 @@
-import React from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import "./ViewSensorPage.css";
+import { useDispatch, useSelector } from "react-redux";
+import { clearSensorValues, getSensor } from "../../stores/sensor/sensorSlice";
+
+import defaultImage from "../../assets/led.jpeg";
 
 export default function ViewSensorPage() {
-  //   const { id } = useParams();
+  const { id } = useParams();
+  const { name, type, topic, pin, boardId, boardName, image } = useSelector(
+    (store) => store.sensor
+  );
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getSensor(id));
+  }, [dispatch, id]);
+
+  const SensorImage = ({ image }) => {
+    const [imgSrc, setImgSrc] = useState("");
+
+    useEffect(() => {
+      try {
+        setImgSrc(require(`../../../public/uploads/${image}`));
+      } catch (error) {
+        setImgSrc(defaultImage);
+      }
+    }, [image]);
+
+    return <img src={imgSrc} alt="" className="board-img" />;
+  };
+
   return (
     <>
       {/* Modal */}
@@ -46,18 +74,22 @@ export default function ViewSensorPage() {
         <div className="text-start">
           <button
             className="back-btn btn-primary fw-bold shadow px-4 py-1"
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              dispatch(clearSensorValues());
+              navigate(-1);
+            }}
           >
             Back
           </button>
         </div>
 
         <div className="text-center">
-          <img
+          {/* <img
             src={require("../../assets/led.jpeg")}
             alt=""
             className="board-img"
-          />
+          /> */}
+          <SensorImage image={image} />
           <div className="mt-4 col-12 text-center">
             {/* <div className="d-flex flex-wrap align-items-center justify-content-center">
               <button className="px-3 py-1 edit-button shadow m-1">ON</button>
@@ -86,30 +118,27 @@ export default function ViewSensorPage() {
             <div className="row">
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Name: <span className="board-data ms-1">Board1</span>
+                  Name: <span className="board-data ms-1">{name}</span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Pin: <span className="board-data ms-1">7</span>
+                  Pin: <span className="board-data ms-1">{pin}</span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Type: <span className="board-data ms-1">Digital Output</span>
+                  Type: <span className="board-data ms-1">{type}</span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Board: <span className="board-data ms-1">Board1</span>
+                  Board: <span className="board-data ms-1">{boardName}</span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Topic:{" "}
-                  <span className="board-data ms-1">
-                    esp32/board1/output/led1
-                  </span>
+                  Topic: <span className="board-data ms-1">{topic}</span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">

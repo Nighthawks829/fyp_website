@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 const initialState = {
   isLoading: false,
   boardId: "",
+  boardName: "",
   name: "",
   pin: "",
   type: "Digital Input",
@@ -75,6 +76,7 @@ const sensorSlice = createSlice({
       .addCase(getSensor.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.boardId = payload.boardId;
+        state.boardName = payload.boardName;
         state.name = payload.name;
         state.pin = payload.pin;
         state.type = payload.type;
