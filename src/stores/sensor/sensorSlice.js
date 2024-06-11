@@ -16,6 +16,7 @@ const initialState = {
   type: "Digital Input",
   topic: "",
   image: "",
+  value: "",
 };
 
 export const addSensor = createAsyncThunk(
@@ -82,6 +83,7 @@ const sensorSlice = createSlice({
         state.type = payload.type;
         state.topic = payload.topic;
         state.image = payload.image;
+        state.value = payload.value;
       })
       .addCase(getSensor.rejected, (state, { payload }) => {
         state.isLoading = false;
