@@ -1,53 +1,125 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import "./AddNotificationPage.css";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addNotification,
+  clearNotificationValues,
+  handleNotificationChange,
+} from "../../stores/notification/notificationSlice";
 
 export default function AddNotificationPage() {
+  const { sensorId, name, message, threshold, condition, platform, address } =
+    useSelector((store) => store.notification);
+  const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleNotificationChange({ name, value }));
+  };
+
+  async function handleAddNotification(e) {
+    e.preventDefault();
+
+    try {
+      const userId = user.userId;
+      await dispatch(
+        addNotification({
+          userId,
+          sensorId,
+          name,
+          message,
+          threshold,
+          condition,
+          platform,
+          address,
+        })
+      ).unwrap();
+      navigate(-1);
+    } catch (error) {}
+  }
 
   return (
     <div className="p-xl-5 p-3">
       <div className="text-start mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate("/notification")}
+          onClick={() => {
+            dispatch(clearNotificationValues());
+            navigate(-1);
+          }}
         >
           Back
         </button>
       </div>
       <h3 className="text-center mt-2 fw-bold">When temperature sensor 1</h3>
-      <form>
+      <form onSubmit={handleAddNotification}>
         <div className="text-center col-lg-6 col-md-8 col-12 mx-auto mt-4">
-          <select className="form-select" aria-label=".form-select sensor-type">
-            <option value="bigger-than">bigger than</option>
-            <option value="lower-than">lower than</option>
+          <select
+            className="form-select"
+            aria-label=".form-select sensor-type"
+            id="condition"
+            name="condition"
+            value={condition}
+            required
+            onChange={handleUserInput}
+          >
+            <option value="bigger">bigger than</option>
+            <option value="lower">lower than</option>
             <option value="equal">equal to</option>
           </select>
         </div>
         <div className="col-lg-6 col-md-8 col-12 mx-auto mt-4">
           <div className="text-center">
-            <label htmlFor="" className="col-form-label fw-bold">
+            <label htmlFor="threshold" className="col-form-label fw-bold">
               Sensor Value
             </label>
           </div>
-          <input type="number" className="form-control" />
+          <input
+            type="number"
+            className="form-control"
+            id="threshold"
+            name="threshold"
+            value={threshold}
+            required
+            onChange={handleUserInput}
+          />
         </div>
         <h3 className="text-center mt-4">Then</h3>
         <div className="col-lg-8 col-md-10 col-12 mx-auto mt-4">
           <div className="row">
             <div className="col-md-3 col-12 d-flex justify-content-center align-items-center">
-              <label htmlFor="" className="form-label fw-bold">
+              <label htmlFor="message" className="form-label fw-bold">
                 Send message:
               </label>
             </div>
             <div className="col-md-9 col-12">
-              <textarea className="form-control" rows="5" />
+              <textarea
+                className="form-control"
+                rows="5"
+                id="message"
+                name="message"
+                value={message}
+                required
+                onChange={handleUserInput}
+              />
             </div>
           </div>
         </div>
         <h3 className="text-center mt-4">To</h3>
         <div className="text-center col-lg-6 col-md-8 col-12 mx-auto mt-4">
-          <select className="form-select" aria-label=".form-select sensor-type">
+          <select
+            className="form-select"
+            aria-label=".form-select sensor-type"
+            id="platform"
+            name="platform"
+            value={platform}
+            required
+            onChange={handleUserInput}
+          >
             <option value="telegram">Telegram</option>
             <option value="email">Email</option>
           </select>
@@ -55,12 +127,20 @@ export default function AddNotificationPage() {
         <div className="col-lg-8 col-md-10 col-12 mx-auto mt-4">
           <div className="row">
             <div className="col-md-3 col-12 d-flex justify-content-center align-items-center">
-              <label htmlFor="" className="form-label fw-bold m-0">
+              <label htmlFor="address" className="form-label fw-bold m-0">
                 Bot ID:
               </label>
             </div>
             <div className="col-md-9 col-12">
-              <input type="text" className="form-control" />
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                name="address"
+                value={address}
+                required
+                onChange={handleUserInput}
+              />
             </div>
           </div>
         </div>

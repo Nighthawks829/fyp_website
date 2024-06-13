@@ -3,15 +3,38 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
 import { getAllNotifications } from "../../stores/allNotifications/allNotificationsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  clearNotificationValues,
+  handleNotificationChange,
+} from "../../stores/notification/notificationSlice";
+import { toast } from "react-toastify";
 
 export default function AlertNotification() {
   const navigate = useNavigate();
+  const { sensorId, name } = useSelector((store) => store.notification);
   const { notifications } = useSelector((store) => store.allNotifications);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllNotifications());
   }, [dispatch]);
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleNotificationChange({ name, value }));
+  };
+
+  const handleAddNotification = (e) => {
+    if (sensorId === "" || name === "") {
+      toast.error("Please provide all values");
+      dispatch(clearNotificationValues());
+      return;
+    } else {
+      navigate("/addNotification");
+    }
+  };
 
   return (
     <>
@@ -34,11 +57,17 @@ export default function AlertNotification() {
                 type="text"
                 className="form-control border border-dark text-center"
                 placeholder="Sensor ID"
+                id="sensorId"
+                name="sensorId"
+                required
+                onChange={handleUserInput}
+                value={sensorId}
               />
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearNotificationValues())}
                 >
                   Cancel
                 </button>
@@ -74,11 +103,17 @@ export default function AlertNotification() {
                 type="text"
                 className="form-control border border-dark text-center"
                 placeholder="Component Name"
+                id="name"
+                name="name"
+                value={name}
+                required
+                onChange={handleUserInput}
               />
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearNotificationValues())}
                 >
                   Cancel
                 </button>
@@ -86,7 +121,7 @@ export default function AlertNotification() {
                   className="modal-next-button shadow"
                   data-bs-target="#addAlert2"
                   data-bs-toggle="modal"
-                  onClick={() => navigate("/addNotification")}
+                  onClick={() => handleAddNotification()}
                 >
                   Next
                 </button>
