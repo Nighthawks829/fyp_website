@@ -97,10 +97,11 @@ const notificationSlice = createSlice({
       })
       .addCase(editNotification.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload);
+        toast.success("Edit sensor successful!");
       })
-      .addCase(deleteNotification.pending, (state) => {
+      .addCase(deleteNotification.pending, (state, { payload }) => {
         state.isLoading = true;
+        toast.error(payload);
       })
       .addCase(deleteNotification.fulfilled, (state, { payload }) => {
         state.isLoading = false;

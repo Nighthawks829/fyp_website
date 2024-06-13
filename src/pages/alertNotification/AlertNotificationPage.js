@@ -217,7 +217,7 @@ export default function AlertNotification() {
                           <li className="ps-1 pe-2 mb-2">
                             <Link
                               className="dropdown-item text-dark py-2 m-0"
-                              to="/editNotification/1"
+                              to={`/editNotification/${notification.id}`}
                             >
                               Edit
                             </Link>
