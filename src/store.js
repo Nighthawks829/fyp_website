@@ -6,6 +6,8 @@ import allBoardsSlice from "./stores/allBoards/allBoardsSlice";
 import boardSlice from "./stores/board/boardSlice";
 import allSensorsSlice from "./stores/allSensors/allSensorsSlice";
 import sensorSlice from "./stores/sensor/sensorSlice";
+import allNotificationsSlice from "./stores/allNotifications/allNotificationsSlice";
+import notificationSlice from "./stores/notification/notificationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +18,7 @@ export const store = configureStore({
     board: boardSlice,
     allSensors: allSensorsSlice,
     sensor: sensorSlice,
+    allNotifications: allNotificationsSlice,
+    notification: notificationSlice,
   },
 });

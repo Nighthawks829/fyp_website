@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
+import { getAllNotifications } from "../../stores/allNotifications/allNotificationsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AlertNotification() {
   const navigate = useNavigate();
+  const { notifications } = useSelector((store) => store.allNotifications);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllNotifications());
+  }, [dispatch]);
+
   return (
     <>
       {/* Modal */}
@@ -77,7 +86,7 @@ export default function AlertNotification() {
                   className="modal-next-button shadow"
                   data-bs-target="#addAlert2"
                   data-bs-toggle="modal"
-                  onClick={()=>navigate('/addNotification')}
+                  onClick={() => navigate("/addNotification")}
                 >
                   Next
                 </button>
@@ -151,9 +160,51 @@ export default function AlertNotification() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            <tr>
+            {notifications
+              ? notifications.map((notification) => (
+                  <tr key={notification.id}>
+                    <td className="text-center">
+                      <Link>{notification.name}</Link>
+                    </td>
+                    <td className="text-center">{notification.sensorName}</td>
+                    <td className="text-center">{notification.threshold}</td>
+                    <td className="text-center">{notification.platform}</td>
+                    <td className="text-center py-2 action">
+                      <div className="dropdown">
+                        <IoIosMore
+                          size={25}
+                          className="dropdown-toggle"
+                          role="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        />
+                        <ul className="dropdown-menu py-3">
+                          <li className="ps-1 pe-2 mb-2">
+                            <Link
+                              className="dropdown-item text-dark py-2 m-0"
+                              to="/editNotification/1"
+                            >
+                              Edit
+                            </Link>
+                          </li>
+                          <li className="ps-1 pe-2">
+                            <button
+                              className="dropdown-item text-danger py-2 m-0 mb-1"
+                              data-bs-toggle="modal"
+                              data-bs-target="#deleteNotification"
+                            >
+                              Delete
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              : null}
+            {/* <tr>
               <td className="text-center">
-                <Link >Alert Water Level</Link>
+                <Link>Alert Water Level</Link>
               </td>
               <td className="text-center">Water Sensor 1</td>
               <td className="text-center">500</td>
@@ -188,7 +239,7 @@ export default function AlertNotification() {
                   </ul>
                 </div>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
