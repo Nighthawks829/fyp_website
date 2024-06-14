@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import loginProfile from "../../assets/login-profile.jpeg";
 // import { IoMenu } from "react-icons/io5";
 import "./sidebar.css";
 import NavigationButton from "../navigation-button/navigation-button";
-import userProfile from "../../assets/profile.jpg";
+// import userProfile from "../../assets/profile.jpg";
 import { IoIosArrowDown } from "react-icons/io";
 import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "../../pages/dashboard/Dashboard";
@@ -26,10 +26,12 @@ import EditUserPage from "../../pages/editUser/EditUserPage";
 import UserProfilePage from "../../pages/userProfile/UserProfilePage";
 import EditUserProfilePage from "../../pages/editUserProfile/EditUserProfilePage";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../stores/auth/authSlice";
+import defaultImage from "../../assets/profile.jpg";
 
 export default function SideBar({ currentTab, setCurrentTab }) {
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
@@ -47,6 +49,26 @@ export default function SideBar({ currentTab, setCurrentTab }) {
   async function logoutHandle() {
     dispatch(logoutUser());
   }
+
+  const UserImage = ({ image }) => {
+    const [imgSrc, setImgSrc] = useState("");
+
+    useEffect(() => {
+      try {
+        setImgSrc(require(`../../../public/uploads/${image}`));
+      } catch (error) {
+        setImgSrc(defaultImage);
+      }
+    }, [image]);
+
+    return (
+      <img
+        src={imgSrc}
+        alt=""
+        className="border border-1 border-dark rounded-circle user-profile profile-img"
+      />
+    );
+  };
 
   return (
     <>
@@ -113,13 +135,18 @@ export default function SideBar({ currentTab, setCurrentTab }) {
         </div>
         <div className="col p-0">
           <div className="py-4 px-5 border-nav ms-auto d-flex align-items-center justify-content-end">
-            <img
-              src={userProfile}
+            {/* <img
+              src={
+                user.image === ""
+                  ? require("../../assets/profile.jpg")
+                  : require(`../../../public/uploads/${user.image}`)
+              }
               alt=""
               className="border border-1 border-dark rounded-circle user-profile profile-img"
-            />
+            /> */}
+            <UserImage image={user.image} />
             <h5 className="text-capitalize my-0 ms-lg-4 ms-3 me-2 user-name">
-              Sunlightsam
+              {user.name}
             </h5>
             <div className="dropdown">
               <IoIosArrowDown
