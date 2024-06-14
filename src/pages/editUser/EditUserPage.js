@@ -108,7 +108,6 @@ export default function EditUserPage() {
           }
           alt=""
           className="user-img"
-          onChange={handleFileChange}
         />
       </div>
       <form onSubmit={handleEditUser}>

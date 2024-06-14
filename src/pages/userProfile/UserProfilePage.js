@@ -26,7 +26,7 @@ export default function UserProfilePage() {
 
   useEffect(() => {
     dispatch(getUser(user.userId));
-  }, []);
+  }, [dispatch, user.userId]);
 
   return (
     <div className="p-xl-5 p-3">
