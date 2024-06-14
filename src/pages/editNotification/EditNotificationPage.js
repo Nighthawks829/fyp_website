@@ -9,8 +9,16 @@ import {
 } from "../../stores/notification/notificationSlice";
 
 export default function EditNotificationPage() {
-  const { sensorId, name, message, threshold, condition, platform, address } =
-    useSelector((store) => store.notification);
+  const {
+    sensorId,
+    name,
+    sensorName,
+    message,
+    threshold,
+    condition,
+    platform,
+    address,
+  } = useSelector((store) => store.notification);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
@@ -65,7 +73,7 @@ export default function EditNotificationPage() {
         </button>
       </div>
 
-      <h3 className="text-center mt-2 fw-bold">When temperature sensor 1</h3>
+      <h3 className="text-center mt-2 fw-bold">When {sensorName}</h3>
       <form onSubmit={handleEditNotification}>
         <div className="text-center col-lg-6 col-md-8 col-12 mx-auto mt-4">
           <select

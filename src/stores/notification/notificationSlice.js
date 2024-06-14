@@ -16,6 +16,7 @@ const initialState = {
   condition: "bigger",
   platform: "email",
   address: "",
+  sensorName: "",
 };
 
 export const addNotification = createAsyncThunk(
@@ -87,6 +88,7 @@ const notificationSlice = createSlice({
         state.condition = payload.condition;
         state.payload = payload.platform;
         state.address = payload.address;
+        state.sensorName = payload.sensorName;
       })
       .addCase(getNotification.rejected, (state, { payload }) => {
         state.isLoading = false;
