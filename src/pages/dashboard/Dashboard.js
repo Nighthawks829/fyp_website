@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getAllDashboards } from "../../stores/allDashboards/allDashboardsSlice";
 import "./Dashboard.css";
 
 import DashboardCard from "../../components/dashboard-card/DashboardCard";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Dashboard() {
+  const { dashboards } = useSelector((store) => store.allDashboards);
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllDashboards(user.userId));
+  }, [dispatch, user.userId]);
+
   // eslint-disable-next-line
   const [data, setData] = useState({
     labels: ["Room 1", "Room 2", "Room 3"], // Example categorical labels

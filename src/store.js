@@ -8,6 +8,9 @@ import allSensorsSlice from "./stores/allSensors/allSensorsSlice";
 import sensorSlice from "./stores/sensor/sensorSlice";
 import allNotificationsSlice from "./stores/allNotifications/allNotificationsSlice";
 import notificationSlice from "./stores/notification/notificationSlice";
+import allDashboardsSlice from "./stores/allDashboards/allDashboardsSlice";
+import dashboardSlice from "./stores/dashboard/dashboardSlice";
+import visualizationSlice from "./stores/visualization/visualizationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +23,8 @@ export const store = configureStore({
     sensor: sensorSlice,
     allNotifications: allNotificationsSlice,
     notification: notificationSlice,
+    allDashboards: allDashboardsSlice,
+    dashboard: dashboardSlice,
+    visualization: visualizationSlice,
   },
 });
