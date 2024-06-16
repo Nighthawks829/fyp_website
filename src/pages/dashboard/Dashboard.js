@@ -4,9 +4,16 @@ import "./Dashboard.css";
 
 import DashboardCard from "../../components/dashboard-card/DashboardCard";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  addDashboard,
+  clearDashboardValues,
+  handleDashboardChange,
+} from "../../stores/dashboard/dashboardSlice";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const { dashboards } = useSelector((store) => store.allDashboards);
+  const { sensorId, type, name } = useSelector((store) => store.dashboard);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
@@ -27,6 +34,33 @@ export default function Dashboard() {
       },
     ],
   });
+
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleDashboardChange({ name, value }));
+  };
+
+  const handleAddDashboard = (e) => {
+    if (sensorId === "" || name === "") {
+      toast.error("Please provide all values");
+      dispatch(clearDashboardValues());
+      return;
+    } else {
+      const userId = user.userId;
+      const control = user.role === "admin" ? true : false;
+      dispatch(
+        addDashboard({
+          userId,
+          sensorId,
+          name,
+          control,
+          type,
+        })
+      );
+      dispatch(getAllDashboards(user.userId));
+    }
+  };
 
   return (
     <>
@@ -49,11 +83,17 @@ export default function Dashboard() {
                 type="text"
                 className="form-control border border-dark text-center"
                 placeholder="Sensor ID"
+                id="sensorId"
+                name="sensorId"
+                value={sensorId}
+                required
+                onChange={handleUserInput}
               />
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearDashboardValues())}
                 >
                   Cancel
                 </button>
@@ -87,15 +127,21 @@ export default function Dashboard() {
                 type="text"
                 className="form-select border border-dark text-center"
                 placeholder="Sensor ID"
+                id="type"
+                name="type"
+                value={type}
+                required
+                onChange={handleUserInput}
               >
                 {/* <option selected>Open this select menu</option> */}
                 <option value="widget">Widget</option>
-                <option value="visualization">Visualization Data</option>
+                <option value="graph">Visualization Data</option>
               </select>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearDashboardValues())}
                 >
                   Cancel
                 </button>
@@ -131,11 +177,17 @@ export default function Dashboard() {
                 type="text"
                 className="form-control border border-dark text-center"
                 placeholder="Component Name"
+                id="name"
+                name="name"
+                value={name}
+                required
+                onChange={handleUserInput}
               />
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearDashboardValues())}
                 >
                   Cancel
                 </button>
@@ -163,13 +215,12 @@ export default function Dashboard() {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-5">
-                Add Room temperature 1 sensor to dashboard?
-              </h2>
+              <h2 className="text-center mb-5">Add {name} to dashboard?</h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearDashboardValues())}
                 >
                   Cancel
                 </button>
@@ -177,6 +228,7 @@ export default function Dashboard() {
                   className="modal-next-button shadow"
                   data-bs-target="#addWidget4"
                   data-bs-toggle="modal"
+                  onClick={() => handleAddDashboard()}
                 >
                   Next
                 </button>
