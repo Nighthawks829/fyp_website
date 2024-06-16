@@ -238,6 +238,86 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <div
+        className="modal fade"
+        id="editWidget"
+        aria-hidden="true"
+        aria-labelledby="editWidgetLabel"
+        tabIndex="-1"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-2">Rename Component</h2>
+              <h4 className="text-center mb-4">
+                Enter new name for this component
+              </h4>
+              <input
+                type="text"
+                className="form-control border border-dark text-center"
+                placeholder="Component Name"
+                id="name"
+                name="name"
+                value={name}
+                required
+                onChange={handleUserInput}
+              />
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                  onClick={() => dispatch(clearDashboardValues())}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-target="#editWidget"
+                  data-bs-toggle="modal"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div
+        className="modal fade"
+        id="deleteWidget"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="deleteWidgetLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-5">
+                Are you sure want to delete Widget?
+              </h2>
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  Yes
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="p-5">
         <div className="text-end">
           <button
