@@ -10,6 +10,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: false,
+  id: "",
   userId: "",
   sensorId: "",
   name: "",
@@ -74,6 +75,7 @@ const dashboardSlice = createSlice({
       })
       .addCase(getDashboard.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.id = payload.id;
         state.userId = payload.userId;
         state.sensorId = payload.sensorId;
         state.name = payload.name;

@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addDashboard,
   clearDashboardValues,
+  editDashboard,
   handleDashboardChange,
 } from "../../stores/dashboard/dashboardSlice";
 import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const { dashboards } = useSelector((store) => store.allDashboards);
-  const { sensorId, type, name } = useSelector((store) => store.dashboard);
+  const { id, sensorId, type, name } = useSelector((store) => store.dashboard);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
@@ -41,7 +42,7 @@ export default function Dashboard() {
     dispatch(handleDashboardChange({ name, value }));
   };
 
-  const handleAddDashboard = (e) => {
+  async function handleAddDashboard() {
     if (sensorId === "" || name === "") {
       toast.error("Please provide all values");
       dispatch(clearDashboardValues());
@@ -49,7 +50,7 @@ export default function Dashboard() {
     } else {
       const userId = user.userId;
       const control = user.role === "admin" ? true : false;
-      dispatch(
+      await dispatch(
         addDashboard({
           userId,
           sensorId,
@@ -57,10 +58,25 @@ export default function Dashboard() {
           control,
           type,
         })
-      );
+      ).unwrap();
       dispatch(getAllDashboards(user.userId));
     }
-  };
+  }
+
+  async function handleEditDashboard() {
+    if (id === "" || name === "") {
+      toast.error("Please provide all values");
+      dispatch(clearDashboardValues());
+      return;
+    } else {
+      const userId = user.userId;
+      const dashboardId = id; // Assuming 'id' is the dashboard ID
+      const dashboard = { name, userId }; // Construct the dashboard object
+
+      await dispatch(editDashboard({ dashboardId, dashboard })).unwrap();
+      dispatch(getAllDashboards(user.userId));
+    }
+  }
 
   return (
     <>
@@ -241,9 +257,11 @@ export default function Dashboard() {
       <div
         className="modal fade"
         id="editWidget"
-        aria-hidden="true"
-        aria-labelledby="editWidgetLabel"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
         tabIndex="-1"
+        aria-labelledby="editWidgetLabel"
+        aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -274,6 +292,7 @@ export default function Dashboard() {
                   className="modal-next-button shadow"
                   data-bs-target="#editWidget"
                   data-bs-toggle="modal"
+                  onClick={() => handleEditDashboard()}
                 >
                   Next
                 </button>
@@ -329,7 +348,18 @@ export default function Dashboard() {
           </button>
         </div>
         <div className="row g-4 mt-4">
-          <DashboardCard
+          {dashboards.map((dashboard) => (
+            <DashboardCard
+              key={dashboard.id}
+              id={dashboard.id}
+              type={dashboard.type}
+              name={dashboard.name}
+              data={dashboard.control ? "ON" : "OFF"} // Adjust this based on your data requirements
+              sensorType={dashboard.type === "graph" ? "analog" : "digital"} // Example logic, adjust as needed
+              control={dashboard.control}
+            />
+          ))}
+          {/* <DashboardCard
             type="widget"
             title="Room 1 LED"
             data="ON"
@@ -367,7 +397,7 @@ export default function Dashboard() {
             data={[10, 20, 30]}
             sensorType="analog"
             control={false}
-          />
+          /> */}
         </div>
       </div>
     </>

@@ -4,11 +4,13 @@ import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import "./DashboardCard.css";
 import { IoMdMore } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { handleDashboardChange } from "../../stores/dashboard/dashboardSlice";
 
 export default function DashboardCard({
+  id,
   type,
-  title,
+  name,
   data,
   sensorType,
   control,
@@ -26,6 +28,7 @@ export default function DashboardCard({
       },
     ],
   });
+  const dispatch = useDispatch();
 
   return (
     <div
@@ -51,13 +54,16 @@ export default function DashboardCard({
             />
             <ul className="dropdown-menu py-3">
               <li className="ps-1 pe-2 mb-2">
-                <Link
+                <button
                   className="dropdown-item text-dark py-2 m-0"
                   data-bs-toggle="modal"
                   data-bs-target="#editWidget"
+                  onClick={() => {
+                    dispatch(handleDashboardChange({ name: "id", value: id }));
+                  }}
                 >
                   Edit
-                </Link>
+                </button>
               </li>
 
               <li className="ps-1 pe-2">
@@ -71,7 +77,7 @@ export default function DashboardCard({
               </li>
             </ul>
           </div>
-          <h4 className="text-center fw-bold mb-4 mt-2">{title}</h4>
+          <h4 className="text-center fw-bold mb-4 mt-2">{name}</h4>
           {type === "widget" ? (
             <>
               <h2 className="text-center fw-bold analogValue display-6 mb-4">
