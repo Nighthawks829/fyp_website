@@ -71,6 +71,12 @@ export default function DashboardCard({
                   className="dropdown-item text-danger py-2 m-0 mb-1"
                   data-bs-toggle="modal"
                   data-bs-target="#deleteWidget"
+                  onClick={() => {
+                    dispatch(handleDashboardChange({ name: "id", value: id }));
+                    dispatch(
+                      handleDashboardChange({ name: "name", value: name })
+                    );
+                  }}
                 >
                   Delete
                 </button>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addDashboard,
   clearDashboardValues,
+  deleteDashboard,
   editDashboard,
   handleDashboardChange,
 } from "../../stores/dashboard/dashboardSlice";
@@ -74,6 +75,16 @@ export default function Dashboard() {
       const dashboard = { name, userId }; // Construct the dashboard object
 
       await dispatch(editDashboard({ dashboardId, dashboard })).unwrap();
+      dispatch(getAllDashboards(user.userId));
+    }
+  }
+
+  async function handleDeleteDashboard() {
+    if (id === "") {
+      toast.error("Please provide all values");
+      dispatch(clearDashboardValues());
+    } else {
+      await dispatch(deleteDashboard(id)).unwrap();
       dispatch(getAllDashboards(user.userId));
     }
   }
@@ -316,12 +327,13 @@ export default function Dashboard() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete Widget?
+                Are you sure want to delete {name}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteDashboard()}
                 >
                   Yes
                 </button>
