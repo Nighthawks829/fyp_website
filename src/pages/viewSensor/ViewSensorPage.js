@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "./ViewSensorPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSensorValues, deleteSensor, getSensor } from "../../stores/sensor/sensorSlice";
+import {
+  clearSensorValues,
+  deleteSensor,
+  getSensor,
+} from "../../stores/sensor/sensorSlice";
 
 import defaultImage from "../../assets/led.jpeg";
+import { toast } from "react-toastify";
+import customFetch from "../../utils/axios";
 
 export default function ViewSensorPage() {
   const { id } = useParams();
   const { name, type, topic, pin, boardName, image, value } = useSelector(
     (store) => store.sensor
   );
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -33,6 +40,34 @@ export default function ViewSensorPage() {
     return <img src={imgSrc} alt="" className="board-img" />;
   };
 
+  async function turnOnHandle() {
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: id,
+        value: 1,
+        topic: topic,
+        userId: user.userId,
+        unit: "",
+      });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  async function turnOffHandle() {
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: id,
+        value: 0,
+        topic: topic,
+        userId: user.userId,
+        unit: "",
+      });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
   const renderControls = () => {
     if (type === "Digital Input" || type === "Analog Input") {
       return null;
@@ -40,8 +75,18 @@ export default function ViewSensorPage() {
       return (
         <div className="text-center mt-4 col-12">
           <div className="d-flex flex-wrap align-items-center justify-content-center">
-            <button className="px-3 py-1 edit-button shadow m-1">ON</button>
-            <button className="px-3 py-1 delete-button shadow m-1">OFF</button>
+            <button
+              className="px-3 py-1 edit-button shadow m-1"
+              onClick={turnOnHandle}
+            >
+              ON
+            </button>
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              onClick={turnOffHandle}
+            >
+              OFF
+            </button>
           </div>
           <h3 className="mt-4">
             State:{" "}
@@ -101,7 +146,7 @@ export default function ViewSensorPage() {
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
-                  onClick={()=>handleDeleteSensor()}
+                  onClick={() => handleDeleteSensor()}
                 >
                   Yes
                 </button>
