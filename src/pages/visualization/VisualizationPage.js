@@ -2,21 +2,32 @@ import React, { useState } from "react";
 // eslint-disable-next-line
 import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
+import { handleSensorIdChange } from "../../stores/visualization/visualizationSlice";
 
 export default function VisualizationPage() {
+  const { sensorId } = useSelector((store) => store.visualization);
+  const dispatch = useDispatch();
+
   // eslint-disable-next-line
   const [graphData, setGraphData] = useState({
-    labels: ['1','2','3'], // Example categorical labels
+    labels: ["1", "2", "3"], // Example categorical labels
     datasets: [
       {
         label: "Light Data",
-        data: [10,20,30], // Example data
+        data: [10, 20, 30], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192, 0.2)",
       },
     ],
   });
+
+  const handleInputChange = (e) => {
+    dispatch(handleSensorIdChange(e.target.value));
+  };
+
+  
 
   return (
     <>
@@ -38,6 +49,10 @@ export default function VisualizationPage() {
                 type="text"
                 className="form-control border border-dark text-center"
                 placeholder="Sensor ID"
+                name="sensorId"
+                id="sensorId"
+                value={sensorId}
+                onChange={handleInputChange}
               />
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
@@ -70,7 +85,7 @@ export default function VisualizationPage() {
         </div>
         <h3 className="text-center fw-bold mb-5">Visualization Data</h3>
         <div className="d-flex justify-content-center align-items-center">
-          <Line data={graphData} style={{width:'100%'}}/>
+          <Line data={graphData} style={{ width: "100%" }} />
         </div>
       </div>
     </>
