@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNotification,
   clearNotificationValues,
-  handleNotificationChange,
+  handleNotificationChange
 } from "../../stores/notification/notificationSlice";
 
 export default function AddNotificationPage() {
@@ -35,7 +35,7 @@ export default function AddNotificationPage() {
           threshold,
           condition,
           platform,
-          address,
+          address
         })
       ).unwrap();
       navigate(-1);
@@ -128,7 +128,7 @@ export default function AddNotificationPage() {
           <div className="row">
             <div className="col-md-3 col-12 d-flex justify-content-center align-items-center">
               <label htmlFor="address" className="form-label fw-bold m-0">
-                Bot ID:
+                {platform === "telegram" ? "Bot ID: " : "Email: "}
               </label>
             </div>
             <div className="col-md-9 col-12">

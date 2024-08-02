@@ -102,7 +102,7 @@ export default function AlertNotification() {
               <input
                 type="text"
                 className="form-control border border-dark text-center"
-                placeholder="Component Name"
+                placeholder="Alert Name"
                 id="name"
                 name="name"
                 value={name}
