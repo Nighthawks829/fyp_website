@@ -35,7 +35,7 @@ export default function ViewSensorPage() {
   const SensorImage = React.memo(
     ({ image }) => {
       const [imgSrc, setImgSrc] = useState("");
-  
+
       useEffect(() => {
         try {
           setImgSrc(require(`../../../public/uploads/${image}`));
@@ -43,7 +43,7 @@ export default function ViewSensorPage() {
           setImgSrc(defaultImage);
         }
       }, [image]);
-  
+
       return <img src={imgSrc} alt="" className="board-img" />;
     },
     (prevProps, nextProps) => prevProps.image === nextProps.image
@@ -58,6 +58,7 @@ export default function ViewSensorPage() {
         userId: user.userId,
         unit: ""
       });
+      dispatch(handleSensorChange({ name: "value", value: 1 }));
     } catch (error) {
       toast.error(error);
     }
@@ -72,6 +73,7 @@ export default function ViewSensorPage() {
         userId: user.userId,
         unit: ""
       });
+      dispatch(handleSensorChange({ name: "value", value: 0 }));
     } catch (error) {
       toast.error(error);
     }
@@ -154,7 +156,10 @@ export default function ViewSensorPage() {
     } catch (error) {}
   }
 
-  const memoizedSensorImage = useMemo(() => <SensorImage image={image} />, [image]);
+  const memoizedSensorImage = useMemo(
+    () => <SensorImage image={image} />,
+    [image]
+  );
 
   return (
     <>
