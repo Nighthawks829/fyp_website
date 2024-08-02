@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "./ViewSensorPage.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import {
   clearSensorValues,
   deleteSensor,
   getSensor,
+  handleSensorChange
 } from "../../stores/sensor/sensorSlice";
 
 import defaultImage from "../../assets/led.jpeg";
@@ -18,27 +19,35 @@ export default function ViewSensorPage() {
     (store) => store.sensor
   );
   const { user } = useSelector((store) => store.auth);
+  const [localValue, setLocalValue] = useState(value);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+  useEffect(() => {
     dispatch(getSensor(id));
   }, [dispatch, id]);
 
-  const SensorImage = ({ image }) => {
-    const [imgSrc, setImgSrc] = useState("");
-
-    useEffect(() => {
-      try {
-        setImgSrc(require(`../../../public/uploads/${image}`));
-      } catch (error) {
-        setImgSrc(defaultImage);
-      }
-    }, [image]);
-
-    return <img src={imgSrc} alt="" className="board-img" />;
-  };
+  const SensorImage = React.memo(
+    ({ image }) => {
+      const [imgSrc, setImgSrc] = useState("");
+  
+      useEffect(() => {
+        try {
+          setImgSrc(require(`../../../public/uploads/${image}`));
+        } catch (error) {
+          setImgSrc(defaultImage);
+        }
+      }, [image]);
+  
+      return <img src={imgSrc} alt="" className="board-img" />;
+    },
+    (prevProps, nextProps) => prevProps.image === nextProps.image
+  );
 
   async function turnOnHandle() {
     try {
@@ -47,7 +56,7 @@ export default function ViewSensorPage() {
         value: 1,
         topic: topic,
         userId: user.userId,
-        unit: "",
+        unit: ""
       });
     } catch (error) {
       toast.error(error);
@@ -61,7 +70,26 @@ export default function ViewSensorPage() {
         value: 0,
         topic: topic,
         userId: user.userId,
-        unit: "",
+        unit: ""
+      });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  const handleSliderChange = (e) => {
+    setLocalValue(e.target.value);
+  };
+
+  async function handleSliderChangeComplete() {
+    dispatch(handleSensorChange({ name: "value", value: localValue }));
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: id,
+        value: localValue,
+        topic: topic,
+        userId: user.userId,
+        unit: ""
       });
     } catch (error) {
       toast.error(error);
@@ -98,7 +126,7 @@ export default function ViewSensorPage() {
       return (
         <div className="text-center mt-4 col-12">
           <h3>
-            Value: <span className="analog-value">{value}</span>
+            Value: <span className="analog-value">{localValue}</span>
           </h3>
           <div className="col-lg-6 col-md-8 col-12 mx-auto">
             <input
@@ -108,8 +136,10 @@ export default function ViewSensorPage() {
               max="4096"
               step="1"
               id="customRange1"
-              value={value}
-              onChange={(e) => {}}
+              value={localValue}
+              onChange={handleSliderChange}
+              onMouseUp={handleSliderChangeComplete}
+              onTouchEnd={handleSliderChangeComplete}
             />
           </div>
         </div>
@@ -123,6 +153,8 @@ export default function ViewSensorPage() {
       navigate(-1);
     } catch (error) {}
   }
+
+  const memoizedSensorImage = useMemo(() => <SensorImage image={image} />, [image]);
 
   return (
     <>
@@ -176,7 +208,8 @@ export default function ViewSensorPage() {
         </div>
 
         <div className="text-center">
-          <SensorImage image={image} />
+          {/* <SensorImage image={image} /> */}
+          {memoizedSensorImage}
           {renderControls()}
           <div className="col-lg-8 col-12 mx-auto mt-5">
             <div className="row">
@@ -213,7 +246,7 @@ export default function ViewSensorPage() {
                       ? value > 0
                         ? "ON"
                         : "OFF"
-                      : value}
+                      : localValue}
                   </span>
                 </h5>
               </div>
