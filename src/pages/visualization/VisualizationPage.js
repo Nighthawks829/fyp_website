@@ -1,33 +1,99 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // eslint-disable-next-line
 import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
-import { handleSensorIdChange } from "../../stores/visualization/visualizationSlice";
+import {
+  getSensorData,
+  handleSensorIdChange
+} from "../../stores/visualization/visualizationSlice";
+import mqtt from "mqtt";
+import { getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function VisualizationPage() {
-  const { sensorId } = useSelector((store) => store.visualization);
+  const { sensorId, data } = useSelector((store) => store.visualization);
+  const { topic } = useSelector((store) => store.sensor);
   const dispatch = useDispatch();
+
+  let clientRef = useRef(null);
+
+  useEffect(() => {
+    clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
+      clientId: "ReactjsMQTT",
+      clean: true,
+      username: "NighthawksMQTT",
+      password: "sunlightsam829",
+      connectTimeout: 10000,
+      reconnectPeriod: 3000,
+      keepalive: 60
+    });
+
+    clientRef.current.on("connect", () => {
+      console.log("Connected to MQTT broker");
+    });
+
+    clientRef.current.on("message", (topicSub, message) => {
+      if (topicSub === topic) {
+        dispatch(getSensorData(sensorId));
+      }
+    });
+
+    // Clean up the connection on component unmount
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.end();
+      }
+    };
+  }, [topic, sensorId, dispatch]);
 
   // eslint-disable-next-line
   const [graphData, setGraphData] = useState({
-    labels: ["1", "2", "3"], // Example categorical labels
+    labels: [], // Example categorical labels
     datasets: [
       {
-        label: "Light Data",
-        data: [10, 20, 30], // Example data
+        label: "Data",
+        data: [], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
-      },
-    ],
+        borderColor: "rgba(75, 192, 192, 0.2)"
+      }
+    ]
   });
 
   const handleInputChange = (e) => {
     dispatch(handleSensorIdChange(e.target.value));
   };
 
-  
+  useEffect(() => {
+    setGraphData({
+      labels: data.map((_, index) => index), // Example labels
+      datasets: [
+        {
+          label: "Data",
+          data: data.map((item) => item.data), // Example data
+          fill: false,
+          backgroundColor: "rgb(75, 192, 192)",
+          borderColor: "rgba(75, 192, 192, 0.2)"
+        }
+      ]
+    });
+  }, [data]);
+
+  async function getVisualizationData() {
+    dispatch(getSensor(sensorId));
+    dispatch(getSensorData(sensorId));
+
+    // Ensure the MQTT client is available before subscribing
+    if (clientRef.current) {
+      clientRef.current.subscribe(topic, (err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else {
+          console.log(`Subscribed to topic: ${topic}`);
+        }
+      });
+    }
+  }
 
   return (
     <>
@@ -65,6 +131,7 @@ export default function VisualizationPage() {
                   className="modal-next-button shadow"
                   data-bs-target="#watchData"
                   data-bs-toggle="modal"
+                  onClick={getVisualizationData}
                 >
                   Next
                 </button>
