@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // eslint-disable-next-line
 import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
@@ -6,29 +6,77 @@ import "./DashboardCard.css";
 import { IoMdMore } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { handleDashboardChange } from "../../stores/dashboard/dashboardSlice";
+import customFetch from "../../utils/axios";
 
 export default function DashboardCard({
   id,
   type,
   name,
-  data,
   sensorType,
   control,
+  sensorId
 }) {
+  const dispatch = useDispatch();
+  const [topic, setTopic] = useState("");
+  const [data, setData] = useState(0);
+  const [listData, setListData] = useState([]);
+
+  let clientRef = useRef(null);
+
+  async function getGraphData() {
+    const response = await customFetch.get(`/sensorData/${sensorId}`);
+    if (Array.isArray(response.data.sensorData)) {
+      setListData(response.data.sensorData.map((item) => item.data));
+    }
+  }
+
+  async function getLatestData() {
+    const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
+    setData(response.data.sensorData.data);
+  }
+
+  async function getTopic() {
+    const response = await customFetch.get(`/sensor/${sensorId}`);
+    setTopic(response.data.sensor.topic);
+  }
+
+  useEffect(() => {
+    getTopic();
+    if (type === "graph") {
+      getGraphData();
+    } else if (type === "widget") {
+      getLatestData();
+    }
+  }, []);
+
+  useEffect(()=>{
+    setGraphData({
+      labels: listData.map((_,index)=>index), // Example labels
+      datasets: [
+        {
+          label: "Data",
+          data: listData, // Example data
+          fill: false,
+          backgroundColor: "rgb(75, 192, 192)",
+          borderColor: "rgba(75, 192, 192, 0.2)"
+        }
+      ]
+    });
+  },[listData])
+
   // eslint-disable-next-line
   const [graphData, setGraphData] = useState({
-    labels: ["Room 1", "Room 2", "Room 3"], // Example categorical labels
+    labels: [], // Example categorical labels
     datasets: [
       {
-        label: "Light Data",
-        data: data, // Example data
+        label: "Data",
+        data: [], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
-      },
-    ],
+        borderColor: "rgba(75, 192, 192, 0.2)"
+      }
+    ]
   });
-  const dispatch = useDispatch();
 
   return (
     <div
@@ -87,10 +135,16 @@ export default function DashboardCard({
           {type === "widget" ? (
             <>
               <h2 className="text-center fw-bold analogValue display-6 mb-4">
-                {data}
+                {sensorType === "Analog"
+                  ? data
+                  : data === 0
+                  ? "OFF"
+                  : data === 1
+                  ? "ON"
+                  : data}
               </h2>
               {control ? (
-                sensorType === "digital" ? (
+                sensorType === "Digital" ? (
                   <div className="text-center mb-3">
                     <label className="switch">
                       <input type="checkbox" />

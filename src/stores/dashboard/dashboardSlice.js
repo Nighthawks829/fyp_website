@@ -3,7 +3,7 @@ import {
   addDashboardThunk,
   deleteDashboardThunk,
   editDashboardThunk,
-  getDashboardThunk,
+  getDashboardThunk
 } from "./dashboardThunk";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -16,6 +16,7 @@ const initialState = {
   name: "",
   control: "",
   type: "widget",
+  data: 0
 };
 
 export const addDashboard = createAsyncThunk(
@@ -55,7 +56,7 @@ const dashboardSlice = createSlice({
     },
     clearDashboardValues: () => {
       return { ...initialState };
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -108,7 +109,7 @@ const dashboardSlice = createSlice({
         state.isLoading = true;
         toast.error(payload);
       });
-  },
+  }
 });
 
 export const { handleDashboardChange, clearDashboardValues } =

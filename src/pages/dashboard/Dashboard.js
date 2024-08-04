@@ -364,52 +364,13 @@ export default function Dashboard() {
             <DashboardCard
               key={dashboard.id}
               id={dashboard.id}
+              sensorId={dashboard.sensorId}
               type={dashboard.type}
               name={dashboard.name}
-              data={dashboard.control ? "ON" : "OFF"} // Adjust this based on your data requirements
-              sensorType={dashboard.type === "graph" ? "analog" : "digital"} // Example logic, adjust as needed
+              sensorType={dashboard.sensorType ? dashboard.sensorType.split(' ')[0] : ''}
               control={dashboard.control}
             />
           ))}
-          {/* <DashboardCard
-            type="widget"
-            title="Room 1 LED"
-            data="ON"
-            sensorType="digital"
-            control={true}
-          />
-
-          <DashboardCard
-            type="widget"
-            title="Room 2 LED"
-            data="ON"
-            sensorType="digital"
-            control={false}
-          />
-
-          <DashboardCard
-            type="widget"
-            title="Room 3 FAN"
-            data="350"
-            sensorType="analog"
-            control={true}
-          />
-
-          <DashboardCard
-            type="widget"
-            title="Room 3 Temperature"
-            data="35°C"
-            sensorType="analog"
-            control={false}
-          />
-
-          <DashboardCard
-            type="graph"
-            title="Room 3 Temperature"
-            data={[10, 20, 30]}
-            sensorType="analog"
-            control={false}
-          /> */}
         </div>
       </div>
     </>
