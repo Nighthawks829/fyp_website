@@ -65,18 +65,33 @@ export default function VisualizationPage() {
   };
 
   useEffect(() => {
-    setGraphData({
-      labels: data.map((_, index) => index), // Example labels
-      datasets: [
-        {
-          label: "Data",
-          data: data.map((item) => item.data), // Example data
-          fill: false,
-          backgroundColor: "rgb(75, 192, 192)",
-          borderColor: "rgba(75, 192, 192, 0.2)"
-        }
-      ]
-    });
+    if (Array.isArray(data)) {
+      setGraphData({
+        labels: data.map((_, index) => index), // Example labels
+        datasets: [
+          {
+            label: "Data",
+            data: data.map((item) => item.data), // Example data
+            fill: false,
+            backgroundColor: "rgb(75, 192, 192)",
+            borderColor: "rgba(75, 192, 192, 0.2)"
+          }
+        ]
+      });
+    } else {
+      setGraphData({
+        labels: [],
+        datasets: [
+          {
+            label: "Data",
+            data: [],
+            fill: false,
+            backgroundColor: "rgb(75, 192, 192)",
+            borderColor: "rgba(75, 192, 192, 0.2)"
+          }
+        ]
+      });
+    }
   }, [data]);
 
   async function getVisualizationData() {
