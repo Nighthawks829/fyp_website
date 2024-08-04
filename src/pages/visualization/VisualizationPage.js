@@ -19,7 +19,7 @@ export default function VisualizationPage() {
 
   useEffect(() => {
     clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
-      clientId: "ReactjsMQTT",
+      clientId: `clientId_${Math.random().toString(16).substr(2, 8)}`,
       clean: true,
       username: "NighthawksMQTT",
       password: "sunlightsam829",
@@ -37,6 +37,17 @@ export default function VisualizationPage() {
         dispatch(getSensorData(sensorId));
       }
     });
+
+    // Ensure the MQTT client is available before subscribing
+    if (clientRef.current && topic !== "") {
+      clientRef.current.subscribe(topic, (err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else {
+          console.log(`Subscribed to topic: ${topic}`);
+        }
+      });
+    }
 
     // Clean up the connection on component unmount
     return () => {
@@ -97,17 +108,6 @@ export default function VisualizationPage() {
   async function getVisualizationData() {
     dispatch(getSensor(sensorId));
     dispatch(getSensorData(sensorId));
-
-    // Ensure the MQTT client is available before subscribing
-    if (clientRef.current) {
-      clientRef.current.subscribe(topic, (err) => {
-        if (err) {
-          console.error("Subscription error:", err);
-        } else {
-          console.log(`Subscribed to topic: ${topic}`);
-        }
-      });
-    }
   }
 
   return (
