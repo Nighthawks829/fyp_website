@@ -4,10 +4,11 @@ import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import "./DashboardCard.css";
 import { IoMdMore } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleDashboardChange } from "../../stores/dashboard/dashboardSlice";
 import customFetch from "../../utils/axios";
 import mqtt from "mqtt";
+import { toast } from "react-toastify";
 
 export default function DashboardCard({
   id,
@@ -18,6 +19,7 @@ export default function DashboardCard({
   sensorId
 }) {
   const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.auth);
   const [topic, setTopic] = useState("");
   const [data, setData] = useState(0);
   const [listData, setListData] = useState([]);
@@ -123,6 +125,40 @@ export default function DashboardCard({
     ]
   });
 
+  async function handleSwitchChange() {
+    console.log("Handle Switch Change");
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: sensorId,
+        value: data ? 0 : 1,
+        topic: topic,
+        userId: user.userId,
+        unit: ""
+      });
+      setData(data ? 0 : 1);
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  const handleSliderChange = (e) => {
+    setData(e.target.value)
+  };
+
+  async function handleSliderChangeComplete() {
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: sensorId,
+        value: data,
+        topic: topic,
+        userId: user.userId,
+        unit: ""
+      });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
   return (
     <div
       className={
@@ -195,6 +231,7 @@ export default function DashboardCard({
                       <input
                         type="checkbox"
                         checked={data === 1 ? true : false}
+                        onChange={handleSwitchChange}
                       />
                       <span className="slider round"></span>
                     </label>
@@ -208,6 +245,9 @@ export default function DashboardCard({
                     step="1"
                     id="customRange1"
                     value={data}
+                    onChange={handleSliderChange}
+                    onMouseUp={handleSliderChangeComplete}
+                    onTouchEnd={handleSliderChangeComplete}
                   />
                 )
               ) : null}
