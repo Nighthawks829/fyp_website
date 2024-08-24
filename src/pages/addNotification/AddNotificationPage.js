@@ -27,6 +27,10 @@ export default function AddNotificationPage() {
     dispatch(handleNotificationChange({ name, value }));
   };
 
+  function handleResetButton(){
+    dispatch(clearNotificationValues());
+  }
+
   async function handleAddNotification(e) {
     e.preventDefault();
 
@@ -156,7 +160,11 @@ export default function AddNotificationPage() {
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
               Add
             </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              type="reset"
+              onClick={() => handleResetButton()}
+            >
               Clear
             </button>
           </div>

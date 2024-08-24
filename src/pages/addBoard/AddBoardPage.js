@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { addBoard, handleBoardChange } from "../../stores/board/boardSlice";
+import { addBoard, clearBoardValues, handleBoardChange } from "../../stores/board/boardSlice";
 import { toast } from "react-toastify";
 
 export default function AddBoardPage() {
@@ -14,6 +14,10 @@ export default function AddBoardPage() {
   const [file, setFile] = useState("");
 
   const navigate = useNavigate();
+
+  function handleResetButton() {
+    dispatch(clearBoardValues());
+  }
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -166,7 +170,11 @@ export default function AddBoardPage() {
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
               Add
             </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              type="reset"
+              onClick={() => handleResetButton()}
+            >
               Clear
             </button>
           </div>

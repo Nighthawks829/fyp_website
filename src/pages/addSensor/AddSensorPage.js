@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addSensor,
   clearSensorValues,
-  handleSensorChange,
+  handleSensorChange
 } from "../../stores/sensor/sensorSlice";
 import { getAllBoards } from "../../stores/allBoards/allBoardsSlice";
 
@@ -37,6 +37,10 @@ export default function AddSensorPage() {
       dispatch(handleSensorChange({ name: "image", value: file.name }));
     }
   };
+
+  function handleResetButton() {
+    dispatch(clearSensorValues());
+  }
 
   async function handleAddSensor(e) {
     e.preventDefault();
@@ -212,6 +216,7 @@ export default function AddSensorPage() {
               <button
                 className="px-3 py-1 delete-button shadow m-1"
                 type="reset"
+                onClick={() => handleResetButton()}
               >
                 Clear
               </button>
