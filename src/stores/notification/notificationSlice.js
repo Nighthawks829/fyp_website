@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addNotificationThunk,
+  deleteNotificationThunk,
   editNotificationThunk,
   getNotificationThunk,
 } from "./notificationThunk";
@@ -47,7 +48,7 @@ export const editNotification = createAsyncThunk(
 export const deleteNotification = createAsyncThunk(
   "notification/deleteNotification",
   async (notificationId, thunkAPI) => {
-    return deleteNotification(`/notification/${notificationId}`, thunkAPI);
+    return deleteNotificationThunk(`/notification/${notificationId}`, thunkAPI);
   }
 );
 

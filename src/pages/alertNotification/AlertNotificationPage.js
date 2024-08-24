@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosMore } from "react-icons/io";
 import { getAllNotifications } from "../../stores/allNotifications/allNotificationsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearNotificationValues,
-  handleNotificationChange,
+  deleteNotification,
+  handleNotificationChange
 } from "../../stores/notification/notificationSlice";
 import { toast } from "react-toastify";
 
@@ -14,7 +15,15 @@ export default function AlertNotification() {
   const { sensorId, name } = useSelector((store) => store.notification);
   const { notifications } = useSelector((store) => store.allNotifications);
 
+  const [deleteNotificationId, setDeleteNotificationId] = useState("");
+  const [deleteNotificationName, setDeleteNotificationName] = useState("");
+
   const dispatch = useDispatch();
+
+  async function handleDeleteNotification(params) {
+    dispatch(deleteNotification(deleteNotificationId));
+    dispatch(getAllNotifications());
+  }
 
   useEffect(() => {
     dispatch(getAllNotifications());
@@ -145,12 +154,13 @@ export default function AlertNotification() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-5">
-                Are you sure want to delete Alert Water Level?
+                Are you sure want to delete {deleteNotificationName}?
               </h2>
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => handleDeleteNotification()}
                 >
                   Yes
                 </button>
@@ -227,6 +237,10 @@ export default function AlertNotification() {
                               className="dropdown-item text-danger py-2 m-0 mb-1"
                               data-bs-toggle="modal"
                               data-bs-target="#deleteNotification"
+                              onClick={() => {
+                                setDeleteNotificationId(notification.id);
+                                setDeleteNotificationName(notification.name);
+                              }}
                             >
                               Delete
                             </button>
