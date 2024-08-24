@@ -9,7 +9,7 @@ import {
   clearDashboardValues,
   deleteDashboard,
   editDashboard,
-  handleDashboardChange,
+  handleDashboardChange
 } from "../../stores/dashboard/dashboardSlice";
 import { toast } from "react-toastify";
 
@@ -32,9 +32,9 @@ export default function Dashboard() {
         data: [10, 20, 30], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
-      },
-    ],
+        borderColor: "rgba(75, 192, 192, 0.2)"
+      }
+    ]
   });
 
   const handleUserInput = (e) => {
@@ -57,7 +57,7 @@ export default function Dashboard() {
           sensorId,
           name,
           control,
-          type,
+          type
         })
       ).unwrap();
       dispatch(getAllDashboards(user.userId));
@@ -360,17 +360,28 @@ export default function Dashboard() {
           </button>
         </div>
         <div className="row g-4 mt-4">
-          {dashboards.map((dashboard) => (
-            <DashboardCard
-              key={dashboard.id}
-              id={dashboard.id}
-              sensorId={dashboard.sensorId}
-              type={dashboard.type}
-              name={dashboard.name}
-              sensorType={dashboard.sensorType ? dashboard.sensorType.split(' ')[0] : ''}
-              control={dashboard.control}
-            />
-          ))}
+          {dashboards.length === 0 ? (
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: "200px", width: "100%" }}
+            >
+              <h4 className="dashboad-message">Empty Dashboard. Try adding something.</h4>
+            </div>
+          ) : (
+            dashboards.map((dashboard) => (
+              <DashboardCard
+                key={dashboard.id}
+                id={dashboard.id}
+                sensorId={dashboard.sensorId}
+                type={dashboard.type}
+                name={dashboard.name}
+                sensorType={
+                  dashboard.sensorType ? dashboard.sensorType.split(" ")[0] : ""
+                }
+                control={dashboard.control}
+              />
+            ))
+          )}
         </div>
       </div>
     </>

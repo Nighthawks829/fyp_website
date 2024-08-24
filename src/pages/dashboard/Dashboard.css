@@ -51,3 +51,11 @@ h4 {
     color: #639FAB;
     background-color: #fff; 
 }
+
+.dashboad-message
+{
+    color: #c2c7cd;
+    font-weight: 600;
+    font-size: 2rem;
+    opacity: 0.8;
+}
