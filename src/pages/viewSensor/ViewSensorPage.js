@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "./ViewSensorPage.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import {
 import defaultImage from "../../assets/led.jpeg";
 import { toast } from "react-toastify";
 import customFetch from "../../utils/axios";
+import mqtt from "mqtt";
 
 export default function ViewSensorPage() {
   const { id } = useParams();
@@ -22,6 +23,8 @@ export default function ViewSensorPage() {
   const [localValue, setLocalValue] = useState(value);
   const dispatch = useDispatch();
 
+  let clientRef = useRef(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +34,47 @@ export default function ViewSensorPage() {
   useEffect(() => {
     dispatch(getSensor(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
+      clientId: `clientId_${Math.random().toString(16).substr(2, 8)}`,
+      clean: true,
+      username: "NighthawksMQTT",
+      password: "sunlightsam829",
+      connectTimeout: 10000,
+      reconnectPeriod: 3000,
+      keepalive: 60
+    });
+
+    clientRef.current.on("connect", () => {
+      console.log("Connected to MQTT broker");
+    });
+
+    clientRef.current.on("message", (topicSub, message) => {
+      const jsonString = message.toString();
+      const jsonObject = JSON.parse(jsonString);
+      setLocalValue(jsonObject.value);
+      dispatch(handleSensorChange({ name: "value", value: jsonObject.value }));
+    });
+
+    // Ensure the MQTT client is available before subscribing
+    if (clientRef.current && topic !== "") {
+      clientRef.current.subscribe(topic, (err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else {
+          console.log(`Subscribed to topic: ${topic}`);
+        }
+      });
+    }
+
+    // Clean up the connection on component unmount
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.end();
+      }
+    };
+  }, [topic]);
 
   const SensorImage = React.memo(
     ({ image }) => {
