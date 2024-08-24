@@ -189,7 +189,7 @@ export default function AddSensorPage() {
                 required
                 onChange={handleUserInput}
               >
-                <option value="">Select Sensor Type</option>
+                <option value="">Select Board Name</option>
                 {boards
                   ? boards.map((board) => (
                       <option key={board.id} value={board.id}>
