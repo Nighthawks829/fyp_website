@@ -7,7 +7,7 @@ import {
   clearBoardValues,
   editBoard,
   getBoard,
-  handleBoardChange,
+  handleBoardChange
 } from "../../stores/board/boardSlice";
 
 export default function EditBoardPage() {
@@ -20,6 +20,10 @@ export default function EditBoardPage() {
   const { id } = useParams();
   const [file, setFile] = useState("");
   const navigate = useNavigate();
+
+  function handleResetButton() {
+    dispatch(getBoard(id));
+  }
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -182,7 +186,13 @@ export default function EditBoardPage() {
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
               Edit
             </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              type="reset"
+              onClick={() => {
+                handleResetButton();
+              }}
+            >
               Clear
             </button>
           </div>

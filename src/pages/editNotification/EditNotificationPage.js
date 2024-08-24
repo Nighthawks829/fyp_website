@@ -5,7 +5,7 @@ import {
   clearNotificationValues,
   editNotification,
   getNotification,
-  handleNotificationChange,
+  handleNotificationChange
 } from "../../stores/notification/notificationSlice";
 
 export default function EditNotificationPage() {
@@ -17,13 +17,17 @@ export default function EditNotificationPage() {
     threshold,
     condition,
     platform,
-    address,
+    address
   } = useSelector((store) => store.notification);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const { id } = useParams();
   const navigate = useNavigate();
+
+  function handleResetButton() {
+    dispatch(getNotification(id));
+  }
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -51,8 +55,8 @@ export default function EditNotificationPage() {
             threshold,
             condition,
             platform,
-            address,
-          },
+            address
+          }
         })
       ).unwrap();
       navigate(-1);
@@ -168,7 +172,11 @@ export default function EditNotificationPage() {
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
               Edit
             </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              type="reset"
+              onClick={() => handleResetButton()}
+            >
               Clear
             </button>
           </div>

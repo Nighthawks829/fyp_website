@@ -6,7 +6,7 @@ import {
   clearSensorValues,
   editSensor,
   getSensor,
-  handleSensorChange,
+  handleSensorChange
 } from "../../stores/sensor/sensorSlice";
 import { getAllBoards } from "../../stores/allBoards/allBoardsSlice";
 
@@ -25,6 +25,10 @@ export default function EditSensorPage() {
     dispatch(getSensor(id));
     dispatch(getAllBoards());
   }, [dispatch, id]);
+
+  function handleResetButton() {
+    dispatch(getSensor(id));
+  }
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -215,7 +219,11 @@ export default function EditSensorPage() {
             <button className="px-3 py-1 edit-button shadow m-1" type="submit">
               Edit
             </button>
-            <button className="px-3 py-1 delete-button shadow m-1" type="reset">
+            <button
+              className="px-3 py-1 delete-button shadow m-1"
+              type="reset"
+              onClick={() => handleResetButton()}
+            >
               Clear
             </button>
           </div>

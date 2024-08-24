@@ -234,6 +234,7 @@ export default function EditUserPage() {
               <button
                 className="px-3 py-1 delete-button shadow m-1"
                 type="reset"
+                onClick={()=>{dispatch(getUser(id))}}
               >
                 Clear
               </button>
