@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import "./AddNotificationPage.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,13 +7,19 @@ import {
   clearNotificationValues,
   handleNotificationChange
 } from "../../stores/notification/notificationSlice";
+import { getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function AddNotificationPage() {
   const { sensorId, name, message, threshold, condition, platform, address } =
     useSelector((store) => store.notification);
   const { user } = useSelector((store) => store.auth);
+  const { name: sensorName } = useSelector((store) => store.sensor);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getSensor(sensorId));
+  }, []);
 
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -55,7 +61,7 @@ export default function AddNotificationPage() {
           Back
         </button>
       </div>
-      <h3 className="text-center mt-2 fw-bold">When temperature sensor 1</h3>
+      <h3 className="text-center mt-2 fw-bold">When {sensorName}</h3>
       <form onSubmit={handleAddNotification}>
         <div className="text-center col-lg-6 col-md-8 col-12 mx-auto mt-4">
           <select
