@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearBoardValues,
   deleteBoard,
-  getBoard,
+  getBoard
 } from "../../stores/board/boardSlice";
+import { deleteSensor } from "../../stores/sensor/sensorSlice";
 import { Link } from "react-router-dom";
 
 import defaultImage from "../../assets/esp32.jpeg";
@@ -17,6 +18,9 @@ export default function ViewBoardPage() {
     (store) => store.board
   );
   const dispatch = useDispatch();
+
+  const [deleteSensorId, setDeleteSensorId] = useState("");
+  const [deleteSensorName, setDeleteSensorName] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -46,9 +50,15 @@ export default function ViewBoardPage() {
     } catch (error) {}
   }
 
+  async function handleDeleteSensor() {
+    try {
+      await dispatch(deleteSensor(deleteSensorId));
+    } catch (error) {}
+  }
+
   return (
     <>
-      {/* Modal */}
+      {/* Delete Board Modal */}
       <div
         className="modal fade"
         id="deleteBoard"
@@ -83,6 +93,44 @@ export default function ViewBoardPage() {
           </div>
         </div>
       </div>
+
+      {/* Delete Sensor Modal */}
+      {/* Modal */}
+      <div
+        className="modal fade"
+        id="deleteSensor"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="deleteBoardLabel1"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body p-5 shadow">
+              <h2 className="text-center mb-5">
+                Are you sure want to delete {deleteSensorName}?
+              </h2>
+              <div className="d-flex align-items-center justify-content-evenly mt-5">
+                <button
+                  className="modal-cancel-button shadow"
+                  data-bs-dismiss="modal"
+                  onClick={() => handleDeleteSensor()}
+                >
+                  Yes
+                </button>
+                <button
+                  className="modal-next-button shadow"
+                  data-bs-dismiss="modal"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="p-5">
         <div className="text-start">
           <button
@@ -176,6 +224,10 @@ export default function ViewBoardPage() {
                                 className="dropdown-item text-danger py-2 m-0 mb-1"
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteSensor"
+                                onClick={() => {
+                                  setDeleteSensorId(sensor.id);
+                                  setDeleteSensorName(sensor.name);
+                                }}
                               >
                                 Delete
                               </button>
