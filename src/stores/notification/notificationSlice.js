@@ -87,7 +87,7 @@ const notificationSlice = createSlice({
         state.message = payload.message;
         state.threshold = payload.threshold;
         state.condition = payload.condition;
-        state.payload = payload.platform;
+        state.platform = payload.platform;
         state.address = payload.address;
         state.sensorName = payload.sensorName;
       })
