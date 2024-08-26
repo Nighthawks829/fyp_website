@@ -189,12 +189,6 @@ export default function SideBar({ currentTab, setCurrentTab }) {
                   </Link>
                 </li>
                 <li className="ps-1 pe-2">
-                  {/* <a
-                    className="dropdown-item text-danger py-2 m-0 mb-1"
-                    href="/"
-                  >
-                    Logout
-                  </a> */}
                   <button
                     className="dropdown-item text-danger py-2 m-0 mb-1"
                     data-bs-toggle="modal"

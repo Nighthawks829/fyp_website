@@ -160,7 +160,6 @@ export default function Dashboard() {
                 required
                 onChange={handleUserInput}
               >
-                {/* <option selected>Open this select menu</option> */}
                 <option value="widget">Widget</option>
                 <option value="graph">Visualization Data</option>
               </select>

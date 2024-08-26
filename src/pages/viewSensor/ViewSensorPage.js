@@ -257,7 +257,6 @@ export default function ViewSensorPage() {
         </div>
 
         <div className="text-center">
-          {/* <SensorImage image={image} /> */}
           {memoizedSensorImage}
           {renderControls()}
           <div className="col-lg-8 col-12 mx-auto mt-5">

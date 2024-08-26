@@ -164,55 +164,6 @@ export default function SensorPage() {
                   </tr>
                 ))
               : null}
-            {/* <tr>
-              <td className="text-center">
-                <Link to="/viewSensor/1">Sensor 1</Link>
-              </td>
-              <td className="text-center">Anaglog Input</td>
-              <td className="text-center">2</td>
-              <td className="text-center">Board1</td>
-              <td className="text-center">esp32/board1/output</td>
-              <td className="text-center py-2 action">
-                <div className="dropdown">
-                  <IoIosMore
-                    size={25}
-                    className="dropdown-toggle"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  />
-                  <ul className="dropdown-menu py-3">
-                    <li className="ps-1 pe-2 mb-2">
-                      <Link
-                        className="dropdown-item text-dark py-2 m-0"
-                        to="/editSensor/1"
-                      >
-                        Edit
-                      </Link>
-                    </li>
-                    <li className="ps-1 pe-2 mb-2">
-                      <button
-                        className="dropdown-item text-dark py-2 m-0"
-                        onClick={() => {
-                          navigator.clipboard.writeText("copy");
-                        }}
-                      >
-                        Copy ID
-                      </button>
-                    </li>
-                    <li className="ps-1 pe-2">
-                      <button
-                        className="dropdown-item text-danger py-2 m-0 mb-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteSensor"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr> */}
           </tbody>
         </table>
       </div>
