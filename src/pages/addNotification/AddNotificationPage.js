@@ -7,7 +7,7 @@ import {
   clearNotificationValues,
   handleNotificationChange
 } from "../../stores/notification/notificationSlice";
-import { getSensor } from "../../stores/sensor/sensorSlice";
+import { clearSensorValues, getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function AddNotificationPage() {
   const { sensorId, name, message, threshold, condition, platform, address } =
@@ -59,6 +59,7 @@ export default function AddNotificationPage() {
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
           onClick={() => {
             dispatch(clearNotificationValues());
+            dispatch(clearSensorValues());
             navigate(-1);
           }}
         >

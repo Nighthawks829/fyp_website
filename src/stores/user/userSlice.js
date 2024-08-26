@@ -53,7 +53,6 @@ const userSlice = createSlice({
       state[name] = value;
     },
     clearUserValues: () => {
-      //   return { ...initialState };
       return { ...initialState };
     },
   },

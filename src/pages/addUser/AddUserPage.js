@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addUser,
   handleUserChange,
-  clearUserValues,
+  clearUserValues
 } from "../../stores/user/userSlice";
 
 export default function AddUserPage() {
@@ -69,8 +69,7 @@ export default function AddUserPage() {
         }
         await dispatch(addUser(formData)).unwrap();
         navigate(-1);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   }
 
@@ -79,7 +78,10 @@ export default function AddUserPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            dispatch(clearUserValues());
+            navigate(-1);
+          }}
         >
           Back
         </button>

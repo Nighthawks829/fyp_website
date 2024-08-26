@@ -108,6 +108,7 @@ export default function VisualizationPage() {
   async function getVisualizationData() {
     dispatch(getSensor(sensorId));
     dispatch(getSensorData(sensorId));
+    dispatch(handleSensorIdChange(""));
   }
 
   return (
@@ -139,6 +140,7 @@ export default function VisualizationPage() {
                 <button
                   className="modal-cancel-button shadow"
                   data-bs-dismiss="modal"
+                  onClick={() => dispatch(handleSensorIdChange(""))}
                 >
                   Cancel
                 </button>

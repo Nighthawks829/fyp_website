@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { addBoard, clearBoardValues, handleBoardChange } from "../../stores/board/boardSlice";
+import {
+  addBoard,
+  clearBoardValues,
+  handleBoardChange
+} from "../../stores/board/boardSlice";
 import { toast } from "react-toastify";
 
 export default function AddBoardPage() {
@@ -58,7 +62,10 @@ export default function AddBoardPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
           className="back-btn btn-primary fw-bold shadow px-4 py-1"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            dispatch(clearBoardValues());
+            navigate(-1);
+          }}
         >
           Back
         </button>
