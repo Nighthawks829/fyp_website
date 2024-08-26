@@ -9,6 +9,8 @@ import {
   handleNotificationChange
 } from "../../stores/notification/notificationSlice";
 import { toast } from "react-toastify";
+import { Modal, Button, Form } from "react-bootstrap";
+import { getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function AlertNotification() {
   const navigate = useNavigate();
@@ -17,6 +19,9 @@ export default function AlertNotification() {
 
   const [deleteNotificationId, setDeleteNotificationId] = useState("");
   const [deleteNotificationName, setDeleteNotificationName] = useState("");
+
+  const [showFirstModal, setShowFirstModal] = useState(false);
+  const [showSecondModal, setShowSecondModal] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -36,6 +41,7 @@ export default function AlertNotification() {
   };
 
   const handleAddNotification = (e) => {
+    setShowSecondModal(false);
     if (sensorId === "" || name === "") {
       toast.error("Please provide all values");
       dispatch(clearNotificationValues());
@@ -45,100 +51,105 @@ export default function AlertNotification() {
     }
   };
 
+  async function handleNext() {
+    try {
+      const response = await dispatch(getSensor(sensorId)).unwrap();
+      if (response.sensorId !== null) {
+        setShowFirstModal(false);
+        setShowSecondModal(true);
+      }
+    } catch (error) {
+      dispatch(clearNotificationValues());
+      setShowFirstModal(false);
+      setShowSecondModal(false);
+    }
+  }
+
   return (
     <>
-      {/* Modal */}
-      <div
-        className="modal fade"
-        id="addAlert"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="addAlertLabel1"
-        aria-hidden="true"
+      <Modal
+        show={showFirstModal}
+        onHide={() => {
+          setShowFirstModal(false);
+          dispatch(clearNotificationValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-2">Select Sensor</h2>
-              <h4 className="text-center mb-4">Sensor ID</h4>
-              <input
-                type="text"
-                className="form-control border border-dark text-center"
-                placeholder="Sensor ID"
-                id="sensorId"
-                name="sensorId"
-                required
-                onChange={handleUserInput}
-                value={sensorId}
-              />
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearNotificationValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addAlert2"
-                  data-bs-toggle="modal"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-2">Select Sensor</h2>
+          <h4 className="text-center mb-4">Sensor ID</h4>
+          <Form.Control
+            type="text"
+            className="border border-dark text-center"
+            placeholder="Sensor ID"
+            id="sensorId"
+            name="sensorId"
+            required
+            onChange={handleUserInput}
+            value={sensorId}
+          />
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              onClick={() => {
+                setShowFirstModal(false);
+                dispatch(clearNotificationValues());
+              }}
+            >
+              Cancel
+            </button>
+            <button className="modal-next-button shadow" onClick={handleNext}>
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
-      {/* Modal 3 */}
-      <div
-        className="modal fade"
-        id="addAlert2"
-        aria-hidden="true"
-        aria-labelledby="addAlertLabel3"
-        tabIndex="-1"
+      {/* Second Modal */}
+      <Modal
+        show={showSecondModal}
+        onHide={() => {
+          setShowSecondModal(false);
+          dispatch(clearNotificationValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-2">Rename Alert</h2>
-              <h4 className="text-center mb-4">
-                Enter new name for this alert
-              </h4>
-              <input
-                type="text"
-                className="form-control border border-dark text-center"
-                placeholder="Alert Name"
-                id="name"
-                name="name"
-                value={name}
-                required
-                onChange={handleUserInput}
-              />
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearNotificationValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addAlert2"
-                  data-bs-toggle="modal"
-                  onClick={() => handleAddNotification()}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-2">Rename Alert</h2>
+          <h4 className="text-center mb-4">Enter new name for this alert</h4>
+          <Form.Control
+            type="text"
+            className="border border-dark text-center"
+            placeholder="Alert Name"
+            id="name"
+            name="name"
+            value={name}
+            required
+            onChange={handleUserInput}
+          />
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              onClick={() => {
+                setShowSecondModal(false);
+                dispatch(clearNotificationValues());
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-next-button shadow"
+              onClick={() => handleAddNotification()}
+            >
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Modal */}
       <div
@@ -180,8 +191,9 @@ export default function AlertNotification() {
         <div className="text-end mb-4">
           <button
             className="add-btn btn-primary fw-bold shadow px-3 py-1"
-            data-bs-toggle="modal"
-            data-bs-target="#addAlert"
+            onClick={() => {
+              setShowFirstModal(true);
+            }}
           >
             + Alert
           </button>
