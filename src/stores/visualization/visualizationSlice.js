@@ -22,6 +22,9 @@ const visualizationSlice = createSlice({
   reducers: {
     handleSensorIdChange: (state, payload) => {
       state.sensorId = payload.payload;
+    },
+    clearVisualizationValues: () => {
+      return { ...initialState };
     }
   },
   extraReducers: (builder) => {
@@ -32,7 +35,7 @@ const visualizationSlice = createSlice({
       .addCase(getSensorData.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.data = payload.sensorData;
-        state.count=payload.count
+        state.count = payload.count;
       })
       .addCase(getSensorData.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -41,5 +44,6 @@ const visualizationSlice = createSlice({
   }
 });
 
-export const { handleSensorIdChange } = visualizationSlice.actions;
+export const { handleSensorIdChange, clearVisualizationValues } =
+  visualizationSlice.actions;
 export default visualizationSlice.reducer;

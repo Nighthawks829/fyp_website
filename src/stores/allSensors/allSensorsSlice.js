@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   isLoading: false,
   sensors: [],
-  totalSensors: 0,
+  totalSensors: 0
 };
 
 export const getAllSensors = createAsyncThunk(
@@ -25,6 +25,9 @@ const allSensorsSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearAllSensorValue: () => {
+      return { ...initialState };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +43,9 @@ const allSensorsSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       });
-  },
+  }
 });
 
-export const { showLoading, hideLoading } = allSensorsSlice.actions;
+export const { showLoading, hideLoading, clearAllSensorValue } =
+  allSensorsSlice.actions;
 export default allSensorsSlice.reducer;

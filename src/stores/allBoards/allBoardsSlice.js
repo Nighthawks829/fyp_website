@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   isLoading: false,
   boards: [],
-  totalBoards: 0,
+  totalBoards: 0
 };
 
 export const getAllBoards = createAsyncThunk(
@@ -25,6 +25,9 @@ const allBoardsSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearAllBoardValue: () => {
+      return { ...initialState };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +43,9 @@ const allBoardsSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       });
-  },
+  }
 });
 
-export const { showLoading, hideLoading } = allBoardsSlice.actions;
+export const { showLoading, hideLoading, clearAllBoardValue } =
+  allBoardsSlice.actions;
 export default allBoardsSlice.reducer;

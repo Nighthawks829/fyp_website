@@ -5,13 +5,16 @@ import { toast } from "react-toastify";
 const initialState = {
   isLoading: false,
   dashboards: [],
-  totalDashboards: 0,
+  totalDashboards: 0
 };
 
 export const getAllDashboards = createAsyncThunk(
   "dashboard/getDashboards",
   async (userId, thunkAPI) => {
-    return getAllDashboardsThunk(`/dashboard/getAllDashboards/${userId}`, thunkAPI);
+    return getAllDashboardsThunk(
+      `/dashboard/getAllDashboards/${userId}`,
+      thunkAPI
+    );
   }
 );
 
@@ -25,6 +28,9 @@ const allDashboardsSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearAllDashboardValue: () => {
+      return { ...initialState };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +46,9 @@ const allDashboardsSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       });
-  },
+  }
 });
 
-export const { showLoading, hideLoding } = allDashboardsSlice.actions;
+export const { showLoading, hideLoding, clearAllDashboardValue } =
+  allDashboardsSlice.actions;
 export default allDashboardsSlice.reducer;

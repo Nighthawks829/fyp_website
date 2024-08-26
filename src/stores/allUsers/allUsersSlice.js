@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   isLoading: false,
   users: [],
-  totalUsers: 0,
+  totalUsers: 0
 };
 
 export const getAllUsers = createAsyncThunk(
@@ -25,6 +25,9 @@ const allUsersSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearAllUserValue: () => {
+      return { ...initialState };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +43,9 @@ const allUsersSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       });
-  },
+  }
 });
 
-export const { showLoading,hideLoading } = allUsersSlice.actions;
+export const { showLoading, hideLoading, clearAllUserValue } =
+  allUsersSlice.actions;
 export default allUsersSlice.reducer;

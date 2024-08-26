@@ -29,6 +29,17 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../stores/auth/authSlice";
 import defaultImage from "../../assets/profile.jpg";
+import { clearDashboardValues } from "../../stores/dashboard/dashboardSlice";
+import { clearBoardValues } from "../../stores/board/boardSlice";
+import { clearSensorValues } from "../../stores/sensor/sensorSlice";
+import { clearNotificationValues } from "../../stores/notification/notificationSlice";
+import { clearUserValues } from "../../stores/user/userSlice";
+import { clearVisualizationValues } from "../../stores/visualization/visualizationSlice";
+import { clearAllDashboardValue } from "../../stores/allDashboards/allDashboardsSlice";
+import { clearAllBoardValue } from "../../stores/allBoards/allBoardsSlice";
+import { clearAllSensorValue } from "../../stores/allSensors/allSensorsSlice";
+import { clearAllNotificationValue } from "../../stores/allNotifications/allNotificationsSlice";
+import { clearAllUserValue } from "../../stores/allUsers/allUsersSlice";
 
 export default function SideBar({ currentTab, setCurrentTab }) {
   const { user } = useSelector((store) => store.auth);
@@ -40,14 +51,27 @@ export default function SideBar({ currentTab, setCurrentTab }) {
     {
       icon: "IoIosNotifications",
       name: "Alert Notification",
-      to: "/notification",
+      to: "/notification"
     },
     { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" },
-    { icon: "LiaUserCogSolid", name: "User Management", to: "/user" },
+    { icon: "LiaUserCogSolid", name: "User Management", to: "/user" }
   ];
 
   async function logoutHandle() {
     dispatch(logoutUser());
+
+    dispatch(clearDashboardValues());
+    dispatch(clearBoardValues());
+    dispatch(clearSensorValues());
+    dispatch(clearNotificationValues());
+    dispatch(clearVisualizationValues());
+    dispatch(clearUserValues());
+
+    dispatch(clearAllDashboardValue());
+    dispatch(clearAllBoardValue());
+    dispatch(clearAllSensorValue());
+    dispatch(clearAllNotificationValue());
+    dispatch(clearAllUserValue());
   }
 
   const UserImage = ({ image }) => {

@@ -5,7 +5,7 @@ import { getAllNotificationsThunk } from "./allNotificationsThunk";
 const initialState = {
   isLoading: false,
   notifications: [],
-  totalNotifications: 0,
+  totalNotifications: 0
 };
 
 export const getAllNotifications = createAsyncThunk(
@@ -25,6 +25,9 @@ const allNotificationsSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearAllNotificationValue: () => {
+      return { ...initialState };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +43,9 @@ const allNotificationsSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       });
-  },
+  }
 });
 
-export const { showLoading, hideLoading } = allNotificationsSlice.actions;
+export const { showLoading, hideLoading, clearAllNotificationValue } =
+  allNotificationsSlice.actions;
 export default allNotificationsSlice.reducer;
