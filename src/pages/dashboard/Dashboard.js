@@ -12,12 +12,19 @@ import {
   handleDashboardChange
 } from "../../stores/dashboard/dashboardSlice";
 import { toast } from "react-toastify";
+import { Modal, Form } from "react-bootstrap";
+import { getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function Dashboard() {
   const { dashboards } = useSelector((store) => store.allDashboards);
   const { id, sensorId, type, name } = useSelector((store) => store.dashboard);
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+
+  const [showFirstModal, setShowFirstModal] = useState(false);
+  const [showSecondModal, setShowSecondModal] = useState(false);
+  const [showThirdModal, setShowThirdModal] = useState(false);
+  const [showFourthModal, setShowFourthModa] = useState(false);
 
   useEffect(() => {
     dispatch(getAllDashboards(user.userId));
@@ -89,181 +96,199 @@ export default function Dashboard() {
     }
   }
 
+  async function handleNext() {
+    try {
+      const response = await dispatch(getSensor(sensorId)).unwrap();
+      if (response.sensorId !== null) {
+        setShowFirstModal(false);
+        setShowSecondModal(true);
+      }
+    } catch (error) {
+      dispatch(clearDashboardValues());
+      setShowFirstModal(false);
+      setShowSecondModal(false);
+    }
+  }
+
   return (
     <>
       {/* Modal */}
-      <div
-        className="modal fade"
-        id="addWidget1"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="addWidgetLabel1"
-        aria-hidden="true"
+      <Modal
+        show={showFirstModal}
+        onHide={() => {
+          setShowFirstModal(false);
+          dispatch(clearDashboardValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-2">Select Sensor</h2>
-              <h4 className="text-center mb-4">Sensor ID</h4>
-              <input
-                type="text"
-                className="form-control border border-dark text-center"
-                placeholder="Sensor ID"
-                id="sensorId"
-                name="sensorId"
-                value={sensorId}
-                required
-                onChange={handleUserInput}
-              />
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearDashboardValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addWidget2"
-                  data-bs-toggle="modal"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-2">Select Sensor</h2>
+          <h4 className="text-center mb-4">Sensor ID</h4>
+          <Form.Control
+            type="text"
+            placeholder="Sensor ID"
+            name="sensorId"
+            value={sensorId}
+            onChange={handleUserInput}
+            className="border border-dark text-center"
+          />
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              onClick={() => {
+                dispatch(clearDashboardValues());
+                setShowFirstModal(false);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-next-button shadow"
+              onClick={() => {
+                handleNext();
+              }}
+            >
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Modal 2 */}
-      <div
-        className="modal fade"
-        id="addWidget2"
-        aria-hidden="true"
-        aria-labelledby="addWidgetLabel2"
-        tabIndex="-1"
+      <Modal
+        show={showSecondModal}
+        onHide={() => {
+          setShowSecondModal(false);
+          dispatch(clearDashboardValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-2">Select Sensor</h2>
-              <h4 className="text-center mb-4">Component Type</h4>
-              <select
-                type="text"
-                className="form-select border border-dark text-center"
-                placeholder="Sensor ID"
-                id="type"
-                name="type"
-                value={type}
-                required
-                onChange={handleUserInput}
-              >
-                <option value="widget">Widget</option>
-                <option value="graph">Visualization Data</option>
-              </select>
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearDashboardValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addWidget3"
-                  data-bs-toggle="modal"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-2">Select Sensor</h2>
+          <h4 className="text-center mb-4">Component Type</h4>
+          <Form.Select
+            name="type"
+            value={type}
+            onChange={handleUserInput}
+            className="border border-dark text-center"
+          >
+            <option value="widget">Widget</option>
+            <option value="graph">Visualization Data</option>
+          </Form.Select>
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              data-bs-dismiss="modal"
+              onClick={() => {
+                setShowSecondModal(false);
+                dispatch(clearDashboardValues());
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-next-button shadow"
+              onClick={() => {
+                setShowSecondModal(false);
+                setShowThirdModal(true);
+              }}
+            >
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Modal 3 */}
-      <div
-        className="modal fade"
-        id="addWidget3"
-        aria-hidden="true"
-        aria-labelledby="addWidgetLabel3"
-        tabIndex="-1"
+      <Modal
+        show={showThirdModal}
+        onHide={() => {
+          setShowThirdModal(false);
+          dispatch(clearDashboardValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-2">Rename Component</h2>
-              <h4 className="text-center mb-4">
-                Enter new name for this component
-              </h4>
-              <input
-                type="text"
-                className="form-control border border-dark text-center"
-                placeholder="Component Name"
-                id="name"
-                name="name"
-                value={name}
-                required
-                onChange={handleUserInput}
-              />
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearDashboardValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addWidget4"
-                  data-bs-toggle="modal"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-2">Rename Component</h2>
+          <h4 className="text-center mb-4">
+            Enter new name for this component
+          </h4>
+          <Form.Control
+            type="text"
+            placeholder="Component Name"
+            name="name"
+            value={name}
+            onChange={handleUserInput}
+            className="border border-dark text-center"
+          />
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              data-bs-dismiss="modal"
+              onClick={() => {
+                setShowThirdModal(false);
+                dispatch(clearDashboardValues());
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-next-button shadow"
+              onClick={() => {
+                setShowThirdModal(false);
+                setShowFourthModa(true);
+              }}
+            >
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
       {/* Modal 4 */}
-      <div
-        className="modal fade"
-        id="addWidget4"
-        aria-hidden="true"
-        aria-labelledby="addWidgetLabel4"
-        tabIndex="-1"
+      <Modal
+        show={showFourthModal}
+        onHide={() => {
+          setShowFourthModa(false);
+          dispatch(clearDashboardValues());
+        }}
+        backdrop="static"
+        keyboard={false}
+        centered
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body p-5 shadow">
-              <h2 className="text-center mb-5">Add {name} to dashboard?</h2>
-              <div className="d-flex align-items-center justify-content-evenly mt-5">
-                <button
-                  className="modal-cancel-button shadow"
-                  data-bs-dismiss="modal"
-                  onClick={() => dispatch(clearDashboardValues())}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="modal-next-button shadow"
-                  data-bs-target="#addWidget4"
-                  data-bs-toggle="modal"
-                  onClick={() => handleAddDashboard()}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+        <Modal.Body className="p-5 shadow">
+          <h2 className="text-center mb-5">Add {name} to dashboard?</h2>
+          <div className="d-flex align-items-center justify-content-evenly mt-5">
+            <button
+              className="modal-cancel-button shadow"
+              data-bs-dismiss="modal"
+              onClick={() => {
+                setShowFourthModa(false);
+                dispatch(clearDashboardValues());
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-next-button shadow"
+              onClick={() => {
+                setShowFourthModa(false);
+                handleAddDashboard();
+              }}
+            >
+              Next
+            </button>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
 
+      {/* Edit Widget Modal */}
       <div
         className="modal fade"
         id="editWidget"
@@ -312,7 +337,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Delete Widget Modal */}
       <div
         className="modal fade"
         id="deleteWidget"
@@ -352,8 +377,7 @@ export default function Dashboard() {
         <div className="text-end">
           <button
             className="add-btn btn-primary fw-bold shadow px-3 py-1"
-            data-bs-toggle="modal"
-            data-bs-target="#addWidget1"
+            onClick={() => setShowFirstModal(true)}
           >
             +Add
           </button>
@@ -364,7 +388,9 @@ export default function Dashboard() {
               className="d-flex justify-content-center align-items-center"
               style={{ height: "200px", width: "100%" }}
             >
-              <h4 className="dashboad-message">Empty Dashboard. Try adding something.</h4>
+              <h4 className="dashboad-message">
+                Empty Dashboard. Try adding something.
+              </h4>
             </div>
           ) : (
             dashboards.map((dashboard) => (
