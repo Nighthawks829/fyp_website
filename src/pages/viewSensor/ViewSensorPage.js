@@ -13,6 +13,7 @@ import defaultImage from "../../assets/led.jpeg";
 import { toast } from "react-toastify";
 import customFetch from "../../utils/axios";
 import mqtt from "mqtt";
+import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function ViewSensorPage() {
   const { id } = useParams();
@@ -26,6 +27,10 @@ export default function ViewSensorPage() {
   let clientRef = useRef(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(switchSidebar({ sidebar: "Sensor" }));
+  },[dispatch]);
 
   useEffect(() => {
     setLocalValue(value);
@@ -74,7 +79,7 @@ export default function ViewSensorPage() {
         clientRef.current.end();
       }
     };
-  }, [topic]);
+  }, [topic,dispatch]);
 
   const SensorImage = React.memo(
     ({ image }) => {

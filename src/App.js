@@ -6,14 +6,12 @@ import { LoginPage } from "./pages/login/login";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "./components/sidebar/sidebar";
 import NotFound from "./pages/notFound/NotFound";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 
 function App() {
   // eslint-disable-next-line
-  const [currentTab, setCurrentTab] = useState("Dashboard");
   const { loggedIn } = useSelector((store) => store.auth);
 
   return (
@@ -25,8 +23,7 @@ function App() {
           element={
             loggedIn ? (
               <SideBar
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
+ 
               />
             ) : (
               <Navigate to="/login" />

@@ -9,13 +9,13 @@ import { IoIosArrowForward } from "react-icons/io";
 
 import "./navigation-button.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function NavigationButton({
   icon,
   name,
   to,
-  currentTab,
-  setCurrentTab,
 }) {
   const icons = {
     RiBarChartBoxLine: <RiBarChartBoxLine color="black" size={30} />,
@@ -23,18 +23,21 @@ export default function NavigationButton({
     GiLed: <GiLed color="black" size={30} />,
     IoIosNotifications: <IoIosNotifications color="black" size={30} />,
     BsGraphUp: <BsGraphUp color="black" size={30} />,
-    LiaUserCogSolid: <LiaUserCogSolid color="black" size={30} />,
+    LiaUserCogSolid: <LiaUserCogSolid color="black" size={30} />
   };
 
+  const { sidebar } = useSelector((store) => store.auth);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <div
       className={`link-button mx-3 my-4 d-flex align-items-center p-3 py-4 ${
-        currentTab === name ? "active" : ""
+        sidebar === name ? "active" : ""
       }`}
       onClick={() => {
-        setCurrentTab(name);
+        dispatch(switchSidebar({ sidebar: name }));
         navigate(to);
       }}
     >

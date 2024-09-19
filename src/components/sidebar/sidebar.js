@@ -41,7 +41,7 @@ import { clearAllSensorValue } from "../../stores/allSensors/allSensorsSlice";
 import { clearAllNotificationValue } from "../../stores/allNotifications/allNotificationsSlice";
 import { clearAllUserValue } from "../../stores/allUsers/allUsersSlice";
 
-export default function SideBar({ currentTab, setCurrentTab }) {
+export default function SideBar() {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigationButton = [
@@ -150,8 +150,6 @@ export default function SideBar({ currentTab, setCurrentTab }) {
                   icon={button.icon}
                   name={button.name}
                   to={button.to}
-                  setCurrentTab={setCurrentTab}
-                  currentTab={currentTab}
                 />
               ))}
             </div>
@@ -159,15 +157,6 @@ export default function SideBar({ currentTab, setCurrentTab }) {
         </div>
         <div className="col p-0">
           <div className="py-4 px-5 border-nav ms-auto d-flex align-items-center justify-content-end">
-            {/* <img
-              src={
-                user.image === ""
-                  ? require("../../assets/profile.jpg")
-                  : require(`../../../public/uploads/${user.image}`)
-              }
-              alt=""
-              className="border border-1 border-dark rounded-circle user-profile profile-img"
-            /> */}
             <UserImage image={user.image} />
             <h5 className="text-capitalize my-0 ms-lg-4 ms-3 me-2 user-name">
               {user.name}

@@ -12,6 +12,7 @@ import { deleteSensor } from "../../stores/sensor/sensorSlice";
 import { Link } from "react-router-dom";
 
 import defaultImage from "../../assets/esp32.jpeg";
+import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function ViewBoardPage() {
   const { name, type, location, ip_address, image, sensors } = useSelector(
@@ -24,6 +25,10 @@ export default function ViewBoardPage() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(switchSidebar({ sidebar: "Board" }));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getBoard(id));

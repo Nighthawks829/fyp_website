@@ -9,6 +9,7 @@ import {
   handleSensorChange
 } from "../../stores/sensor/sensorSlice";
 import { getAllBoards } from "../../stores/allBoards/allBoardsSlice";
+import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function EditSensorPage() {
   const { id } = useParams();
@@ -20,6 +21,10 @@ export default function EditSensorPage() {
   const navigate = useNavigate();
 
   const [file, setFile] = useState("");
+
+  useEffect(() => {
+    dispatch(switchSidebar({ sidebar: "Sensor" }));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getSensor(id));
