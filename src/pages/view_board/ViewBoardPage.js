@@ -26,6 +26,13 @@ export default function ViewBoardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  function handleBoardNameClick() {
+    if (ip_address) {
+      const url = `http://${ip_address}`;
+      window.open(url, "_blank"); // Opens the URL in a new tab
+    }
+  }
+
   useEffect(() => {
     dispatch(switchSidebar({ sidebar: "Board" }));
   }, [dispatch]);
@@ -171,7 +178,12 @@ export default function ViewBoardPage() {
               <div className="col-md-6 col-12 mb-3">
                 <h5 className="fw-bold">
                   IP Address:{" "}
-                  <span className="board-data ms-1">{ip_address}</span>
+                  <span
+                    className="board-data ms-1 board-link text-primary text-decoration-underline"
+                    onClick={handleBoardNameClick}
+                  >
+                    {ip_address}
+                  </span>
                 </h5>
               </div>
             </div>
