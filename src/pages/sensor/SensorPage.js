@@ -9,6 +9,7 @@ import { deleteSensor } from "../../stores/sensor/sensorSlice";
 export default function SensorPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.auth);
   const { sensors } = useSelector((store) => store.allSensors);
 
   const [deleteSensorId, setDeleteSensorId] = useState("");
@@ -77,12 +78,14 @@ export default function SensorPage() {
 
       <div className="p-xl-5 p-3">
         <div className="text-end mb-4">
-          <button
-            className="add-btn btn-primary fw-bold shadow px-3 py-1"
-            onClick={() => navigate("/addSensor")}
-          >
-            + Sensor
-          </button>
+          {user.role === "admin" ? (
+            <button
+              className="add-btn btn-primary fw-bold shadow px-3 py-1"
+              onClick={() => navigate("/addSensor")}
+            >
+              + Sensor
+            </button>
+          ) : null}
         </div>
         <table className="table">
           <thead>
@@ -126,14 +129,16 @@ export default function SensorPage() {
                           aria-expanded="false"
                         />
                         <ul className="dropdown-menu py-3">
-                          <li className="ps-1 pe-2 mb-2">
-                            <Link
-                              className="dropdown-item text-dark py-2 m-0"
-                              to={`/editSensor/${sensor.id}`}
-                            >
-                              Edit
-                            </Link>
-                          </li>
+                          {user.role === "admin" ? (
+                            <li className="ps-1 pe-2 mb-2">
+                              <Link
+                                className="dropdown-item text-dark py-2 m-0"
+                                to={`/editSensor/${sensor.id}`}
+                              >
+                                Edit
+                              </Link>
+                            </li>
+                          ) : null}
                           <li className="ps-1 pe-2 mb-2">
                             <button
                               className="dropdown-item text-dark py-2 m-0"
@@ -145,19 +150,21 @@ export default function SensorPage() {
                               Copy ID
                             </button>
                           </li>
-                          <li className="ps-1 pe-2">
-                            <button
-                              className="dropdown-item text-danger py-2 m-0 mb-1"
-                              data-bs-toggle="modal"
-                              data-bs-target="#deleteSensor"
-                              onClick={() => {
-                                setDeleteSensorId(sensor.id);
-                                setDeleteSensorName(sensor.name);
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </li>
+                          {user.role === "admin" ? (
+                            <li className="ps-1 pe-2">
+                              <button
+                                className="dropdown-item text-danger py-2 m-0 mb-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteSensor"
+                                onClick={() => {
+                                  setDeleteSensorId(sensor.id);
+                                  setDeleteSensorName(sensor.name);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </li>
+                          ) : null}
                         </ul>
                       </div>
                     </td>
