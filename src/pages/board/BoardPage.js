@@ -23,7 +23,6 @@ export default function BoardPage() {
   }
 
   useEffect(() => {
-    console.log(user);
     dispatch(getAllBoards());
   }, [dispatch]);
 

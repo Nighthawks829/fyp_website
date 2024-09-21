@@ -146,52 +146,60 @@ export default function ViewSensorPage() {
     }
   }
 
+  const renderSensorValue = () => {
+    if (type === "Digital Input" || type === "Analog Input") {
+      return null;
+    } else if (type === "Digital Output") {
+      return (
+        <h3 className="mb-3">
+          State:{" "}
+          <span className="digital-value">{value > 0 ? "ON" : "OFF"}</span>
+        </h3>
+      );
+    } else if (type === "Analog Output") {
+      return (
+        <h3>
+          Value: <span className="analog-value">{localValue}</span>
+        </h3>
+      );
+    }
+  };
+
   const renderControls = () => {
     if (type === "Digital Input" || type === "Analog Input") {
       return null;
     } else if (type === "Digital Output") {
       return (
-        <div className="text-center mt-4 col-12">
-          <div className="d-flex flex-wrap align-items-center justify-content-center">
-            <button
-              className="px-3 py-1 edit-button shadow m-1"
-              onClick={turnOnHandle}
-            >
-              ON
-            </button>
-            <button
-              className="px-3 py-1 delete-button shadow m-1"
-              onClick={turnOffHandle}
-            >
-              OFF
-            </button>
-          </div>
-          <h3 className="mt-4">
-            State:{" "}
-            <span className="digital-value">{value > 0 ? "ON" : "OFF"}</span>
-          </h3>
+        <div className="d-flex flex-wrap align-items-center justify-content-center">
+          <button
+            className="px-3 py-1 edit-button shadow m-1"
+            onClick={turnOnHandle}
+          >
+            ON
+          </button>
+          <button
+            className="px-3 py-1 delete-button shadow m-1"
+            onClick={turnOffHandle}
+          >
+            OFF
+          </button>
         </div>
       );
     } else if (type === "Analog Output") {
       return (
-        <div className="text-center mt-4 col-12">
-          <h3>
-            Value: <span className="analog-value">{localValue}</span>
-          </h3>
-          <div className="col-lg-6 col-md-8 col-12 mx-auto">
-            <input
-              type="range"
-              className="mt-4"
-              min="0"
-              max="4096"
-              step="1"
-              id="customRange1"
-              value={localValue}
-              onChange={handleSliderChange}
-              onMouseUp={handleSliderChangeComplete}
-              onTouchEnd={handleSliderChangeComplete}
-            />
-          </div>
+        <div className="col-lg-6 col-md-8 col-12 mx-auto">
+          <input
+            type="range"
+            className="mt-4"
+            min="0"
+            max="4096"
+            step="1"
+            id="customRange1"
+            value={localValue}
+            onChange={handleSliderChange}
+            onMouseUp={handleSliderChangeComplete}
+            onTouchEnd={handleSliderChangeComplete}
+          />
         </div>
       );
     }
@@ -262,7 +270,10 @@ export default function ViewSensorPage() {
 
         <div className="text-center">
           {memoizedSensorImage}
-          {renderControls()}
+          <div className="text-center mt-4 col-12">
+            {renderSensorValue()}
+            {user.role === "admin" ? renderControls() : null}
+          </div>
           <div className="col-lg-8 col-12 mx-auto mt-5">
             <div className="row">
               <div className="col-lg-6 col-12 mb-3">
@@ -312,21 +323,23 @@ export default function ViewSensorPage() {
           </div>
         </div>
         <div className="mt-5 col-12 text-center ">
-          <div className="d-flex flex-wrap align-items-center justify-content-center">
-            <button
-              className="px-3 py-1 edit-button shadow m-1"
-              onClick={() => navigate(`/editSensor/${id}`)}
-            >
-              Edit
-            </button>
-            <button
-              className="px-3 py-1 delete-button shadow m-1"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteSensor"
-            >
-              Delete
-            </button>
-          </div>
+          {user.role === "admin" ? (
+            <div className="d-flex flex-wrap align-items-center justify-content-center">
+              <button
+                className="px-3 py-1 edit-button shadow m-1"
+                onClick={() => navigate(`/editSensor/${id}`)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-3 py-1 delete-button shadow m-1"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteSensor"
+              >
+                Delete
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </>
