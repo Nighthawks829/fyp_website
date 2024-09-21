@@ -44,7 +44,7 @@ import { clearAllUserValue } from "../../stores/allUsers/allUsersSlice";
 export default function SideBar() {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-  const navigationButton = [
+  const adminNavigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
     { icon: "LuCircuitBoard", name: "Board", to: "/board" },
     { icon: "GiLed", name: "Sensor", to: "/sensor" },
@@ -55,6 +55,18 @@ export default function SideBar() {
     },
     { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" },
     { icon: "LiaUserCogSolid", name: "User Management", to: "/user" }
+  ];
+
+  const userNavigationButton = [
+    { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
+    { icon: "LuCircuitBoard", name: "Board", to: "/board" },
+    { icon: "GiLed", name: "Sensor", to: "/sensor" },
+    {
+      icon: "IoIosNotifications",
+      name: "Alert Notification",
+      to: "/notification"
+    },
+    { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" }
   ];
 
   async function logoutHandle() {
@@ -144,14 +156,23 @@ export default function SideBar() {
               </h5>
             </div>
             <div className="sidebar-body pt-5">
-              {navigationButton.map((button, index) => (
-                <NavigationButton
-                  key={index}
-                  icon={button.icon}
-                  name={button.name}
-                  to={button.to}
-                />
-              ))}
+              {user.role === "admin"
+                ? adminNavigationButton.map((button, index) => (
+                    <NavigationButton
+                      key={index}
+                      icon={button.icon}
+                      name={button.name}
+                      to={button.to}
+                    />
+                  ))
+                : userNavigationButton.map((button, index) => (
+                    <NavigationButton
+                      key={index}
+                      icon={button.icon}
+                      name={button.name}
+                      to={button.to}
+                    />
+                  ))}
             </div>
           </div>
         </div>
