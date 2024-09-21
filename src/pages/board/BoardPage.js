@@ -10,6 +10,7 @@ import { deleteBoard } from "../../stores/board/boardSlice";
 
 export default function BoardPage() {
   const navigate = useNavigate();
+  const { user } = useSelector((store) => store.auth);
   const { boards } = useSelector((store) => store.allBoards);
   const dispatch = useDispatch();
 
@@ -22,6 +23,7 @@ export default function BoardPage() {
   }
 
   useEffect(() => {
+    console.log(user);
     dispatch(getAllBoards());
   }, [dispatch]);
 
@@ -65,12 +67,16 @@ export default function BoardPage() {
 
       <div className="p-5 w-100">
         <div className="text-end mb-4">
-          <button
-            className="add-btn btn-primary fw-bold shadow px-3 py-1"
-            onClick={() => navigate("/addBoard")}
-          >
-            + Board
-          </button>
+          {user.role === "admin" ? (
+            <button
+              className="add-btn btn-primary fw-bold shadow px-3 py-1"
+              onClick={() => navigate("/addBoard")}
+            >
+              + Board
+            </button>
+          ) : (
+            ""
+          )}
         </div>
         <table className="table">
           <thead>
@@ -87,7 +93,10 @@ export default function BoardPage() {
               <th scope="col" className="text-center col-3">
                 IP Address
               </th>
-              <th scope="col" className="text-center col-1"></th>
+              {user.role === "admin" ? (
+                <th scope="col" className="text-center col-1"></th>
+              ) : null}
+              {/* <th scope="col" className="text-center col-1"></th> */}
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -100,40 +109,42 @@ export default function BoardPage() {
                     <td className="text-center py-2">{board.type}</td>
                     <td className="text-center py-2">{board.location}</td>
                     <td className="text-center py-2">{board.ip_address}</td>
-                    <td className="text-center py-2 action">
-                      <div className="dropdown">
-                        <IoIosMore
-                          size={25}
-                          className="dropdown-toggle"
-                          role="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        />
-                        <ul className="dropdown-menu py-3">
-                          <li className="ps-1 pe-2 mb-2">
-                            <Link
-                              className="dropdown-item text-dark py-2 m-0"
-                              to={`/editBoard/${board.id}`}
-                            >
-                              Edit
-                            </Link>
-                          </li>
-                          <li className="ps-1 pe-2">
-                            <button
-                              className="dropdown-item text-danger py-2 m-0 mb-1"
-                              data-bs-toggle="modal"
-                              data-bs-target="#deleteBoard"
-                              onClick={() => {
-                                setDeleteBoardId(board.id);
-                                setDeleteBoardName(board.name);
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
+                    {user.role === "admin" ? (
+                      <td className="text-center py-2 action">
+                        <div className="dropdown">
+                          <IoIosMore
+                            size={25}
+                            className="dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          />
+                          <ul className="dropdown-menu py-3">
+                            <li className="ps-1 pe-2 mb-2">
+                              <Link
+                                className="dropdown-item text-dark py-2 m-0"
+                                to={`/editBoard/${board.id}`}
+                              >
+                                Edit
+                              </Link>
+                            </li>
+                            <li className="ps-1 pe-2">
+                              <button
+                                className="dropdown-item text-danger py-2 m-0 mb-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteBoard"
+                                onClick={() => {
+                                  setDeleteBoardId(board.id);
+                                  setDeleteBoardName(board.name);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    ) : null}
                   </tr>
                 ))
               : null}
