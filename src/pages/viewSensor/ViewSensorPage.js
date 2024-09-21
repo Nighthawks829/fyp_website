@@ -17,9 +17,8 @@ import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function ViewSensorPage() {
   const { id } = useParams();
-  const { name, type, topic, pin, boardName, image, value } = useSelector(
-    (store) => store.sensor
-  );
+  const { name, type, topic, pin, boardName, image, value, boardId } =
+    useSelector((store) => store.sensor);
   const { user } = useSelector((store) => store.auth);
   const [localValue, setLocalValue] = useState(value);
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export default function ViewSensorPage() {
 
   useEffect(() => {
     dispatch(switchSidebar({ sidebar: "Sensor" }));
-  },[dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     setLocalValue(value);
@@ -79,7 +78,7 @@ export default function ViewSensorPage() {
         clientRef.current.end();
       }
     };
-  }, [topic,dispatch]);
+  }, [topic, dispatch]);
 
   const SensorImage = React.memo(
     ({ image }) => {
@@ -283,7 +282,13 @@ export default function ViewSensorPage() {
               </div>
               <div className="col-lg-6 col-12 mb-3">
                 <h5 className="fw-bold">
-                  Board: <span className="board-data ms-1">{boardName}</span>
+                  Board:{" "}
+                  <span
+                    className="board-data ms-1 board-link text-primary text-decoration-underline"
+                    onClick={() => navigate(`/viewBoard/${boardId}`)}
+                  >
+                    {boardName}
+                  </span>
                 </h5>
               </div>
               <div className="col-lg-6 col-12 mb-3">

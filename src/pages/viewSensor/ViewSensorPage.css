@@ -3,7 +3,11 @@
   font-weight: 600;
 }
 
-.analog-value{
-    color: #F0C808;
-     font-weight: 600;
+.analog-value {
+  color: #F0C808;
+  font-weight: 600;
+}
+
+.board-link {
+  cursor: pointer;
 }
