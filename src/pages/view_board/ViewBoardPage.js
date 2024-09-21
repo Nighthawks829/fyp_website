@@ -15,6 +15,7 @@ import defaultImage from "../../assets/esp32.jpeg";
 import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function ViewBoardPage() {
+  const { user } = useSelector((store) => store.auth);
   const { name, type, location, ip_address, image, sensors } = useSelector(
     (store) => store.board
   );
@@ -204,7 +205,9 @@ export default function ViewBoardPage() {
                 <th scope="col" className="text-center col-3">
                   Pin
                 </th>
-                <th scope="col" className="text-center col-3"></th>
+                {user.role === "admin" ? (
+                  <th scope="col" className="text-center col-3"></th>
+                ) : null}
               </tr>
             </thead>
             <tbody className="table-group-divider">
@@ -218,63 +221,67 @@ export default function ViewBoardPage() {
                       </td>
                       <td className="text-center py-2">{sensor.type}</td>
                       <td className="text-center py-2">{sensor.pin}</td>
-                      <td className="text-center py-2 action">
-                        <div className="dropdown">
-                          <IoIosMore
-                            size={25}
-                            className="dropdown-toggle"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          />
-                          <ul className="dropdown-menu py-3">
-                            <li className="ps-1 pe-2 mb-2">
-                              <Link
-                                className="dropdown-item text-dark py-2 m-0"
-                                to={`/editSensor/${sensor.id}`}
-                              >
-                                Edit
-                              </Link>
-                            </li>
-                            <li className="ps-1 pe-2">
-                              <button
-                                className="dropdown-item text-danger py-2 m-0 mb-1"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteSensor"
-                                onClick={() => {
-                                  setDeleteSensorId(sensor.id);
-                                  setDeleteSensorName(sensor.name);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
+                      {user.role === "admin" ? (
+                        <td className="text-center py-2 action">
+                          <div className="dropdown">
+                            <IoIosMore
+                              size={25}
+                              className="dropdown-toggle"
+                              role="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            />
+                            <ul className="dropdown-menu py-3">
+                              <li className="ps-1 pe-2 mb-2">
+                                <Link
+                                  className="dropdown-item text-dark py-2 m-0"
+                                  to={`/editSensor/${sensor.id}`}
+                                >
+                                  Edit
+                                </Link>
+                              </li>
+                              <li className="ps-1 pe-2">
+                                <button
+                                  className="dropdown-item text-danger py-2 m-0 mb-1"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#deleteSensor"
+                                  onClick={() => {
+                                    setDeleteSensorId(sensor.id);
+                                    setDeleteSensorName(sensor.name);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      ) : null}
                     </tr>
                   ))
                 : null}
             </tbody>
           </table>
         </div>
-        <div className="mt-5 col-12 text-center ">
-          <div className="d-flex flex-wrap align-items-center justify-content-center">
-            <button
-              className="px-3 py-1 edit-button shadow m-1"
-              onClick={() => navigate(`/editBoard/${id}`)}
-            >
-              Edit
-            </button>
-            <button
-              className="px-3 py-1 delete-button shadow m-1"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteBoard"
-            >
-              Delete
-            </button>
+        {user.role === "admin" ? (
+          <div className="mt-5 col-12 text-center ">
+            <div className="d-flex flex-wrap align-items-center justify-content-center">
+              <button
+                className="px-3 py-1 edit-button shadow m-1"
+                onClick={() => navigate(`/editBoard/${id}`)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-3 py-1 delete-button shadow m-1"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteBoard"
+              >
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );
