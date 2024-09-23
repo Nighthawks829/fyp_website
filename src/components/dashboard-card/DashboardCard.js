@@ -23,6 +23,7 @@ export default function DashboardCard({
   const [topic, setTopic] = useState("");
   const [data, setData] = useState(0);
   const [listData, setListData] = useState([]);
+  const [unit, setUnit] = useState("");
 
   let clientRef = useRef(null);
 
@@ -36,6 +37,7 @@ export default function DashboardCard({
   async function getLatestData() {
     const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
     setData(response.data.sensorData.data);
+    setUnit(response.data.sensorData.unit);
   }
 
   async function getTopic() {
@@ -50,6 +52,7 @@ export default function DashboardCard({
     } else if (type === "widget") {
       getLatestData();
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -94,6 +97,7 @@ export default function DashboardCard({
         clientRef.current.end();
       }
     };
+    // eslint-disable-next-line
   }, [topic]);
 
   useEffect(() => {
@@ -142,7 +146,7 @@ export default function DashboardCard({
   }
 
   const handleSliderChange = (e) => {
-    setData(e.target.value)
+    setData(e.target.value);
   };
 
   async function handleSliderChangeComplete() {
@@ -222,7 +226,8 @@ export default function DashboardCard({
                   ? "OFF"
                   : data === 1
                   ? "ON"
-                  : data}
+                  : data}{" "}
+                {unit}
               </h2>
               {control ? (
                 sensorType === "Digital" ? (
