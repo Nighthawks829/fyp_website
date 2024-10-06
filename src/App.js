@@ -2,7 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { LoginPage } from "./pages/login/login";
+import { LoginPage } from "./pages/login/loginPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SideBar from "./components/sidebar/sidebar";
 import NotFound from "./pages/notFound/NotFound";
