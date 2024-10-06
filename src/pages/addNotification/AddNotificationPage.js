@@ -12,13 +12,13 @@ import { clearSensorValues, getSensor } from "../../stores/sensor/sensorSlice";
 export default function AddNotificationPage() {
   const { sensorId, name, message, threshold, condition, platform, address } =
     useSelector((store) => store.notification);
-  const { user } = useSelector((store) => store.auth);
   const { name: sensorName } = useSelector((store) => store.sensor);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getSensor(sensorId));
+    // eslint-disable-next-line
   }, []);
 
   const handleUserInput = (e) => {
@@ -27,7 +27,7 @@ export default function AddNotificationPage() {
     dispatch(handleNotificationChange({ name, value }));
   };
 
-  function handleResetButton(){
+  function handleResetButton() {
     dispatch(clearNotificationValues());
   }
 
@@ -35,10 +35,8 @@ export default function AddNotificationPage() {
     e.preventDefault();
 
     try {
-      const userId = user.userId;
       await dispatch(
         addNotification({
-          userId,
           sensorId,
           name,
           message,

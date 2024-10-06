@@ -19,7 +19,6 @@ export default function EditNotificationPage() {
     platform,
     address
   } = useSelector((store) => store.notification);
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const { id } = useParams();
@@ -43,12 +42,10 @@ export default function EditNotificationPage() {
     e.preventDefault();
 
     try {
-      const userId = user.userId;
       await dispatch(
         editNotification({
           notificationId: id,
           notification: {
-            userId,
             sensorId,
             name,
             message,
