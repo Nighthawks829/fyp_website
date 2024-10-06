@@ -9,7 +9,7 @@ import {
   handleNotificationChange
 } from "../../stores/notification/notificationSlice";
 import { toast } from "react-toastify";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { getSensor } from "../../stores/sensor/sensorSlice";
 
 export default function AlertNotification() {
