@@ -1,4 +1,4 @@
-import { fireEvent, screenr } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { LoginPage } from "./loginPage";
 import { renderWithProviders } from "../../test-utils";
 
@@ -17,7 +17,6 @@ describe("Login Page", () => {
 
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
-    const loginButton = screen.getByRole("button", { name: /Login/i });
 
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
