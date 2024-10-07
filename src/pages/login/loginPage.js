@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./login.css";
 import loginProfile from "../../assets/login-profile.jpeg";
-// import axios from "axios";
-// import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
-// import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, loginUser } from "../../stores/auth/authSlice";
 
@@ -25,14 +22,6 @@ export const LoginPage = () => {
     }
     // eslint-disable-next-line
   }, [user]);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     setTimeout(() => {
-  //       navigate("/");
-  //     }, 2000);
-  //   }
-  // }, [user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
