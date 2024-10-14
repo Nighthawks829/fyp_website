@@ -10,11 +10,8 @@ const initialState = {
 
 export const getAllDashboards = createAsyncThunk(
   "dashboard/getDashboards",
-  async (userId, thunkAPI) => {
-    return getAllDashboardsThunk(
-      `/dashboard/getAllDashboards/${userId}`,
-      thunkAPI
-    );
+  async (_, thunkAPI) => {
+    return getAllDashboardsThunk("/dashboard/", thunkAPI);
   }
 );
 
