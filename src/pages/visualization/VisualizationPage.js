@@ -5,7 +5,7 @@ import { Line } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSensorData,
-  handleSensorIdChange
+  handleSensorIdChange,
 } from "../../stores/visualization/visualizationSlice";
 import mqtt from "mqtt";
 import { getSensor } from "../../stores/sensor/sensorSlice";
@@ -25,7 +25,7 @@ export default function VisualizationPage() {
       password: "sunlightsam829",
       connectTimeout: 10000,
       reconnectPeriod: 3000,
-      keepalive: 60
+      keepalive: 60,
     });
 
     clientRef.current.on("connect", () => {
@@ -55,7 +55,7 @@ export default function VisualizationPage() {
         clientRef.current.end();
       }
     };
-  }, [topic, sensorId, dispatch]);
+  }, [sensorId, topic, dispatch]);
 
   // eslint-disable-next-line
   const [graphData, setGraphData] = useState({
@@ -66,9 +66,9 @@ export default function VisualizationPage() {
         data: [], // Example data
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)"
-      }
-    ]
+        borderColor: "rgba(75, 192, 192, 0.2)",
+      },
+    ],
   });
 
   const handleInputChange = (e) => {
@@ -85,9 +85,9 @@ export default function VisualizationPage() {
             data: data.map((item) => item.data), // Example data
             fill: false,
             backgroundColor: "rgb(75, 192, 192)",
-            borderColor: "rgba(75, 192, 192, 0.2)"
-          }
-        ]
+            borderColor: "rgba(75, 192, 192, 0.2)",
+          },
+        ],
       });
     } else {
       setGraphData({
@@ -98,9 +98,9 @@ export default function VisualizationPage() {
             data: [],
             fill: false,
             backgroundColor: "rgb(75, 192, 192)",
-            borderColor: "rgba(75, 192, 192, 0.2)"
-          }
-        ]
+            borderColor: "rgba(75, 192, 192, 0.2)",
+          },
+        ],
       });
     }
   }, [data]);
@@ -108,7 +108,7 @@ export default function VisualizationPage() {
   async function getVisualizationData() {
     dispatch(getSensor(sensorId));
     dispatch(getSensorData(sensorId));
-    dispatch(handleSensorIdChange(""));
+    // dispatch(handleSensorIdChange(""));
   }
 
   return (
