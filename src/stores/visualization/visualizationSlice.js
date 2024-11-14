@@ -6,6 +6,7 @@ const initialState = {
   isLoading: false,
   sensorId: "",
   data: {},
+  type: "Digital Input",
   count: 0
 };
 
@@ -20,8 +21,8 @@ const visualizationSlice = createSlice({
   name: "visualization",
   initialState,
   reducers: {
-    handleSensorIdChange: (state, payload) => {
-      state.sensorId = payload.payload;
+    handleVisualizationChange: (state, { payload: { name, value } }) => {
+      state[name] = value;
     },
     clearVisualizationValues: () => {
       return { ...initialState };
@@ -44,6 +45,6 @@ const visualizationSlice = createSlice({
   }
 });
 
-export const { handleSensorIdChange, clearVisualizationValues } =
+export const { handleVisualizationChange, clearVisualizationValues } =
   visualizationSlice.actions;
 export default visualizationSlice.reducer;
