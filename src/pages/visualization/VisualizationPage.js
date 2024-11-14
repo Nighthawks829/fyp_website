@@ -13,7 +13,7 @@ import { getSensor } from "../../stores/sensor/sensorSlice";
 import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
 
 export default function VisualizationPage() {
-  const { sensorId, data, type } = useSelector((store) => store.visualization);
+  const { sensorId, data } = useSelector((store) => store.visualization);
   const { topic } = useSelector((store) => store.sensor);
   const { sensors } = useSelector((store) => store.allSensors);
   const [filterSensor, setFilterSensor] = useState([]);

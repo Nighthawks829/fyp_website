@@ -3,7 +3,7 @@ import {
   addNotificationThunk,
   deleteNotificationThunk,
   editNotificationThunk,
-  getNotificationThunk,
+  getNotificationThunk
 } from "./notificationThunk";
 import { toast } from "react-toastify";
 
@@ -18,6 +18,7 @@ const initialState = {
   platform: "email",
   address: "",
   sensorName: "",
+  sensorType: ""
 };
 
 export const addNotification = createAsyncThunk(
@@ -61,7 +62,7 @@ const notificationSlice = createSlice({
     },
     clearNotificationValues: () => {
       return { ...initialState };
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -114,7 +115,7 @@ const notificationSlice = createSlice({
         state.isLoading = true;
         toast.error(payload);
       });
-  },
+  }
 });
 
 export const { handleNotificationChange, clearNotificationValues } =
