@@ -65,16 +65,20 @@ export default function AlertNotification() {
   };
 
   async function handleNext() {
-    try {
-      const response = await dispatch(getSensor(sensorId)).unwrap();
-      if (response.sensorId !== null) {
+    if (sensorId === "") {
+      toast.error("Please select sensor type and sensor");
+    } else {
+      try {
+        const response = await dispatch(getSensor(sensorId)).unwrap();
+        if (response.sensorId !== null) {
+          setShowFirstModal(false);
+          setShowSecondModal(true);
+        }
+      } catch (error) {
+        dispatch(clearNotificationValues());
         setShowFirstModal(false);
-        setShowSecondModal(true);
+        setShowSecondModal(false);
       }
-    } catch (error) {
-      dispatch(clearNotificationValues());
-      setShowFirstModal(false);
-      setShowSecondModal(false);
     }
   }
 
