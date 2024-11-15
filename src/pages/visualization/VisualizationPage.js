@@ -156,6 +156,7 @@ export default function VisualizationPage() {
                 name="type"
                 onChange={handleUserInputSensorType}
               >
+                <option value="">Select Sensor Type</option>
                 <option value="Digital Input">Digital Input</option>
                 <option value="Digital Output">Digital Output</option>
                 <option value="Analog Input">Analog Input</option>
