@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,10 @@ export default function AddBoardPage() {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const [file, setFile] = useState("");
+
+  useEffect(() => {
+    dispatch(clearBoardValues());
+  },[]);
 
   const navigate = useNavigate();
 

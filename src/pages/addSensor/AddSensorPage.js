@@ -21,6 +21,7 @@ export default function AddSensorPage() {
   const [file, setFile] = useState("");
 
   useEffect(() => {
+    dispatch(clearSensorValues());
     dispatch(getAllBoards());
   }, [dispatch]);
 

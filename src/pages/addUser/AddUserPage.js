@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { TbUpload } from "react-icons/tb";
 import { toast } from "react-toastify";
@@ -17,6 +17,10 @@ export default function AddUserPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(clearUserValues());
+  }, []);
 
   const handleUserInput = (e) => {
     const name = e.target.name;
