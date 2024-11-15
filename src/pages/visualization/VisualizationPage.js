@@ -11,6 +11,7 @@ import {
 import mqtt from "mqtt";
 import { getSensor } from "../../stores/sensor/sensorSlice";
 import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
+import { toast } from "react-toastify";
 
 export default function VisualizationPage() {
   const { sensorId, data } = useSelector((store) => store.visualization);
@@ -20,6 +21,14 @@ export default function VisualizationPage() {
   const dispatch = useDispatch();
 
   let clientRef = useRef(null);
+
+  function handleWatchData() {
+    if (sensorId === "") {
+      toast.error("Please select sensor type and sensor");
+    } else {
+      getVisualizationData();
+    }
+  }
 
   const handleUserInputSensorType = (e) => {
     dispatch(clearVisualizationValues());
@@ -181,15 +190,6 @@ export default function VisualizationPage() {
                     ))
                   : null}
               </select>
-              {/* <input
-                type="text"
-                className="form-control border border-dark text-center"
-                placeholder="Sensor ID"
-                name="sensorId"
-                id="sensorId"
-                value={sensorId}
-                onChange={handleVisualizationChange}
-              /> */}
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
@@ -202,7 +202,7 @@ export default function VisualizationPage() {
                   className="modal-next-button shadow"
                   data-bs-target="#watchData"
                   data-bs-toggle="modal"
-                  onClick={getVisualizationData}
+                  onClick={handleWatchData}
                 >
                   Next
                 </button>
