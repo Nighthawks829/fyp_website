@@ -36,7 +36,7 @@ export default function DashboardCard({
 
   async function getLatestData() {
     const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
-    setData(response.data.sensorData.data);
+    setData(response.data.sensorData.data.toFixed(2));
     setUnit(response.data.sensorData.unit);
   }
 
@@ -226,7 +226,7 @@ export default function DashboardCard({
                   ? "OFF"
                   : data === 1
                   ? "ON"
-                  : data}{" "}
+                  : parseFloat(data).toFixed(2)}{" "}
                 {unit}
               </h2>
               {control ? (
