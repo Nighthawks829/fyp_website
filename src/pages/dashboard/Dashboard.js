@@ -14,11 +14,14 @@ import {
 import { toast } from "react-toastify";
 import { Modal, Form } from "react-bootstrap";
 import { getSensor } from "../../stores/sensor/sensorSlice";
+import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
 
 export default function Dashboard() {
   const { dashboards } = useSelector((store) => store.allDashboards);
   const { id, sensorId, type, name } = useSelector((store) => store.dashboard);
   const { user } = useSelector((store) => store.auth);
+  const { sensors } = useSelector((store) => store.allSensors);
+
   const dispatch = useDispatch();
 
   const [showFirstModal, setShowFirstModal] = useState(false);
@@ -26,8 +29,11 @@ export default function Dashboard() {
   const [showThirdModal, setShowThirdModal] = useState(false);
   const [showFourthModal, setShowFourthModa] = useState(false);
 
+  const [filterSensor, setFilterSensor] = useState([]);
+
   useEffect(() => {
     dispatch(getAllDashboards(user.userId));
+    dispatch(getAllSensors());
   }, [dispatch, user.userId]);
 
   // eslint-disable-next-line
@@ -97,18 +103,30 @@ export default function Dashboard() {
   }
 
   async function handleNext() {
-    try {
-      const response = await dispatch(getSensor(sensorId)).unwrap();
-      if (response.sensorId !== null) {
+    if (sensorId === "") {
+      toast.error("Please select sensor type and sensor");
+    } else {
+      try {
+        const response = await dispatch(getSensor(sensorId)).unwrap();
+        if (response.sensorId !== null) {
+          setShowFirstModal(false);
+          setShowSecondModal(true);
+        }
+      } catch (error) {
+        dispatch(clearDashboardValues());
         setShowFirstModal(false);
-        setShowSecondModal(true);
+        setShowSecondModal(false);
       }
-    } catch (error) {
-      dispatch(clearDashboardValues());
-      setShowFirstModal(false);
-      setShowSecondModal(false);
     }
   }
+
+  const handleUserInputSensorType = (e) => {
+    dispatch(clearDashboardValues());
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleDashboardChange({ name, value }));
+    setFilterSensor(sensors.filter((sensor) => sensor.type === value));
+  };
 
   return (
     <>
@@ -126,14 +144,45 @@ export default function Dashboard() {
         <Modal.Body className="p-5 shadow">
           <h2 className="text-center mb-2">Select Sensor</h2>
           <h4 className="text-center mb-4">Sensor ID</h4>
-          <Form.Control
+          {/* <Form.Control
             type="text"
             placeholder="Sensor ID"
             name="sensorId"
             value={sensorId}
             onChange={handleUserInput}
             className="border border-dark text-center"
-          />
+          /> */}
+          <select
+            className="form-select border border-dark mb-4"
+            aria-label="form-select sensor-type"
+            id="sensorType"
+            name="sensorType"
+            onChange={handleUserInputSensorType}
+          >
+            <option value="">Select Sensor Type</option>
+            <option value="Digital Input">Digital Input</option>
+            <option value="Digital Output">Digital Output</option>
+            <option value="Analog Input">Analog Input</option>
+            <option value="Analog Output">Analog Output</option>
+          </select>
+          <select
+            className="form-select border border-dark"
+            aria-label="form-select sensor-name"
+            id="sensorId"
+            name="sensorId"
+            value={sensorId}
+            required
+            onChange={handleUserInput}
+          >
+            <option value="">Select Sensor</option>
+            {filterSensor
+              ? filterSensor.map((sensor) => (
+                  <option key={sensor.id} value={sensor.id}>
+                    {sensor.name} ({sensor.id})
+                  </option>
+                ))
+              : null}
+          </select>
           <div className="d-flex align-items-center justify-content-evenly mt-5">
             <button
               className="modal-cancel-button shadow"

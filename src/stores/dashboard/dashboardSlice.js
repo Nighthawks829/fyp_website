@@ -16,7 +16,8 @@ const initialState = {
   name: "",
   control: "",
   type: "widget",
-  data: 0
+  data: 0,
+  sensorType: ""
 };
 
 export const addDashboard = createAsyncThunk(
