@@ -36,7 +36,8 @@ export default function DashboardCard({
 
   async function getLatestData() {
     const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
-    setData(response.data.sensorData.data.toFixed(2));
+    // setData(response.data.sensorData.data.toFixed(2));
+    setData(response.data.sensorData.data)
     setUnit(response.data.sensorData.unit);
   }
 
@@ -218,16 +219,18 @@ export default function DashboardCard({
           </div>
           <h4 className="text-center fw-bold mb-4 mt-2">{name}</h4>
           {type === "widget" ? (
+
             <>
               <h2 className="text-center fw-bold analogValue display-6 mb-4">
-                {sensorType === "Analog"
-                  ? data
-                  : data === 0
-                  ? "OFF"
-                  : data === 1
-                  ? "ON"
-                  : parseFloat(data).toFixed(2)}{" "}
-                {unit}
+                {
+                  sensorType === "Analog"
+                    ? parseFloat(data).toFixed(2) + " " + (unit !== undefined ? " " + unit : "") // Show parsed float value for analog sensor
+                    : data === 0
+                    ? "OFF" // Show "OFF" if data is 0
+                    : data === 1
+                    ? "ON" // Show "ON" if data is 1
+                    : "Invalid " // Optional: handle any other cases
+                }
               </h2>
               {control ? (
                 sensorType === "Digital" ? (
