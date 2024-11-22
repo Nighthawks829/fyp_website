@@ -131,13 +131,18 @@ export default function AddNotificationPage() {
           >
             <option value="telegram">Telegram</option>
             <option value="email">Email</option>
+            <option value="whatsapp">WhatsApp</option>
           </select>
         </div>
         <div className="col-lg-8 col-md-10 col-12 mx-auto mt-4">
           <div className="row">
             <div className="col-md-3 col-12 d-flex justify-content-center align-items-center">
               <label htmlFor="address" className="form-label fw-bold m-0">
-                {platform === "telegram" ? "Bot ID: " : "Email: "}
+                {platform === "telegram"
+                  ? "Bot ID: "
+                  : platform === "email"
+                  ? "Email: "
+                  : "Phone Number: "}
               </label>
             </div>
             <div className="col-md-9 col-12">
