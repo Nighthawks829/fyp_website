@@ -146,6 +146,23 @@ export default function ViewSensorPage() {
     }
   }
 
+  async function handleToneChange(e) {
+    try {
+      await customFetch.post("/sensorControl/", {
+        sensorId: id,
+        value: parseInt(e.target.value),
+        topic: topic,
+        userId: user.userId,
+        unit: ""
+      });
+      dispatch(
+        handleSensorChange({ name: "value", value: parseInt(e.target.value) })
+      );
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
   const renderSensorValue = () => {
     if (type === "Digital Input" || type === "Analog Input") {
       return null;
@@ -186,22 +203,59 @@ export default function ViewSensorPage() {
         </div>
       );
     } else if (type === "Analog Output") {
-      return (
-        <div className="col-lg-6 col-md-8 col-12 mx-auto">
-          <input
-            type="range"
-            className="mt-4"
-            min="0"
-            max="4096"
-            step="1"
-            id="customRange1"
-            value={localValue}
-            onChange={handleSliderChange}
-            onMouseUp={handleSliderChangeComplete}
-            onTouchEnd={handleSliderChangeComplete}
-          />
-        </div>
-      );
+      // return (
+      //   <div className="col-lg-6 col-md-8 col-12 mx-auto">
+      //     <input
+      //       type="range"
+      //       className="mt-4"
+      //       min="0"
+      //       max="4096"
+      //       step="1"
+      //       id="customRange1"
+      //       value={localValue}
+      //       onChange={handleSliderChange}
+      //       onMouseUp={handleSliderChangeComplete}
+      //       onTouchEnd={handleSliderChangeComplete}
+      //     />
+      //   </div>
+      if (name.toLowerCase().includes("buzzer")) {
+        return (
+          <div className="col-lg-6 col-md-8 col-12 mx-auto">
+            <select className="form-select mt-4" onChange={handleToneChange}>
+            <option value="0">Turn Off</option>
+              <option value="262">C</option>
+              <option value="277">C#</option>
+              <option value="294">D</option>
+              <option value="311">D#</option>
+              <option value="330">E</option>
+              <option value="349">F</option>
+              <option value="370">F#</option>
+              <option value="392">G</option>
+              <option value="415">G#</option>
+              <option value="440">A</option>
+              <option value="466">A#</option>
+              <option value="494">B</option>
+            </select>
+          </div>
+        );
+      } else {
+        return (
+          <div className="col-lg-6 col-md-8 col-12 mx-auto">
+            <input
+              type="range"
+              className="mt-4"
+              min="0"
+              max="4096"
+              step="1"
+              id="customRange1"
+              value={localValue}
+              onChange={handleSliderChange}
+              onMouseUp={handleSliderChangeComplete}
+              onTouchEnd={handleSliderChangeComplete}
+            />
+          </div>
+        );
+      }
     }
   };
 
