@@ -452,6 +452,7 @@ export default function Dashboard() {
                 sensorType={
                   dashboard.sensorType ? dashboard.sensorType.split(" ")[0] : ""
                 }
+                sensorName={dashboard.sensorName}
                 control={dashboard.control}
               />
             ))

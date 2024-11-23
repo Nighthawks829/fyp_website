@@ -9,6 +9,7 @@ import { handleDashboardChange } from "../../stores/dashboard/dashboardSlice";
 import customFetch from "../../utils/axios";
 import mqtt from "mqtt";
 import { toast } from "react-toastify";
+import { handleSensorChange } from "../../stores/sensor/sensorSlice";
 
 export default function DashboardCard({
   id,
@@ -16,7 +17,8 @@ export default function DashboardCard({
   name,
   sensorType,
   control,
-  sensorId
+  sensorId,
+  sensorName
 }) {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
@@ -37,7 +39,7 @@ export default function DashboardCard({
   async function getLatestData() {
     const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
     // setData(response.data.sensorData.data.toFixed(2));
-    setData(response.data.sensorData.data)
+    setData(response.data.sensorData.data);
     setUnit(response.data.sensorData.unit);
   }
 
@@ -164,6 +166,23 @@ export default function DashboardCard({
     }
   }
 
+  async function handleToneChange(e) {
+    try {
+      const response=await customFetch.post("/sensorControl/", {
+        sensorId: sensorId,
+        value: parseInt(e.target.value),
+        topic: topic,
+        userId: user.userId,
+        unit: ""
+      });
+      dispatch(
+        handleSensorChange({ name: "value", value: parseInt(e.target.value) })
+      );
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
   return (
     <div
       className={
@@ -219,12 +238,13 @@ export default function DashboardCard({
           </div>
           <h4 className="text-center fw-bold mb-4 mt-2">{name}</h4>
           {type === "widget" ? (
-
             <>
               <h2 className="text-center fw-bold analogValue display-6 mb-4">
                 {
                   sensorType === "Analog"
-                    ? parseFloat(data).toFixed(2) + " " + (unit !== undefined ? " " + unit : "") // Show parsed float value for analog sensor
+                    ? parseFloat(data).toFixed(2) +
+                      " " +
+                      (unit !== undefined ? " " + unit : "") // Show parsed float value for analog sensor
                     : data === 0
                     ? "OFF" // Show "OFF" if data is 0
                     : data === 1
@@ -243,6 +263,40 @@ export default function DashboardCard({
                       />
                       <span className="slider round"></span>
                     </label>
+                  </div>
+                ) : // <input
+                //   type="range"
+                //   className="mt-4"
+                //   min="0"
+                //   max="4096"
+                //   step="1"
+                //   id="customRange1"
+                //   value={data}
+                //   onChange={handleSliderChange}
+                //   onMouseUp={handleSliderChangeComplete}
+                //   onTouchEnd={handleSliderChangeComplete}
+
+                sensorName.toLowerCase().includes("buzzer") ? (
+                  <div className="col-lg-6 col-md-8 col-12 mx-auto">
+                    <select
+                      className="form-select mt-4"
+                      onChange={handleToneChange}
+                      value={data}
+                    >
+                      <option value="0">Turn Off</option>
+                      <option value="262">C</option>
+                      <option value="277">C#</option>
+                      <option value="294">D</option>
+                      <option value="311">D#</option>
+                      <option value="330">E</option>
+                      <option value="349">F</option>
+                      <option value="370">F#</option>
+                      <option value="392">G</option>
+                      <option value="415">G#</option>
+                      <option value="440">A</option>
+                      <option value="466">A#</option>
+                      <option value="494">B</option>
+                    </select>
                   </div>
                 ) : (
                   <input
