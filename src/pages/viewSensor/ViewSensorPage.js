@@ -221,7 +221,7 @@ export default function ViewSensorPage() {
       if (name.toLowerCase().includes("buzzer")) {
         return (
           <div className="col-lg-6 col-md-8 col-12 mx-auto">
-            <select className="form-select mt-4" onChange={handleToneChange}>
+            <select className="form-select mt-4" onChange={handleToneChange} value={localValue}>
             <option value="0">Turn Off</option>
               <option value="262">C</option>
               <option value="277">C#</option>
