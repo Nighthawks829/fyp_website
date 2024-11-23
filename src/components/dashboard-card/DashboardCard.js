@@ -168,7 +168,7 @@ export default function DashboardCard({
 
   async function handleToneChange(e) {
     try {
-      const response=await customFetch.post("/sensorControl/", {
+      await customFetch.post("/sensorControl/", {
         sensorId: sensorId,
         value: parseInt(e.target.value),
         topic: topic,
