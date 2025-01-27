@@ -142,8 +142,8 @@ export default function Dashboard() {
         centered
       >
         <Modal.Body className="p-5 shadow">
-          <h2 className="text-center mb-2">Select Sensor</h2>
-          <h4 className="text-center mb-4">Sensor ID</h4>
+          <h2 className="text-center mb-4">Select Sensor</h2>
+          {/* <h4 className="text-center mb-4">Sensor ID</h4> */}
           {/* <Form.Control
             type="text"
             placeholder="Sensor ID"
