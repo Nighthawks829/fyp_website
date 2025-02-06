@@ -41,9 +41,22 @@ import { clearAllSensorValue } from "../../stores/allSensors/allSensorsSlice";
 import { clearAllNotificationValue } from "../../stores/allNotifications/allNotificationsSlice";
 import { clearAllUserValue } from "../../stores/allUsers/allUsersSlice";
 
+
+/**
+ * Sidebar component that provides navigation for the application.
+ * 
+ * The sidebar includes user profile details, a logout function, and navigational
+ * buttons that change based on the user's role (admin or regular user).
+ * 
+ * @returns {JSX.Element} The rendered Sidebar component.
+ */
+
 export default function SideBar() {
+  // Retrieve user details from Redux stores
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+
+  // Define navigation buttons for admin users
   const adminNavigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
     { icon: "LuCircuitBoard", name: "Board", to: "/board" },
@@ -57,6 +70,7 @@ export default function SideBar() {
     { icon: "LiaUserCogSolid", name: "User Management", to: "/user" }
   ];
 
+  // Define navigation buttons for regular users
   const userNavigationButton = [
     { icon: "RiBarChartBoxLine", name: "Dashboard", to: "/dashboard" },
     { icon: "LuCircuitBoard", name: "Board", to: "/board" },
@@ -69,6 +83,12 @@ export default function SideBar() {
     { icon: "BsGraphUp", name: "Visualization Data", to: "/visualization" }
   ];
 
+  /**
+   * Handles user logout.
+   * 
+   * This function dispatches the logout action and clears all relevant Redux state values
+   * to reset the application state for a new login session.
+   */
   async function logoutHandle() {
     dispatch(logoutUser());
 
@@ -86,6 +106,15 @@ export default function SideBar() {
     dispatch(clearAllUserValue());
   }
 
+  /**
+   * Component to display the user's profile image.
+   * 
+   * If the provided image is unavailable, a default image is used.
+   * 
+   * @param {Object} props - Component props
+   * @param {string} props.image - The image filename from the backend
+   * @returns {JSX.Element} The rendered user image component
+   */
   const UserImage = ({ image }) => {
     const [imgSrc, setImgSrc] = useState("");
 
@@ -108,7 +137,7 @@ export default function SideBar() {
 
   return (
     <>
-      {/* Modal */}
+      {/* Logout Confirmation Modal */}
       <div
         className="modal fade"
         id="logoutModal"
@@ -142,6 +171,7 @@ export default function SideBar() {
         </div>
       </div>
 
+      {/* Sidebar Layout */}
       <div className="row g-0 m-0">
         <div className="sidebar-container">
           <div className="d-flex flex-column col-2 sidebar">
@@ -155,27 +185,31 @@ export default function SideBar() {
                 NIGHTHAWKS
               </h5>
             </div>
+
+            {/* Sidebar Navigation */}
             <div className="sidebar-body pt-5">
               {user.role === "admin"
                 ? adminNavigationButton.map((button, index) => (
-                    <NavigationButton
-                      key={index}
-                      icon={button.icon}
-                      name={button.name}
-                      to={button.to}
-                    />
-                  ))
+                  <NavigationButton
+                    key={index}
+                    icon={button.icon}
+                    name={button.name}
+                    to={button.to}
+                  />
+                ))
                 : userNavigationButton.map((button, index) => (
-                    <NavigationButton
-                      key={index}
-                      icon={button.icon}
-                      name={button.name}
-                      to={button.to}
-                    />
-                  ))}
+                  <NavigationButton
+                    key={index}
+                    icon={button.icon}
+                    name={button.name}
+                    to={button.to}
+                  />
+                ))}
             </div>
           </div>
         </div>
+
+        {/* Main Content Area */}
         <div className="col p-0">
           <div className="py-4 px-5 border-nav ms-auto d-flex align-items-center justify-content-end">
             <UserImage image={user.image} />
@@ -210,6 +244,8 @@ export default function SideBar() {
               </ul>
             </div>
           </div>
+
+          {/* Application Routes */}
           <div>
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
