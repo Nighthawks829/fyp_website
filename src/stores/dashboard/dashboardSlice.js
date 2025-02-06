@@ -8,18 +8,26 @@ import {
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+/**
+ * Initial state for the dashboard slice.
+ * Stores dashboard details and loading state.
+ */
 const initialState = {
-  isLoading: false,
+  isLoading: false, // Indicates if an async operation is in progress
   id: "",
   userId: "",
   sensorId: "",
   name: "",
   control: "",
-  type: "widget",
-  data: 0,
+  type: "widget", // Default type of dashboard
+  data: 0, // Placeholder for sensor data
   sensorType: ""
 };
 
+/**
+ * Async thunk to add a new dashboard.
+ * Calls `addDashboardThunk` to send a POST request to the server.
+ */
 export const addDashboard = createAsyncThunk(
   "dashboard/addDashboard",
   async (dashboard, thunkAPI) => {
@@ -27,6 +35,10 @@ export const addDashboard = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to retrieve a specific dashboard by ID.
+ * Calls `getDashboardThunk` to send a GET request.
+ */
 export const getDashboard = createAsyncThunk(
   "dashboard/getDashboard",
   async (dashboardId, thunkAPI) => {
@@ -34,6 +46,10 @@ export const getDashboard = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to edit an existing dashboard.
+ * Calls `editDashboardThunk` to send a PATCH request.
+ */
 export const editDashboard = createAsyncThunk(
   "dashboard/editDashboard",
   async ({ dashboardId, dashboard }, thunkAPI) => {
@@ -41,6 +57,10 @@ export const editDashboard = createAsyncThunk(
   }
 );
 
+/**
+ * Async thunk to delete a dashboard by ID.
+ * Calls `deleteDashboardThunk` to send a DELETE request.
+ */
 export const deleteDashboard = createAsyncThunk(
   "dashboard/deleteDashboard",
   async (dashboardId, thunkAPI) => {
@@ -48,19 +68,28 @@ export const deleteDashboard = createAsyncThunk(
   }
 );
 
+/**
+ * Redux slice for handling dashboard-related state and actions.
+ */
 const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
+    // Handles changes to the dashboard form inputs.
     handleDashboardChange: (state, { payload: { name, value } }) => {
       state[name] = value;
     },
+    /**
+ * Resets the dashboard state to its initial values.
+ * Useful after successful form submission or when switching dashboards.
+ */
     clearDashboardValues: () => {
       return { ...initialState };
     }
   },
   extraReducers: (builder) => {
     builder
+      // Add Dashboard
       .addCase(addDashboard.pending, (state) => {
         state.isLoading = true;
       })
@@ -72,6 +101,7 @@ const dashboardSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       })
+      // Get Dashboard
       .addCase(getDashboard.pending, (state) => {
         state.isLoading = true;
       })
@@ -88,6 +118,7 @@ const dashboardSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       })
+      // Edit Dashboard
       .addCase(editDashboard.pending, (state) => {
         state.isLoading = true;
       })
@@ -99,6 +130,7 @@ const dashboardSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       })
+      // Delete Dashboard
       .addCase(deleteDashboard.pending, (state) => {
         state.isLoading = true;
       })
@@ -107,12 +139,15 @@ const dashboardSlice = createSlice({
         toast.success("Dashboard deleted successful!");
       })
       .addCase(deleteDashboard.rejected, (state, { payload }) => {
-        state.isLoading = true;
+        state.isLoading = false;
         toast.error(payload);
       });
   }
 });
 
+// Export actions for use in components
 export const { handleDashboardChange, clearDashboardValues } =
   dashboardSlice.actions;
+
+// Export reducer to be added to the Redux store
 export default dashboardSlice.reducer;
