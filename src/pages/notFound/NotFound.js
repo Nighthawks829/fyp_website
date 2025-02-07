@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 export default function NotFound() {
   return (
     <div className="vh-100 d-flex align-items-center justify-content-center background-image">
+      {/* Main container for the 404 page */}
       <div className="w-75 h-75 bg-white p-5 rounded shadow text-center d-flex flex-column align-items-center justify-content-center">
         <LiaRobotSolid size={250} />
         <h1 className="display-1 fw-bold m-0">404</h1>
@@ -15,6 +16,7 @@ export default function NotFound() {
         <h6 className="display-6 mb-5">
           Sorry, the page you're looking for doesn't exist.
         </h6>
+        {/* Link to navigate back to the home page */}
         <Link to="/">
           <button className="btn btn-primary fw-bold shadow return-btn">
             RETURN HOME

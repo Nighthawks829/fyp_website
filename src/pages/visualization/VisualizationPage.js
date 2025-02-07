@@ -14,40 +14,54 @@ import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
 import { toast } from "react-toastify";
 
 export default function VisualizationPage() {
+  // Get necessary data from Redux store
   const { sensorId, data } = useSelector((store) => store.visualization);
   const { topic } = useSelector((store) => store.sensor);
   const { sensors } = useSelector((store) => store.allSensors);
+  // Local state for filtering sensors based on type
   const [filterSensor, setFilterSensor] = useState([]);
   const dispatch = useDispatch();
 
+  // Reference for MQTT client
   let clientRef = useRef(null);
 
+  // Function to handle user action for watching data
   function handleWatchData() {
     if (sensorId === "") {
+      // Show error if no sensor is selected
       toast.error("Please select sensor type and sensor");
     } else {
+      // Fetch visualization data if a sensor is selected
       getVisualizationData();
     }
   }
 
+  // Handle sensor type selection
   const handleUserInputSensorType = (e) => {
+    // Clear previous visualization values
     dispatch(clearVisualizationValues());
     const name = e.target.name;
     const value = e.target.value;
+    // Update visualization state with selected type
     dispatch(handleVisualizationChange({ name, value }));
+    // Filter sensors based on selected type
     setFilterSensor(sensors.filter((sensor) => sensor.type === value));
   };
 
+  // Handle sensor selection
   const handleUserInputSensorId = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    // Update visualization state with selected sensor ID
     dispatch(handleVisualizationChange({ name, value }));
   };
 
+  // Fetch all sensors when the component mounts
   useEffect(() => {
     dispatch(getAllSensors());
   }, []);
 
+  // Set up MQTT client connection on mount and subscribe to the sensor topic
   useEffect(() => {
     clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
       clientId: `clientId_${Math.random().toString(16).substr(2, 8)}`,
@@ -59,17 +73,19 @@ export default function VisualizationPage() {
       keepalive: 60
     });
 
+    // Handle successful connection
     clientRef.current.on("connect", () => {
       console.log("Connected to MQTT broker");
     });
 
+    // Handle incoming MQTT messages and update the visualization data
     clientRef.current.on("message", (topicSub, message) => {
       if (topicSub === topic) {
         dispatch(getSensorData(sensorId));
       }
     });
 
-    // Ensure the MQTT client is available before subscribing
+    // Subscribe to the topic once MQTT client is connected
     if (clientRef.current && topic !== "") {
       clientRef.current.subscribe(topic, (err) => {
         if (err) {
@@ -83,37 +99,34 @@ export default function VisualizationPage() {
     // Clean up the connection on component unmount
     return () => {
       if (clientRef.current) {
-        clientRef.current.end();
+        clientRef.current.end();    // Close MQTT client connection
       }
     };
   }, [sensorId, topic, dispatch]);
 
-  // eslint-disable-next-line
+  // Default graph data structure
   const [graphData, setGraphData] = useState({
-    labels: [], // Example categorical labels
+    labels: [],   // X-axis labels
     datasets: [
       {
-        label: "Data",
-        data: [], // Example data
+        label: "Data",    // Label for the dataset
+        data: [],   // Data points for the graph
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)"
+        backgroundColor: "rgb(75, 192, 192)",   // Line color
+        borderColor: "rgba(75, 192, 192, 0.2)"    // Border color for the line
       }
     ]
   });
 
-  // const handleInputChange = (e) => {
-  //   dispatch(handleSensorIdChange(e.target.value));
-  // };
-
+  // Update the graph data whenever new sensor data is available
   useEffect(() => {
     if (Array.isArray(data)) {
       setGraphData({
-        labels: data.map((_, index) => index), // Example labels
+        labels: data.map((_, index) => index),   // Use the index as labels for the X-axis
         datasets: [
           {
             label: "Data",
-            data: data.map((item) => item.data), // Example data
+            data: data.map((item) => item.data), // Map the sensor data to the Y-axis
             fill: false,
             backgroundColor: "rgb(75, 192, 192)",
             borderColor: "rgba(75, 192, 192, 0.2)"
@@ -134,16 +147,17 @@ export default function VisualizationPage() {
         ]
       });
     }
-  }, [data]);
+  }, [data]);    // Trigger when data changes
 
+  // Fetch the visualization data (sensor data and values)
   async function getVisualizationData() {
-    dispatch(getSensor(sensorId));
-    dispatch(getSensorData(sensorId));
-    // dispatch(handleSensorIdChange(""));
+    dispatch(getSensor(sensorId));       // Get sensor data
+    dispatch(getSensorData(sensorId));   // Get sensor data for visualization
   }
 
   return (
     <>
+      {/* Modal for selecting sensor type and sensor */}
       <div
         className="modal fade"
         id="watchData"
@@ -157,7 +171,7 @@ export default function VisualizationPage() {
           <div className="modal-content">
             <div className="modal-body p-5 shadow">
               <h2 className="text-center mb-4">Select Sensor</h2>
-              {/* <h4 className="text-center mb-4">Sensor ID</h4> */}
+              {/* Sensor type selection */}
               <select
                 className="form-select border border-dark mb-4"
                 aria-label="form-select sensor-type"
@@ -172,6 +186,7 @@ export default function VisualizationPage() {
                 <option value="Analog Output">Analog Output</option>
               </select>
 
+              {/* Sensor selection */}
               <select
                 className="form-select border border-dark"
                 aria-label="form-select sensor-name"
@@ -184,12 +199,13 @@ export default function VisualizationPage() {
                 <option value="">Select Sensor</option>
                 {filterSensor
                   ? filterSensor.map((sensor) => (
-                      <option key={sensor.id} value={sensor.id}>
-                        {sensor.name} ({sensor.id})
-                      </option>
-                    ))
+                    <option key={sensor.id} value={sensor.id}>
+                      {sensor.name} ({sensor.id})
+                    </option>
+                  ))
                   : null}
               </select>
+              {/* Modal buttons */}
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
@@ -211,7 +227,10 @@ export default function VisualizationPage() {
           </div>
         </div>
       </div>
+
+      {/* Main page content */}
       <div className="p-xl-5 p-3">
+        {/* Button to open the modal for selecting sensor */}
         <div className="text-end mb-4">
           <button
             className="add-btn btn-primary fw-bold shadow px-3 py-1"
@@ -221,8 +240,11 @@ export default function VisualizationPage() {
             + Watch Data
           </button>
         </div>
+
+        {/* Visualization section */}
         <h3 className="text-center fw-bold mb-5">Visualization Data</h3>
         <div className="d-flex justify-content-center align-items-center">
+          {/* Line chart displaying the sensor data */}
           <Line data={graphData} style={{ width: "100%" }} />
         </div>
       </div>

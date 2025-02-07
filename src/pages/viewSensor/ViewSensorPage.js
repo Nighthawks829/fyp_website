@@ -16,29 +16,41 @@ import mqtt from "mqtt";
 import { switchSidebar } from "../../stores/auth/authSlice";
 
 export default function ViewSensorPage() {
+  // Retrieve sensor id from URL params
   const { id } = useParams();
+
+  // Get sensor data from Redux store
   const { name, type, topic, pin, boardName, image, value, boardId } =
     useSelector((store) => store.sensor);
+
+  // Get current user info from Redux store
   const { user } = useSelector((store) => store.auth);
+
+  // Local state for sensor value
   const [localValue, setLocalValue] = useState(value);
+
   const dispatch = useDispatch();
-
-  let clientRef = useRef(null);
-
   const navigate = useNavigate();
 
+  // MQTT client reference for connection
+  let clientRef = useRef(null);
+
+  // Switch the sidebar to Sensor on component mount
   useEffect(() => {
     dispatch(switchSidebar({ sidebar: "Sensor" }));
   }, [dispatch]);
 
+  // Update localValue when sensor value changes
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
+  // Fetch sensor details from the APIå
   useEffect(() => {
     dispatch(getSensor(id));
   }, [dispatch, id]);
 
+  // MQTT client setup: connect to MQTT broker and subscribe to sensor topic
   useEffect(() => {
     clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
       clientId: `clientId_${Math.random().toString(16).substr(2, 8)}`,
@@ -50,10 +62,12 @@ export default function ViewSensorPage() {
       keepalive: 60
     });
 
+    // Log connection to the MQTT broker
     clientRef.current.on("connect", () => {
       console.log("Connected to MQTT broker");
     });
 
+    // Handle incoming MQTT messages and update sensor value
     clientRef.current.on("message", (topicSub, message) => {
       const jsonString = message.toString();
       const jsonObject = JSON.parse(jsonString);
@@ -80,10 +94,12 @@ export default function ViewSensorPage() {
     };
   }, [topic, dispatch]);
 
+  // Memoized component for displaying sensor image
   const SensorImage = React.memo(
     ({ image }) => {
       const [imgSrc, setImgSrc] = useState("");
 
+      // Update the image source whenever the image changes
       useEffect(() => {
         try {
           setImgSrc(require(`../../../public/uploads/${image}`));
@@ -97,6 +113,7 @@ export default function ViewSensorPage() {
     (prevProps, nextProps) => prevProps.image === nextProps.image
   );
 
+  // Handler for turning the sensor ON (e.g., for digital output)
   async function turnOnHandle() {
     try {
       await customFetch.post("/sensorControl/", {
@@ -112,6 +129,7 @@ export default function ViewSensorPage() {
     }
   }
 
+  // Handler for turning the sensor OFF (e.g., for digital output)
   async function turnOffHandle() {
     try {
       await customFetch.post("/sensorControl/", {
@@ -127,10 +145,12 @@ export default function ViewSensorPage() {
     }
   }
 
+  // Handler for slider input change
   const handleSliderChange = (e) => {
     setLocalValue(e.target.value);
   };
 
+  // Handler for slider change completion (after user finishes sliding)
   async function handleSliderChangeComplete() {
     dispatch(handleSensorChange({ name: "value", value: localValue }));
     try {
@@ -146,6 +166,7 @@ export default function ViewSensorPage() {
     }
   }
 
+  // Handler for changing tone value (for buzzer sensor)
   async function handleToneChange(e) {
     try {
       await customFetch.post("/sensorControl/", {
@@ -163,8 +184,10 @@ export default function ViewSensorPage() {
     }
   }
 
+  // Function to render the current sensor value based on type
   const renderSensorValue = () => {
     if (type === "Digital Input" || type === "Analog Input") {
+      // No value display for input types
       return null;
     } else if (type === "Digital Output") {
       return (
@@ -182,8 +205,10 @@ export default function ViewSensorPage() {
     }
   };
 
+  // Function to render the appropriate control buttons based on sensor type
   const renderControls = () => {
     if (type === "Digital Input" || type === "Analog Input") {
+      // No controls for input types
       return null;
     } else if (type === "Digital Output") {
       return (
@@ -218,11 +243,12 @@ export default function ViewSensorPage() {
       //       onTouchEnd={handleSliderChangeComplete}
       //     />
       //   </div>
+      // Additional controls for analog output sensors (e.g., sliders or tone control for buzzers)
       if (name.toLowerCase().includes("buzzer")) {
         return (
           <div className="col-lg-6 col-md-8 col-12 mx-auto">
             <select className="form-select mt-4" onChange={handleToneChange} value={localValue}>
-            <option value="0">Turn Off</option>
+              <option value="0">Turn Off</option>
               <option value="262">C</option>
               <option value="277">C#</option>
               <option value="294">D</option>
@@ -259,13 +285,15 @@ export default function ViewSensorPage() {
     }
   };
 
+  // Handler to delete the sensor
   async function handleDeleteSensor() {
     try {
       await dispatch(deleteSensor(id)).unwrap();
-      navigate(-1);
-    } catch (error) {}
+      navigate(-1);   // Navigate back after deletion
+    } catch (error) { }
   }
 
+  // Memoize sensor image to avoid unnecessary re-renders
   const memoizedSensorImage = useMemo(
     () => <SensorImage image={image} />,
     [image]
@@ -273,7 +301,7 @@ export default function ViewSensorPage() {
 
   return (
     <>
-      {/* Modal */}
+      {/* Modal for confirming sensor deletion */}
       <div
         className="modal fade"
         id="deleteSensor"
@@ -309,8 +337,10 @@ export default function ViewSensorPage() {
         </div>
       </div>
 
+      {/* Sensor details page */}
       <div className="p-xl-5 p-3">
         <div className="text-start">
+          {/* Back button */}
           <button
             className="back-btn btn-primary fw-bold shadow px-4 py-1"
             onClick={() => {

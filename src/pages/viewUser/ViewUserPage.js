@@ -11,23 +11,28 @@ import {
 import defaultImage from "../../assets/profile.jpg";
 
 export default function ViewUserPage() {
+  // Get user state from Redux store
   const { name, email, role, image } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
+  // Extracting user ID from the URL parameters
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  // Function to handle user deletion when triggered by modal
   async function handleDeleteUser() {
     try {
       await dispatch(deleteUser(id)).unwrap();
       navigate(-1); // Navigate back to the previous page
-    } catch (error) {}
+    } catch (error) { }
   }
 
+  // Fetch user details on component mount
   useEffect(() => {
+    // Dispatch action to fetch user by ID
     dispatch(getUser(id));
   }, [id, dispatch]);
 
+  // UserImage component to handle dynamic image loading with fallback to default
   const UserImage = ({ image }) => {
     const [imgSrc, setImgSrc] = useState("");
 
@@ -45,7 +50,7 @@ export default function ViewUserPage() {
 
   return (
     <>
-      {/* Modal */}
+      {/* Modal for confirmation before deleting the user */}
       <div
         className="modal fade"
         id="deleteUser"
@@ -61,6 +66,7 @@ export default function ViewUserPage() {
               <h2 className="text-center mb-5">
                 Are you sure want to delete user {name}?
               </h2>
+              {/* Modal buttons for handling delete confirmation */}
               <div className="d-flex align-items-center justify-content-evenly mt-5">
                 <button
                   className="modal-cancel-button shadow"
@@ -80,19 +86,22 @@ export default function ViewUserPage() {
           </div>
         </div>
       </div>
+      {/* Main container for the View User page */}
       <div className="p-xl-5 p-3">
         <div className="text-start">
+          {/* Back button to navigate to the previous page */}
           <button
             className="back-btn btn-primary fw-bold shadow px-4 py-1"
             onClick={() => {
-              dispatch(clearUserValues());
-              navigate(-1);
+              dispatch(clearUserValues());    // Clear any user-related state
+              navigate(-1);   // Navigate to the previous page
             }}
           >
             Back
           </button>
         </div>
         <div className="text-center ">
+          {/* Rendering User Image */}
           <UserImage image={image} />
           {/* <img
             src={
@@ -104,6 +113,7 @@ export default function ViewUserPage() {
             className="user-img"
           /> */}
           <div className="mt-5">
+            {/* Display user details: name, role, and email */}
             <h5 className="mb-3 fw-bold">
               Name: <span className="board-data">{name}</span>
             </h5>
@@ -115,18 +125,19 @@ export default function ViewUserPage() {
             </h5>
           </div>
         </div>
+        {/* Buttons for navigating to the edit page or triggering user deletion */}
         <div className="mt-5 col-12 text-center ">
           <div className="d-flex flex-wrap align-items-center justify-content-center">
             <button
               className="px-3 py-1 edit-button shadow m-1"
-              onClick={() => navigate(`/editUser/${id}`)}
+              onClick={() => navigate(`/editUser/${id}`)}   // Navigate to the edit page
             >
               Edit
             </button>
             <button
               className="px-3 py-1 delete-button shadow m-1"
               data-bs-toggle="modal"
-              data-bs-target="#deleteUser"
+              data-bs-target="#deleteUser"   // Open delete confirmation modal
             >
               Delete
             </button>

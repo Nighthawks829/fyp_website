@@ -17,6 +17,7 @@ import { getSensor } from "../../stores/sensor/sensorSlice";
 import { getAllSensors } from "../../stores/allSensors/allSensorsSlice";
 
 export default function Dashboard() {
+  // Get state values from Redux store
   const { dashboards } = useSelector((store) => store.allDashboards);
   const { id, sensorId, type, name } = useSelector((store) => store.dashboard);
   const { user } = useSelector((store) => store.auth);
@@ -24,38 +25,43 @@ export default function Dashboard() {
 
   const dispatch = useDispatch();
 
+  // Modal visibility states
   const [showFirstModal, setShowFirstModal] = useState(false);
   const [showSecondModal, setShowSecondModal] = useState(false);
   const [showThirdModal, setShowThirdModal] = useState(false);
   const [showFourthModal, setShowFourthModa] = useState(false);
 
+  // Filter sensor list based on selected sensor type
   const [filterSensor, setFilterSensor] = useState([]);
 
+  // Fetch initial data when component mounts
   useEffect(() => {
     dispatch(getAllDashboards(user.userId));
     dispatch(getAllSensors());
   }, [dispatch, user.userId]);
 
   // eslint-disable-next-line
-  const [data, setData] = useState({
-    labels: ["Room 1", "Room 2", "Room 3"], // Example categorical labels
-    datasets: [
-      {
-        label: "Light Data",
-        data: [10, 20, 30], // Example data
-        fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)"
-      }
-    ]
-  });
+  // const [data, setData] = useState({
+  //   labels: ["Room 1", "Room 2", "Room 3"], // Example categorical labels
+  //   datasets: [
+  //     {
+  //       label: "Light Data",
+  //       data: [10, 20, 30], // Example data
+  //       fill: false,
+  //       backgroundColor: "rgb(75, 192, 192)",
+  //       borderColor: "rgba(75, 192, 192, 0.2)"
+  //     }
+  //   ]
+  // });
 
+  // Handle user input changes for dashboard details
   const handleUserInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     dispatch(handleDashboardChange({ name, value }));
   };
 
+  // Add new dashboard
   async function handleAddDashboard() {
     if (sensorId === "" || name === "") {
       toast.error("Please provide all values");
@@ -77,6 +83,7 @@ export default function Dashboard() {
     }
   }
 
+  // Edit existing dashboard
   async function handleEditDashboard() {
     if (id === "" || name === "") {
       toast.error("Please provide all values");
@@ -92,6 +99,7 @@ export default function Dashboard() {
     }
   }
 
+  // Delete existing dashboard
   async function handleDeleteDashboard() {
     if (id === "") {
       toast.error("Please provide all values");
@@ -102,6 +110,7 @@ export default function Dashboard() {
     }
   }
 
+  // Handle the "Next" step in modal flow
   async function handleNext() {
     if (sensorId === "") {
       toast.error("Please select sensor type and sensor");
@@ -120,6 +129,7 @@ export default function Dashboard() {
     }
   }
 
+  // Handle changes to sensor type and filter the available sensors
   const handleUserInputSensorType = (e) => {
     dispatch(clearDashboardValues());
     const name = e.target.name;
@@ -130,7 +140,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Modal */}
+      {/* Modal for selecting sensor */}
       <Modal
         show={showFirstModal}
         onHide={() => {
@@ -143,15 +153,7 @@ export default function Dashboard() {
       >
         <Modal.Body className="p-5 shadow">
           <h2 className="text-center mb-4">Select Sensor</h2>
-          {/* <h4 className="text-center mb-4">Sensor ID</h4> */}
-          {/* <Form.Control
-            type="text"
-            placeholder="Sensor ID"
-            name="sensorId"
-            value={sensorId}
-            onChange={handleUserInput}
-            className="border border-dark text-center"
-          /> */}
+          {/* Dropdown for selecting sensor type */}
           <select
             className="form-select border border-dark mb-4"
             aria-label="form-select sensor-type"
@@ -165,6 +167,7 @@ export default function Dashboard() {
             <option value="Analog Input">Analog Input</option>
             <option value="Analog Output">Analog Output</option>
           </select>
+          {/* Dropdown for selecting sensor */}
           <select
             className="form-select border border-dark"
             aria-label="form-select sensor-name"
@@ -177,10 +180,10 @@ export default function Dashboard() {
             <option value="">Select Sensor</option>
             {filterSensor
               ? filterSensor.map((sensor) => (
-                  <option key={sensor.id} value={sensor.id}>
-                    {sensor.name} ({sensor.id})
-                  </option>
-                ))
+                <option key={sensor.id} value={sensor.id}>
+                  {sensor.name} ({sensor.id})
+                </option>
+              ))
               : null}
           </select>
           <div className="d-flex align-items-center justify-content-evenly mt-5">
@@ -205,7 +208,8 @@ export default function Dashboard() {
         </Modal.Body>
       </Modal>
 
-      {/* Modal 2 */}
+      {/* Other modals for further steps */}
+      {/* Modal for selecting component type */}
       <Modal
         show={showSecondModal}
         onHide={() => {
@@ -252,7 +256,7 @@ export default function Dashboard() {
         </Modal.Body>
       </Modal>
 
-      {/* Modal 3 */}
+      {/* Modal for renaming component */}
       <Modal
         show={showThirdModal}
         onHide={() => {
@@ -300,7 +304,7 @@ export default function Dashboard() {
         </Modal.Body>
       </Modal>
 
-      {/* Modal 4 */}
+      {/* Modal for confirming dashboard addition */}
       <Modal
         show={showFourthModal}
         onHide={() => {
@@ -422,6 +426,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Display dashboard data or message when no dashboards are available */}
       <div className="p-5">
         <div className="text-end">
           <button
