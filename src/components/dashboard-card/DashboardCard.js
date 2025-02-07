@@ -22,13 +22,18 @@ export default function DashboardCard({
 }) {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const [topic, setTopic] = useState("");
-  const [data, setData] = useState(0);
-  const [listData, setListData] = useState([]);
-  const [unit, setUnit] = useState("");
 
+  // State variables for storing sensor data
+  const [topic, setTopic] = useState(""); // MQTT topic for sensor
+  const [data, setData] = useState(0); // Current sensor value
+  const [listData, setListData] = useState([]); // Historical sensor data for graph
+  const [unit, setUnit] = useState(""); // Unit of measurement for sensor data
+
+
+  // MQTT client reference to manage connections
   let clientRef = useRef(null);
 
+  // Fetch historical sensor data for graph visualization
   async function getGraphData() {
     const response = await customFetch.get(`/sensorData/${sensorId}`);
     if (Array.isArray(response.data.sensorData)) {
@@ -36,6 +41,7 @@ export default function DashboardCard({
     }
   }
 
+  // Fetch the latest sensor data
   async function getLatestData() {
     const response = await customFetch.get(`/sensorData/latest/${sensorId}`);
     // setData(response.data.sensorData.data.toFixed(2));
@@ -43,11 +49,13 @@ export default function DashboardCard({
     setUnit(response.data.sensorData.unit);
   }
 
+  // Get MQTT topic for the sensor
   async function getTopic() {
     const response = await customFetch.get(`/sensor/${sensorId}`);
     setTopic(response.data.sensor.topic);
   }
 
+  // Fetch topic and sensor data when the component mounts
   useEffect(() => {
     getTopic();
     if (type === "graph") {
@@ -58,6 +66,7 @@ export default function DashboardCard({
     // eslint-disable-next-line
   }, []);
 
+  // Establish MQTT connection and subscribe to topic
   useEffect(() => {
     clientRef.current = mqtt.connect("mqtt://192.168.0.6:8080", {
       clientId: `clientId_${Math.random().toString(16).substr(2, 8)}`,
@@ -103,6 +112,7 @@ export default function DashboardCard({
     // eslint-disable-next-line
   }, [topic]);
 
+  // Update graph data when listData changes
   useEffect(() => {
     setGraphData({
       labels: listData.map((_, index) => index), // Example labels
@@ -118,7 +128,7 @@ export default function DashboardCard({
     });
   }, [listData]);
 
-  // eslint-disable-next-line
+  // State for graph data
   const [graphData, setGraphData] = useState({
     labels: [], // Example categorical labels
     datasets: [
@@ -132,6 +142,7 @@ export default function DashboardCard({
     ]
   });
 
+  // Handle switch control for digital sensors
   async function handleSwitchChange() {
     console.log("Handle Switch Change");
     try {
@@ -148,10 +159,12 @@ export default function DashboardCard({
     }
   }
 
+  // Handle slider input for analog sensors
   const handleSliderChange = (e) => {
     setData(e.target.value);
   };
 
+  // Send slider value when user stops adjusting
   async function handleSliderChangeComplete() {
     try {
       await customFetch.post("/sensorControl/", {
@@ -166,6 +179,7 @@ export default function DashboardCard({
     }
   }
 
+  // Handle buzzer tone selection
   async function handleToneChange(e) {
     try {
       await customFetch.post("/sensorControl/", {
@@ -192,9 +206,8 @@ export default function DashboardCard({
       }
     >
       <div
-        className={`position-relative ratio ${
-          type === "widget" ? "ratio-1x1" : "ratio-4x3"
-        }`}
+        className={`position-relative ratio ${type === "widget" ? "ratio-1x1" : "ratio-4x3"
+          }`}
       >
         <div className="card p-4 d-flex align-items-center justify-content-evenly shadow">
           <div className="position-absolute top-0 end-0 p-2">
@@ -243,13 +256,13 @@ export default function DashboardCard({
                 {
                   sensorType === "Analog"
                     ? parseFloat(data).toFixed(2) +
-                      " " +
-                      (unit !== undefined ? " " + unit : "") // Show parsed float value for analog sensor
+                    " " +
+                    (unit !== undefined ? " " + unit : "") // Show parsed float value for analog sensor
                     : data === 0
-                    ? "OFF" // Show "OFF" if data is 0
-                    : data === 1
-                    ? "ON" // Show "ON" if data is 1
-                    : "Invalid " // Optional: handle any other cases
+                      ? "OFF" // Show "OFF" if data is 0
+                      : data === 1
+                        ? "ON" // Show "ON" if data is 1
+                        : "Invalid " // Optional: handle any other cases
                 }
               </h2>
               {control ? (
@@ -265,53 +278,53 @@ export default function DashboardCard({
                     </label>
                   </div>
                 ) : // <input
-                //   type="range"
-                //   className="mt-4"
-                //   min="0"
-                //   max="4096"
-                //   step="1"
-                //   id="customRange1"
-                //   value={data}
-                //   onChange={handleSliderChange}
-                //   onMouseUp={handleSliderChangeComplete}
-                //   onTouchEnd={handleSliderChangeComplete}
+                  //   type="range"
+                  //   className="mt-4"
+                  //   min="0"
+                  //   max="4096"
+                  //   step="1"
+                  //   id="customRange1"
+                  //   value={data}
+                  //   onChange={handleSliderChange}
+                  //   onMouseUp={handleSliderChangeComplete}
+                  //   onTouchEnd={handleSliderChangeComplete}
 
-                sensorName.toLowerCase().includes("buzzer") ? (
-                  <div className="col-lg-6 col-md-8 col-12 mx-auto">
-                    <select
-                      className="form-select mt-4"
-                      onChange={handleToneChange}
+                  sensorName.toLowerCase().includes("buzzer") ? (
+                    <div className="col-lg-6 col-md-8 col-12 mx-auto">
+                      <select
+                        className="form-select mt-4"
+                        onChange={handleToneChange}
+                        value={data}
+                      >
+                        <option value="0">Turn Off</option>
+                        <option value="262">C</option>
+                        <option value="277">C#</option>
+                        <option value="294">D</option>
+                        <option value="311">D#</option>
+                        <option value="330">E</option>
+                        <option value="349">F</option>
+                        <option value="370">F#</option>
+                        <option value="392">G</option>
+                        <option value="415">G#</option>
+                        <option value="440">A</option>
+                        <option value="466">A#</option>
+                        <option value="494">B</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <input
+                      type="range"
+                      className="mt-4"
+                      min="0"
+                      max="4096"
+                      step="1"
+                      id="customRange1"
                       value={data}
-                    >
-                      <option value="0">Turn Off</option>
-                      <option value="262">C</option>
-                      <option value="277">C#</option>
-                      <option value="294">D</option>
-                      <option value="311">D#</option>
-                      <option value="330">E</option>
-                      <option value="349">F</option>
-                      <option value="370">F#</option>
-                      <option value="392">G</option>
-                      <option value="415">G#</option>
-                      <option value="440">A</option>
-                      <option value="466">A#</option>
-                      <option value="494">B</option>
-                    </select>
-                  </div>
-                ) : (
-                  <input
-                    type="range"
-                    className="mt-4"
-                    min="0"
-                    max="4096"
-                    step="1"
-                    id="customRange1"
-                    value={data}
-                    onChange={handleSliderChange}
-                    onMouseUp={handleSliderChangeComplete}
-                    onTouchEnd={handleSliderChangeComplete}
-                  />
-                )
+                      onChange={handleSliderChange}
+                      onMouseUp={handleSliderChangeComplete}
+                      onTouchEnd={handleSliderChangeComplete}
+                    />
+                  )
               ) : null}
             </>
           ) : (
